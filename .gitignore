@@ -20,4 +20,4 @@ yarn-error.log*
 
 
 #added .env to gitignore
-.env
+*.env
