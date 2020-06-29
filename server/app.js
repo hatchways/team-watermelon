@@ -1,4 +1,6 @@
+require("dotenv").config();
 const createError = require("http-errors");
+const mongoose = require("mongoose");
 const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
@@ -10,6 +12,15 @@ const pingRouter = require("./routes/ping");
 const { json, urlencoded } = express;
 
 var app = express();
+
+//EXTERNAL DB CONFIG
+mongoose.connect("mongodb+srv://surhud004:"+process.env.MDBATLAS_PWD+"@cluster0-7zxck.mongodb.net/watermelondb?retryWrites=true&w=majority", {"useNewUrlParser": true, "useUnifiedTopology": true, "useFindAndModify": false})
+.then(() => {
+  console.log("Connected to external DB!");
+})
+.catch((err) => {
+  console.log(err);
+});
 
 app.use(logger("dev"));
 app.use(json());
