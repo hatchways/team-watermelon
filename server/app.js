@@ -1,4 +1,3 @@
-require("dotenv").config();
 const createError = require("http-errors");
 const mongoose = require("mongoose");
 const express = require("express");
