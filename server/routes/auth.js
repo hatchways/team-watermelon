@@ -84,7 +84,9 @@ router.post(
 					id: user.id
 				}
 			};
-			await generateToken(res, payload);
+
+			console.log(payload.user.id);
+			await generateToken(res, payload.user);
 			res.status(200).send('Login Success');
 		} catch (err) {
 			console.error(err.message);
@@ -97,6 +99,7 @@ router.post(
 // @desc     Get user by token
 // @access   Private
 
+//Okay so this was my old .get via token thingy, could be using this but may need to do the decrypt on the id
 router.get('/', verifyToken, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.id);
@@ -107,6 +110,12 @@ router.get('/', verifyToken, async (req, res) => {
 	}
 });
 
-router.post('/verify', verifyToken);
-
+router.post('/verify', verifyToken, async (req, res) => {
+	try {
+		res.json('Cookie token verified');
+	} catch (err) {
+		console.error(err.message);
+		res.status(500);
+	}
+});
 module.exports = router;

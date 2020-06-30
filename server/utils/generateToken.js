@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const generateToken = (res, payload) => {
-	const token = jwt.sign({ payload }, process.env.SECRET_KEY, {
+	const token = jwt.sign(payload, process.env.SECRET_KEY, {
 		expiresIn: 360000
 	});
 	return res.cookie('token', token, {

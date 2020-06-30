@@ -9,8 +9,9 @@ const verifyToken = async (req, res, next) => {
 			return res.status(401).json('You need to Login');
 		}
 		const decrypt = await jwt.verify(token, process.env.MY_SECRET);
+		console.log(decrypt);
 		req.user = {
-			id: decrypt.payload
+			id: decrypt.id
 		};
 		next();
 	} catch (err) {
