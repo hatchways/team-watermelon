@@ -85,7 +85,7 @@ router.post(
 				}
 			};
 
-			console.log(payload.user.id);
+			console.log(user);
 			await generateToken(res, payload.user);
 			res.status(200).send('Login Success');
 		} catch (err) {
@@ -100,7 +100,7 @@ router.post(
 // @access   Private
 
 //Okay so this was my old .get via token thingy, could be using this but may need to do the decrypt on the id
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', auth, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.id);
 		res.json(user);

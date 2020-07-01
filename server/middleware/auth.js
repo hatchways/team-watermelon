@@ -4,7 +4,7 @@ dotenv.config();
 
 module.exports = function (req, res, next) {
 	// get token from the header
-	const token = req.header('x-auth-token');
+	const token = req.cookie.token;
 
 	//check if there is no token
 	if (!token) {
@@ -12,6 +12,7 @@ module.exports = function (req, res, next) {
 	}
 	//Verify token
 	try {
+		console.log(req.cookie);
 		const decoded = jwt.verify(token, process.env.SECRET_KEY);
 		req.user = decoded.user;
 		next();
