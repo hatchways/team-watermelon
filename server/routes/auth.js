@@ -86,7 +86,7 @@ router.post(
 			};
 
 			console.log(user);
-			await generateToken(res, payload.user);
+			await generateToken(res, payload.user.id);
 			res.status(200).send('Login Success');
 		} catch (err) {
 			console.error(err.message);
@@ -103,9 +103,10 @@ router.post(
 router.get('/', auth, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.id);
-		res.json(user);
+		res.send(user);
+		console.log(user);
 	} catch (err) {
-		console.error(err.message);
+		console.error('error my dude');
 		res.status(500);
 	}
 });
