@@ -6,8 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import ProductHeroLayout from './HeroLayout';
 
 
-const backgroundImage = "img/bg.jpg";
-//   'https://source.unsplash.com/UACPtYJHjTM/1920x1280';
+const backgroundImage = "assets/images/bg.jpg";
+
 
 const styles = (theme) => ({
   background: {
@@ -35,27 +35,27 @@ function ProductHero(props) {
 
   return (
     <ProductHeroLayout backgroundClassName={classes.background}>
-      {/* Increase the network loading priority of the background image. */}
-      <img style={{ display: 'none' }} src={backgroundImage} alt="increase priority" />
-      <Typography color="inherit" align="center" variant="h2" marked="center">
-        Track your Favorites
-      </Typography>
-      <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
-        Every deal is a Big Deal!
-      </Typography>
-      <Button
-        color="primary"
-        variant="contained"
-        size="large"
-        className={classes.button}
-        component="a"
-        href="#"
-      >
-        Register
-      </Button>
-      <Typography variant="body2" color="inherit" className={classes.more}>
-        Discover the best shopping experience
-      </Typography>
+        {/* Increase the network loading priority of the background image. */}
+        <img style={{ display: 'none' }} src={backgroundImage} alt="increase priority" />
+        <Typography color="inherit" align="center" variant="h2" marked="center">
+            Track your Favorites
+        </Typography>
+        <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
+            Every deal is a Big Deal!
+        </Typography>
+        <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            className={classes.button}
+            component="a"
+            href="#"
+        >
+            Register
+        </Button>
+        <Typography variant="body2" color="inherit" className={classes.more}>
+            Discover the best shopping experience
+        </Typography>
     </ProductHeroLayout>
   );
 }

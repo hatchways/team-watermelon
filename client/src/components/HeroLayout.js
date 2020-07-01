@@ -65,7 +65,7 @@ function ProductHeroLayout(props) {
       <Container className={classes.container}>
         <img
             className={classes.light}
-            src="img/light.png"
+            src="assets/images/light.png"
             alt="light"
             width="500"
             height="160"
