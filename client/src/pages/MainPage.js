@@ -7,7 +7,7 @@ import ShoppingLists from '../components/ShoppingLists';
 
 
 
-export default function Main() {
+export default function MainPage() {
 
   return (
     <React.Fragment>

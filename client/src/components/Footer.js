@@ -41,11 +41,11 @@ const footers = [
 },
 {
     title: 'Features',
-    description: ['Cool stuff', 'Random feature', 'Team feature', 'Developer stuff', 'Another one'],
+    description: ['Cool feature', 'Team feature'],
 },
 {
     title: 'Resources',
-    description: ['Resource', 'Resource name', 'Another resource', 'Final resource'],
+    description: ['Resource', 'Another resource', 'Final resource'],
 },
 {
     title: 'Legal',

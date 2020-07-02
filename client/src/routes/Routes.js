@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
-import LandingPage from "../pages/Landingpage";
-import MainPage from "../pages/Main";
+import LandingPage from "../pages/LandingPage";
+import MainPage from "../pages/MainPage";
 
 class Routes extends Component{
     render(){

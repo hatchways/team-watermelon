@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import ListCard from './ListCardComponent';
+import ListCard from './ListCard';
 import { makeStyles } from '@material-ui/core/styles';
 
 // using this lists as placeholder, 

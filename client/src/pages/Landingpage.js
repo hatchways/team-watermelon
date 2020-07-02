@@ -7,7 +7,7 @@ import Hero from '../components/Hero';
 
 
 
-export default function Main() {
+export default function LandingPage() {
 
   return (
     <React.Fragment>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
 
 const styles = (theme) => ({
   root: {
@@ -44,20 +44,14 @@ const styles = (theme) => ({
     backgroundRepeat: 'no-repeat',
     zIndex: -2,
   },
-  arrowDown: {
-    position: 'absolute',
-    bottom: theme.spacing(4),
-    fontSize:"large",
-    color:'primary',
-  },
   light: {
     position: 'absolute',
-    top: theme.spacing(10),
-    opacity: 0.5,
+    display: 'flex',
+    opacity: 0.5
   },
 });
 
-function ProductHeroLayout(props) {
+function HeroLayout(props) {
   const { backgroundClassName, children, classes } = props;
 
   return (
@@ -67,22 +61,21 @@ function ProductHeroLayout(props) {
             className={classes.light}
             src="assets/images/light.png"
             alt="light"
-            width="500"
+            width="300"
             height="160"
         />
         {children}
         <div className={classes.backdrop} />
         <div className={clsx(classes.background, backgroundClassName)} />
-        <ArrowDownwardIcon className={classes.arrowDown}/>
       </Container>
     </section>
   );
 }
 
-ProductHeroLayout.propTypes = {
+HeroLayout.propTypes = {
   backgroundClassName: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductHeroLayout);
+export default withStyles(styles)(HeroLayout);
