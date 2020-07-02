@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth.js');
+const authMiddleware = require('../middleware/auth.js');
 const User = require('../models/User.js');
 const { check, validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
-// const config = require('config');
-const dotenv = require('dotenv');
-dotenv.config();
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken.js');
 const verifyToken = require('../middleware/verify.js');
@@ -49,7 +45,7 @@ router.post(
 			};
 
 			await generateToken(res, payload);
-			res.status(200).send('Cookie set');
+			res.status(200).send(user);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).send('Server error');
@@ -78,16 +74,14 @@ router.post(
 			if (!isMatch) {
 				return res.status(400).json({ errors: [{ msg: 'Invalid Password' }] });
 			}
-
 			const payload = {
 				user: {
 					id: user.id
 				}
 			};
 
-			console.log(user);
-			await generateToken(res, payload.user.id);
-			res.status(200).send('Login Success');
+			await generateToken(res, payload);
+			res.status(200).send(user);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).send('server error');
@@ -99,24 +93,31 @@ router.post(
 // @desc     Get user by token
 // @access   Private
 
-//Okay so this was my old .get via token thingy, could be using this but may need to do the decrypt on the id
-router.get('/', auth, async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.id);
 		res.send(user);
-		console.log(user);
 	} catch (err) {
-		console.error('error my dude');
+		console.error('	');
 		res.status(500);
 	}
 });
 
 router.post('/verify', verifyToken, async (req, res) => {
 	try {
-		res.json('Cookie token verified');
+		res.status(200).send('Cookie token verified');
 	} catch (err) {
 		console.error(err.message);
 		res.status(500);
 	}
+});
+
+router.post('/logout', function (req, res) {
+	const token = req.cookies.token;
+	if (!token) {
+		return res.status(403).send('You are not logged in.');
+	}
+	res.clearCookie('token');
+	res.status(200).send('Successfully Logged Out');
 });
 module.exports = router;

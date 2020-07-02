@@ -1,22 +1,16 @@
-const dotenv = require('dotenv');
+const dotenv = require('dotenv').config();
 const jwt = require('jsonwebtoken');
-dotenv.config();
 
-const verifyToken = async (req, res, next) => {
+module.exports = verifyToken = async (req, res, next) => {
 	const token = req.cookies.token;
 	try {
 		if (!token) {
-			return res.status(401).json('You need to Login');
+			return res.status(403).json({ msg: ' No token, You need to Login' });
 		}
-		const decrypt = await jwt.verify(token, process.env.MY_SECRET);
-		console.log(decrypt);
-		req.user = {
-			id: decrypt.id
-		};
+		const decoded = jwt.verify(token, process.env.SECRET_KEY);
+		req.user = decoded.user;
 		next();
 	} catch (err) {
-		return res.status(500).send('Error');
+		return res.status(500);
 	}
 };
-
-module.exports = verifyToken;
