@@ -14,10 +14,12 @@ const UserSchema = new mongoose.Schema({
 		required: true
 	},
 	my_lists: {
-		type: ObjectID
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Product List'
 	},
 	friends_list: {
-		type: ObjectID
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Friends List'
 	}
 });
 
