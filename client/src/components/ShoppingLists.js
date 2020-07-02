@@ -167,8 +167,7 @@ const ShoppingLists = ()=>{
         <Container maxWidth="md" component="main">
             <Grid container spacing={5} alignItems="flex-end">
             {lists.map((list) => (
-                // Enterprise card is full width at sm breakpoint
-                <Grid item key={list.title} xs={12} sm={list.title === 'Enterprise' ? 12 : 6} md={4}>
+                <Grid item key={list._id} xs={12} sm={6} md={4}>
                     {ListCard(list)}
                 </Grid>
             ))}
