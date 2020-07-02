@@ -4,8 +4,9 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import ListCard from './ListCard';
 import { makeStyles } from '@material-ui/core/styles';
+import AddNewItemBar from '../form/AddNewItemBar';
 
-// using this lists as placeholder, 
+// placeholder
 const lists = [
     {
         _id:1,
@@ -142,9 +143,11 @@ const lists = [
 
 
 const useStyles = makeStyles((theme) => ({
-    
-    heroContent: {
-        padding: theme.spacing(8, 0, 6),
+    root: {
+        margin: theme.spacing(1),
+    },
+    TopContent: {
+        padding: theme.spacing(8, 0, 10),
     }
 }));
 
@@ -153,27 +156,28 @@ const ShoppingLists = ()=>{
     const classes = useStyles();
 
     return(
-        <>
-        {/* Hero unit */}
-        <Container maxWidth="sm" component="main" className={classes.heroContent}>
-            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-            My Shopping Lists
-            </Typography>
-            <Typography variant="h5" align="center" color="textSecondary" component="p">
-            tracking products...
-            </Typography>
-        </Container>
-        {/* End hero unit */}
-        <Container maxWidth="md" component="main">
-            <Grid container spacing={5} alignItems="flex-end">
-            {lists.map((list) => (
-                <Grid item key={list._id} xs={12} sm={6} md={4}>
-                    {ListCard(list)}
+        <section className={classes.root}>
+            <Container maxWidth="sm" component="main" className={classes.TopContent}>
+                <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
+                Add New Item:
+                </Typography>
+                <AddNewItemBar/>
+            </Container>
+            
+            <Container maxWidth="md" component="main">
+                <Typography variant="h5" align="left" color="textSecondary" component="p">
+                My Shopping Lists:
+                </Typography>
+                <br/>
+                <Grid container spacing={5} alignItems="flex-end">
+                {lists.map((list) => (
+                    <Grid item key={list._id} xs={12} sm={6} md={4}>
+                        {ListCard(list)}
+                    </Grid>
+                ))}
                 </Grid>
-            ))}
-            </Grid>
-        </Container>
-        </>
+            </Container>
+        </section>
     )
 }
 
