@@ -14,6 +14,7 @@ const verifyToken = require('../middleware/verify.js');
 router.post(
 	'/register',
 	[
+		check('name', 'Name is required').not().isEmpty(),
 		check('email', 'Please include a valid email').isEmail(),
 		check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
 	],
@@ -22,7 +23,7 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-		const { password, email } = req.body;
+		const { name, password, email } = req.body;
 
 		try {
 			let user = await User.findOne({ email });
@@ -30,6 +31,7 @@ router.post(
 				return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
 			}
 			user = new User({
+				name,
 				email,
 				password
 			});
