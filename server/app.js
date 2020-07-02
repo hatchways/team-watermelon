@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
 const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
@@ -7,6 +8,8 @@ const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
+const listRouter = require("./routes/lists");
+const productRouter = require("./routes/products");
 
 const { json, urlencoded } = express;
 
@@ -23,12 +26,15 @@ mongoose.connect("mongodb+srv://surhud004:"+process.env.MDBATLAS_PWD+"@cluster0-
 
 app.use(logger("dev"));
 app.use(json());
-app.use(urlencoded({ extended: false }));
+// app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
+app.use(bodyParser.urlencoded({extended: true}));
 
-app.use("/", indexRouter);
-app.use("/ping", pingRouter);
+app.use(indexRouter);
+app.use(pingRouter);
+app.use(listRouter);
+app.use(productRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

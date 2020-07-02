@@ -7,10 +7,10 @@ const productSchema = new mongoose.Schema({
     lastprice: mongoose.Types.Decimal128,
     currentprice: mongoose.Types.Decimal128,
     list: {
-		id: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "List"
-		}
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "List"
+      }
     }
 });
 module.exports = mongoose.model("Product", productSchema);

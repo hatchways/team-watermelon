@@ -8,13 +8,13 @@ const listSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now
 	},
-	user: {
+	/*user: {
 		id: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User"
 		},
 		username: String
-	},
+	},*/
 	products: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product"
