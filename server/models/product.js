@@ -5,12 +5,6 @@ const productSchema = new mongoose.Schema({
     description: String,
     url: String,
     lastprice: mongoose.Types.Decimal128,
-    currentprice: mongoose.Types.Decimal128,
-    list: {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "List"
-      }
-    }
+    currentprice: mongoose.Types.Decimal128
 });
 module.exports = mongoose.model("Product", productSchema);

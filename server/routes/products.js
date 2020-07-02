@@ -16,7 +16,7 @@ router.post("/lists/:id", function(req, res, next) {
 			let description = "tempDesc";
 			let price = 23.46;
 			// WEB SCRAPING FROM URL - SCRAPE name, description, price
-			var newProduct = {name: name, description: description, url: url, lastprice: 0.0, currentprice: price, list: {id: foundList._id}};
+			var newProduct = {name: name, description: description, url: url, lastprice: 0.0, currentprice: price};
 			Product.create(newProduct, function(err, product) {
 				if(err){
 					console.log("error: Aw, Snap! Something went wrong.");
