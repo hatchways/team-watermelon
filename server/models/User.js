@@ -14,10 +14,10 @@ const UserSchema = new mongoose.Schema({
 		required: true
 	},
 	my_lists: {
-		type: Array
+		type: ObjectID
 	},
 	friends_list: {
-		type: Array
+		type: ObjectID
 	}
 });
 

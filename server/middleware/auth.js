@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv').config();
 
 module.exports = authMiddleware = async (req, res, next) => {
 	const token = req.cookies.token;
