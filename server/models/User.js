@@ -13,14 +13,18 @@ const UserSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	my_lists: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Product List'
-	},
-	friends_list: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Friends List'
-	}
+	my_lists: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Product List'
+		}
+	],
+	friends_list: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Friends List'
+		}
+	]
 });
 
 module.exports = User = mongoose.model('users', UserSchema);
