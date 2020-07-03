@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const List = require("../models/list");
-const Product = require("../models/product");
+const List = require("../models/List");
+const Product = require("../models/Product");
+
+const verifyToken = require("../middleware/verify");
 
 // ADD new product
-router.post("/lists/:id", function(req, res, next) {
+router.post("/lists/:id", verifyToken, function(req, res) {
 	List.findById(req.params.id, function(err, foundList) {
 		if(err){
 			console.log("error: List not found.");
@@ -24,7 +26,7 @@ router.post("/lists/:id", function(req, res, next) {
 					foundList.products.push(product);
 					foundList.save();
 					console.log("success: Product added to list.");
-					res.redirect("/lists/"+foundList._id);
+					res.redirect("/lists/" + req.params.id);
 				}
 			});
 		}
@@ -32,7 +34,7 @@ router.post("/lists/:id", function(req, res, next) {
 });
 
 // DELETE product
-router.delete("/lists/:id/products/:product_id", function(req, res, next) {
+router.delete("/lists/:id/products/:product_id", verifyToken, function(req, res) {
 	Product.findByIdAndRemove(req.params.product_id, function(err, foundProduct) {
 		if(err){
 			console.log("error: Product not found.");

@@ -6,13 +6,14 @@ const { join } = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+
 const indexRouter = require('./routes/index');
 const pingRouter = require('./routes/ping');
 const authRouter = require('./routes/auth');
 const listRouter = require('./routes/lists');
 const productRouter = require('./routes/products');
 
-const { json, urlencoded } = express;
+const { json } = express;
 
 var app = express();
 
@@ -58,12 +59,6 @@ app.use(function (err, req, res, next) {
 	// render the error page
 	res.status(err.status || 500);
 	res.json({ error: err });
-});
-
-const PORT = 8084;
-
-app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = app;

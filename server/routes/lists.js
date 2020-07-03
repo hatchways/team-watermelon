@@ -1,23 +1,25 @@
 const express = require("express");
 const router = express.Router();
 
-const List = require("../models/list");
-const Product = require("../models/product");
+const User = require("../models/User");
+const List = require("../models/List");
+const Product = require("../models/Product");
 
-// GET all lists
-router.get("/lists", function (req, res, next) {
-    List.find({}).sort({created: 'desc'}).exec(function(err, allLists) {
-		if(err || !allLists.length) {
-            console.log("error: No lists available.");
-            console.log(err);
+const verifyToken = require("../middleware/verify");
+
+// GET all lists of user
+router.get("/lists", verifyToken, function (req, res) {
+	User.findById(req.user.id).populate("my_lists").exec(function(err, foundUser) {
+		if(err){
+			console.log("error: User not found.");
 		} else {
-			res.status(200).send({lists: allLists});
+			res.status(200).send({lists: foundUser.my_lists});
 		}
 	});
 });
 
-// GET one list
-router.get("/lists/:id", function(req, res, next) {
+// GET one list of user
+router.get("/lists/:id", verifyToken, function(req, res) {
 	List.findById(req.params.id).populate("products").exec(function(err, foundList) {
 		if(err){
 			console.log("error: List not found.");
@@ -27,29 +29,37 @@ router.get("/lists/:id", function(req, res, next) {
 	});
 });
 
-// CREATE list
-router.post("/lists/new", function(req, res, next) {
+// CREATE list for user
+router.post("/lists/new", verifyToken, function(req, res) {
     let title = req.body.title;
 	let image = req.body.imageurl;
 	let subtitle = req.body.listdescription;
-	/*let user = {
-		id: req.user._id,
-		username: req.user.username
-	};user: user*/
-	let newList = {title: title, image: image, subtitle: subtitle, products: []};
+	let user = {
+		id: req.user.id,
+		name: req.user.name
+	};
+	let newList = {title: title, image: image, subtitle: subtitle, user: user, products: []};
 	List.create(newList, function(err, createdList){
 		if(err){
             console.log("error: Aw, Snap! Something went wrong.");
             console.log(err);
 		} else {
 			console.log("success: List created.");
+			User.findById(req.user.id, function(err, foundUser) {
+				if(err){
+					console.log("error: User not found.");
+				} else {
+					foundUser.my_lists.push(createdList);
+					foundUser.save();
+				}
+			});
 			res.redirect("/lists");
 		}
 	});
 });
 
-// UPDATE PUT list
-router.put("/lists/:id", function(req, res, next) {
+// UPDATE PUT list for user
+router.put("/lists/:id", verifyToken, function(req, res) {
 	let title = req.body.title;
 	let image = req.body.imageurl;
 	let subtitle = req.body.listdescription;
@@ -65,8 +75,8 @@ router.put("/lists/:id", function(req, res, next) {
 	});
 });
 
-// DELETE list
-router.delete("/lists/:id", function(req, res, next) {
+// DELETE list for user
+router.delete("/lists/:id", verifyToken, function(req, res) {
 	List.findByIdAndRemove(req.params.id, function(err, foundList) {
 		if(err){
 			console.log("error: List not found.");
