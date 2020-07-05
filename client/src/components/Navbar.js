@@ -52,7 +52,7 @@ const Navbar = ()=>{
                 <p> token:{auth_context.token}</p>
                 <p> my_lists:{auth_context.my_lists}</p>
                 <p> f_list:{auth_context.firends_list}</p>
-                <p>{(auth_context)=>console.log(auth_context)}</p>
+                {(auth_context)=>console.log(auth_context)}
             
             <Link variant="button" 
                 component={RouterLink} 
