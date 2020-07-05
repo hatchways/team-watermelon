@@ -7,12 +7,26 @@ import DialogActions from '@material-ui/core/DialogActions';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { makeStyles } from '@material-ui/core/styles';
 
-export default function LoginRegisterModal() {
+const useStyles = makeStyles({
+	root: {
+	  flexGrow: 1,
+	  maxWidth: 500,
+	},
+  })
+
+export default function LoginRegisterModal(props) {
 	const [loginActive, setLoginActive] = useState(true);
 	const [userData, setUserData] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
+
+	const classes = useStyles();
+	  const [value, setValue] = React.useState(0);
+	  const handleChange = (event, newValue) => {
+		setValue(newValue);
+	  };
 
 	const [formData, setFormData] = useState({
 		name: '',
@@ -83,36 +97,37 @@ export default function LoginRegisterModal() {
 		width: '100%'
 	};
 	const hidden = {
-		display: 'none'
+		visibility: "hidden",
 	};
 	const textField = {
 		width: '70%'
 	};
-	console.log(userData);
+	// console.log(userData);
 	return (
 		<div>
-			<Button onClick={() => setDialogOpen(true)} variant="contained" color="primary">
+			<Button onClick={() => setDialogOpen(true)} {...props}>
 				Login
 			</Button>
 			<Dialog style={dialog} open={dialogOpen}>
-				<div style={dialog}>
+				{/* <div style={dialog}> */}
 					<AppBar style={appBar} position="static" color="default">
-						<Tabs value={false} indicatorColor="primary" textColor="primary" variant="fullWidth">
+						<Tabs value={value} indicatorColor="primary" textColor="primary" variant="fullWidth" onChange={handleChange}>
 							<Tab
-								style={loginActive ? active : inactive}
+								// style={loginActive ? active : inactive}
 								label="login"
 								onClick={() => setLoginActive(true)}
-								variant="contained"
-								color="primary"
+								// variant="contained"
+								// color="primary"
+								
 							>
 								Login
 							</Tab>
 							<Tab
-								style={loginActive ? inactive : active}
+								// style={loginActive ? inactive : active}
 								label="register"
 								onClick={() => setLoginActive(false)}
-								variant="contained"
-								color="primary"
+								// variant="contained"
+								// color="primary"
 							>
 								Register
 							</Tab>
@@ -147,14 +162,14 @@ export default function LoginRegisterModal() {
 						/>
 					</form>
 					<DialogActions>
-						<Button onClick={onSubmitForm} variant="contained" color="primary">
+						<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
 							{loginActive ? 'Login' : 'Register'}
 						</Button>
-						<Button onClick={() => setDialogOpen(false)} color="primary">
+						<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
 							Cancel
 						</Button>
 					</DialogActions>
-				</div>
+				{/* </div> */}
 			</Dialog>
 		</div>
 	);
