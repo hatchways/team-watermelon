@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
@@ -7,26 +7,23 @@ import DialogActions from '@material-ui/core/DialogActions';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { makeStyles } from '@material-ui/core/styles';
+import AuthContext from '../state_management/AuthContext';
 
-const useStyles = makeStyles({
-	root: {
-	  flexGrow: 1,
-	  maxWidth: 500,
-	},
-  })
+
 
 export default function LoginRegisterModal(props) {
+	const authContext = useContext(AuthContext);
+
 	const [loginActive, setLoginActive] = useState(true);
 	const [userData, setUserData] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
 
-	const classes = useStyles();
-	  const [value, setValue] = React.useState(0);
-	  const handleChange = (event, newValue) => {
-		setValue(newValue);
-	  };
+
+	const [value, setValue] = React.useState(0);
+	const handleChange = (event, newValue) => {
+	setValue(newValue);
+	};
 
 	const [formData, setFormData] = useState({
 		name: '',
@@ -51,6 +48,7 @@ export default function LoginRegisterModal(props) {
 		try {
 			const res = await axios.post(`/auth/${login ? 'login' : 'register'}`, body, config);
 			setUserData(res.data);
+			authContext.handleLogin(res.data);
 			setFormData({
 				name: '',
 				email: '',
@@ -102,7 +100,7 @@ export default function LoginRegisterModal(props) {
 	const textField = {
 		width: '70%'
 	};
-	// console.log(userData);
+	console.log(userData);
 	return (
 		<div>
 			<Button onClick={() => setDialogOpen(true)} {...props}>
