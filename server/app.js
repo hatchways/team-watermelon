@@ -18,7 +18,7 @@ var app = express();
 
 //EXTERNAL DB CONFIG
 mongoose
-	.connect(MBD_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+	.connect(process.env.MDB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 	.then(() => {
 		console.log('Connected to external DB!');
 	})
@@ -52,6 +52,12 @@ app.use(function (err, req, res, next) {
 	// render the error page
 	res.status(err.status || 500);
 	res.json({ error: err });
+});
+
+const PORT = 8084;
+
+app.listen(PORT, () => {
+	console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = app;
