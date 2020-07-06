@@ -18,12 +18,7 @@ var app = express();
 
 //EXTERNAL DB CONFIG
 mongoose
-	.connect(
-		'mongodb+srv://surhud004:' +
-			process.env.MDBATLAS_PWD +
-			'@cluster0-7zxck.mongodb.net/watermelondb?retryWrites=true&w=majority',
-		{ useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
-	)
+	.connect(MBD_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 	.then(() => {
 		console.log('Connected to external DB!');
 	})
@@ -34,7 +29,7 @@ mongoose
 app.use(logger('dev'));
 app.use(json());
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, 'public')));
 
