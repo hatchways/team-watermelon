@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
@@ -7,12 +7,52 @@ import DialogActions from '@material-ui/core/DialogActions';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import AuthContext from '../state_management/AuthContext';
 
-export default function LoginRegisterModal() {
+
+const style = {
+	error: {
+		color: 'red'
+	},
+	dialog:{
+		padding: '10px 40px',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	appBar:{
+		marginBottom: '30px'
+	},
+	formStyle:{
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		marginBottom: '30px',
+		width: '100%'
+	},
+	hidden:{
+		visibility: "hidden",
+	},
+	textField:{
+		width: '70%'
+	},
+}
+
+
+export default function LoginRegisterModal(props) {
+
+	const authContext = useContext(AuthContext);
+
 	const [loginActive, setLoginActive] = useState(true);
 	const [userData, setUserData] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
+	const [asyncStart,setAsyncStart] = useState(false);
+
+
+	const [value, setValue] = React.useState(0);//handle tabs
+	const handleChange = (event, newValue) => {setValue(newValue);};//handle tabs
 
 	const [formData, setFormData] = useState({
 		name: '',
@@ -24,7 +64,7 @@ export default function LoginRegisterModal() {
 
 	const onSubmitForm = async (e) => {
 		e.preventDefault();
-		loginRegister(name, email, password, loginActive);
+		setAsyncStart(true);
 	};
 
 	const loginRegister = async (name, email, password, login) => {
@@ -36,13 +76,13 @@ export default function LoginRegisterModal() {
 		const body = { name, email, password };
 		try {
 			const res = await axios.post(`/auth/${login ? 'login' : 'register'}`, body, config);
-			setUserData(res.data);
 			setFormData({
 				name: '',
 				email: '',
 				password: ''
 			});
 			setDialogOpen(false);
+			return res
 		} catch (err) {
 			const errors = err.response.data.errors;
 			console.log(errors);
@@ -51,93 +91,68 @@ export default function LoginRegisterModal() {
 				setErrorMsg('');
 			}, 4000);
 		}
+		return null
 	};
-	const error = {
-		color: 'red'
-	};
-	const active = {
-		marginTop: '0',
-		color: 'red',
-		borderBottom: '2px solid black',
-		borderRadius: '2px'
-	};
-	const inactive = {
-		color: 'black',
-		border: 'none'
-	};
-	const dialog = {
-		padding: '10px 40px',
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center'
-	};
-	const appBar = {
-		marginBottom: '30px'
-	};
-	const formStyle = {
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		marginBottom: '30px',
-		width: '100%'
-	};
-	const hidden = {
-		display: 'none'
-	};
-	const textField = {
-		width: '70%'
-	};
-	console.log(userData);
+	
+
+	useEffect(() => {
+		if (asyncStart){
+			loginRegister(name, email, password, loginActive)
+			.then(res=>{
+				if (res != null) {
+					setUserData(res.data);
+					authContext.handleLogin(res.data);
+					console.log(res);
+				};
+			});
+			setAsyncStart(false);
+		}
+		// return () => thisComponentMounted = false;
+	  }, [asyncStart]);
+
 	return (
 		<div>
-			<Button onClick={() => setDialogOpen(true)} variant="contained" color="primary">
+			{authContext.isAuthenticated?"":
+			<Button onClick={() => setDialogOpen(true)} {...props}>
 				Login
-			</Button>
-			<Dialog style={dialog} open={dialogOpen}>
-				<div style={dialog}>
-					<AppBar style={appBar} position="static" color="default">
-						<Tabs value={false} indicatorColor="primary" textColor="primary" variant="fullWidth">
+			</Button>}
+			<Dialog style={style.dialog} open={dialogOpen}>
+					<AppBar style={style.appBar} position="static" color="default">
+						<Tabs value={value} indicatorColor="primary" textColor="primary" variant="fullWidth" onChange={handleChange}>
 							<Tab
-								style={loginActive ? active : inactive}
 								label="login"
 								onClick={() => setLoginActive(true)}
-								variant="contained"
-								color="primary"
 							>
 								Login
 							</Tab>
 							<Tab
-								style={loginActive ? inactive : active}
 								label="register"
 								onClick={() => setLoginActive(false)}
-								variant="contained"
-								color="primary"
 							>
 								Register
 							</Tab>
 						</Tabs>
 					</AppBar>
-					<form style={formStyle}>
-						<p style={error}>{errorMsg}</p>
+					<form style={style.formStyle}>
+						<p style={style.error}>{errorMsg}</p>
 						<TextField
-							style={loginActive ? hidden : textField}
-							id="standard-basic"
+							style={loginActive ? style.hidden : style.textField}
+							id="standard-basic-name"
 							label="Name"
 							name="name"
 							value={name}
 							onChange={(e) => onChange(e)}
 						/>
 						<TextField
-							style={textField}
-							id="standard-basic"
+							style={style.textField}
+							id="standard-basic-email"
 							label="Email"
 							name="email"
 							value={email}
 							onChange={(e) => onChange(e)}
 						/>
 						<TextField
-							style={textField}
+							style={style.textField}
 							id="standard-password-input"
 							type="password"
 							label="Password"
@@ -147,14 +162,13 @@ export default function LoginRegisterModal() {
 						/>
 					</form>
 					<DialogActions>
-						<Button onClick={onSubmitForm} variant="contained" color="primary">
+						<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
 							{loginActive ? 'Login' : 'Register'}
 						</Button>
-						<Button onClick={() => setDialogOpen(false)} color="primary">
+						<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
 							Cancel
 						</Button>
 					</DialogActions>
-				</div>
 			</Dialog>
 		</div>
 	);

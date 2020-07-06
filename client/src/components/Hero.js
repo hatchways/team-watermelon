@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import HeroLayout from './HeroLayout';
+import LoginForm from './loginRegisterModal';
 
 
 const backgroundImage = "assets/images/bg.jpg";
@@ -43,16 +43,12 @@ function Hero(props) {
         <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
             Every deal is a Big Deal!
         </Typography>
-        <Button
+        <LoginForm
             color="primary"
             variant="contained"
             size="large"
             className={classes.button}
-            component="a"
-            href="#"
-        >
-            Register
-        </Button>
+        />
         <Typography variant="body2" color="inherit" className={classes.more}>
             Discover the best shopping experience
         </Typography>
