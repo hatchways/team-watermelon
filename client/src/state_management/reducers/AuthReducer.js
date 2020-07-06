@@ -2,7 +2,7 @@ import * as ACTION_TYPES from '../actions/ActionTypes'
 
 export const initialState = {
     _id:"",
-    name: 'no name',
+    name: '',
     isAuthenticated: false,
     email: '',
     token: "",

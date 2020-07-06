@@ -47,12 +47,12 @@ const Navbar = ()=>{
             </IconButton>
                 BigDeal 
             </Typography>
-                <p>name: {auth_context.name}</p>
-                <p> email:{auth_context.email}</p>
-                <p> token:{auth_context.token}</p>
-                <p> my_lists:{auth_context.my_lists}</p>
-                <p> f_list:{auth_context.firends_list}</p>
-                {(auth_context)=>console.log(auth_context)}
+                <Typography>
+                    name: {auth_context.name}
+                    / email:{auth_context.email}
+                    / isAuthenticated:{auth_context.isAuthenticated? "true":"false"}
+                    / token:{auth_context.token}
+                </Typography>
             
             <Link variant="button" 
                 component={RouterLink} 

@@ -10,9 +10,7 @@ export default function LandingPage() {
   return (
     <React.Fragment>
         <CssBaseline />
-        {/* <Navbar/> */}
         <Hero/>
-        {/* <Footer/> */}
     </React.Fragment>
   );
 }
