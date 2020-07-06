@@ -5,7 +5,6 @@ export const initialState = {
     name: '',
     isAuthenticated: false,
     email: '',
-    token: "",
     my_lists:[],
     friends_list:[]
 };
@@ -19,7 +18,6 @@ export const AuthReducer = (state, action) => {
             ...state,
             name: action.payload.name,
             email:action.payload.email,
-            token:action.payload.token,
             my_lists:action.payload.my_lists,
             friends_list:action.payload.friends_list,
             isAuthenticated: true
@@ -29,7 +27,6 @@ export const AuthReducer = (state, action) => {
             ...state,
             name:"",
             email:"",
-            token:"",
             my_lists:[],
             friends_list:[],
             isAuthenticated: false

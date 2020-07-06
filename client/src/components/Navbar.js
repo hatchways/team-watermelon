@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = ()=>{
     const classes = useStyles();
-    const auth_context = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
 
     return(
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
@@ -47,13 +47,6 @@ const Navbar = ()=>{
             </IconButton>
                 BigDeal 
             </Typography>
-                <Typography>
-                    name: {auth_context.name}
-                    / email:{auth_context.email}
-                    / isAuthenticated:{auth_context.isAuthenticated? "true":"false"}
-                    / token:{auth_context.token}
-                </Typography>
-            
             <Link variant="button" 
                 component={RouterLink} 
                 to="/main"
@@ -75,13 +68,15 @@ const Navbar = ()=>{
                 className={classes.link}>
                 Notifications
             </Link>
-            <Button onClick={()=>auth_context.handleLogout({})} 
+            {authContext.isAuthenticated?
+            <Button onClick={()=>authContext.handleLogout({})} 
                 color="primary" 
                 variant="outlined" 
                 className={classes.link}
                 >
-                Login
-            </Button>
+                Logout
+            </Button>: ""}
+            
             </Toolbar>
         </AppBar>
     )

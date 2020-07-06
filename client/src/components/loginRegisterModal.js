@@ -14,16 +14,6 @@ const style = {
 	error: {
 		color: 'red'
 	},
-	active:{
-		marginTop: '0',
-		color: 'red',
-		borderBottom: '2px solid black',
-		borderRadius: '2px'
-	},
-	inactive:{
-		color: 'black',
-		border: 'none'
-	},
 	dialog:{
 		padding: '10px 40px',
 		display: 'flex',
@@ -55,7 +45,7 @@ export default function LoginRegisterModal(props) {
 	const authContext = useContext(AuthContext);
 
 	const [loginActive, setLoginActive] = useState(true);
-	// const [userData, setUserData] = useState(null);
+	const [userData, setUserData] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [asyncStart,setAsyncStart] = useState(false);
@@ -110,7 +100,7 @@ export default function LoginRegisterModal(props) {
 			loginRegister(name, email, password, loginActive)
 			.then(res=>{
 				if (res != null) {
-					// setUserData(res.data);
+					setUserData(res.data);
 					authContext.handleLogin(res.data);
 					console.log(res);
 				};
@@ -122,11 +112,11 @@ export default function LoginRegisterModal(props) {
 
 	return (
 		<div>
+			{authContext.isAuthenticated?"":
 			<Button onClick={() => setDialogOpen(true)} {...props}>
 				Login
-			</Button>
+			</Button>}
 			<Dialog style={style.dialog} open={dialogOpen}>
-				{/* <div style={dialog}> */}
 					<AppBar style={style.appBar} position="static" color="default">
 						<Tabs value={value} indicatorColor="primary" textColor="primary" variant="fullWidth" onChange={handleChange}>
 							<Tab
@@ -179,7 +169,6 @@ export default function LoginRegisterModal(props) {
 							Cancel
 						</Button>
 					</DialogActions>
-				{/* </div> */}
 			</Dialog>
 		</div>
 	);
