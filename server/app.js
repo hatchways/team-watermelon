@@ -6,7 +6,6 @@ const { join } = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const listRouter = require('./routes/lists');
@@ -54,10 +53,8 @@ app.use(function (err, req, res, next) {
 	res.json({ error: err });
 });
 
-const PORT = 8084;
-
-app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+	console.log(`Server running on port ${process.env.PORT}`);
 });
 
 module.exports = app;
