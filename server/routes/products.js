@@ -7,7 +7,7 @@ const Product = require("../models/Product");
 const verifyToken = require("../middleware/verify");
 
 // ADD new product
-router.post("/lists/:id", verifyToken, function(req, res) {
+router.post("/lists/:id/products/new", verifyToken, function(req, res) {
 	List.findById(req.params.id, function(err, foundList) {
 		if(err){
 			res.status(400).send({response: "error: List not found."});
