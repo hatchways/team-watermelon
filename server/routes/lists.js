@@ -11,7 +11,7 @@ const verifyToken = require("../middleware/verify");
 router.get("/lists", verifyToken, function (req, res) {
 	User.findById(req.user.id).populate("my_lists").exec(function(err, foundUser) {
 		if(err){
-			res.status(500).send({response: "error: User not found."});
+			res.status(400).send({response: "error: User not found."});
 		} else {
 			res.status(200).send({lists: foundUser.my_lists});
 		}
@@ -22,7 +22,7 @@ router.get("/lists", verifyToken, function (req, res) {
 router.get("/lists/:id", verifyToken, function(req, res) {
 	List.findById(req.params.id).populate("products").exec(function(err, foundList) {
 		if(err){
-			res.status(500).send({response: "error: List not found."});
+			res.status(400).send({response: "error: List not found."});
 		} else {
 			res.status(200).send({list: foundList});
 		}
@@ -47,7 +47,7 @@ router.post("/lists/new", verifyToken, function(req, res) {
 			console.log("success: List created.");
 			User.findById(req.user.id, function(err, foundUser) {
 				if(err){
-					res.status(500).send({response: "error: User not found."});
+					res.status(400).send({response: "error: User not found."});
 				} else {
 					foundUser.my_lists.push(createdList);
 					foundUser.save();
@@ -66,7 +66,7 @@ router.put("/lists/:id", verifyToken, function(req, res) {
 	let updateList = {title: title, image: image, subtitle: subtitle};
 	List.findByIdAndUpdate(req.params.id, updateList, function(err, updatedList) {
 		if(err){
-			res.status(500).send({response: "error: List not found."});
+			res.status(400).send({response: "error: List not found."});
 			res.redirect("/lists");
 		} else {
 			console.log("success: List updated.");
@@ -79,13 +79,13 @@ router.put("/lists/:id", verifyToken, function(req, res) {
 router.delete("/lists/:id", verifyToken, function(req, res) {
 	List.findByIdAndRemove(req.params.id, function(err, foundList) {
 		if(err){
-			res.status(500).send({response: "error: List not found."});
+			res.status(400).send({response: "error: List not found."});
 			res.redirect("/lists");
 		} else { // remove associated products with list too
 			foundList.products.forEach(function(product) {
 				Product.findByIdAndRemove(product, function(err) {
 					if(err){
-						res.status(500).send({response: "error: Product not found."});
+						res.status(400).send({response: "error: Product not found."});
 						res.redirect("/lists");
 					}
 				});
