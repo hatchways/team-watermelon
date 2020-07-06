@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cron = require('node-cron');
 const express = require('express');
 const { join } = require('path');
 const cors = require('cors');
@@ -42,6 +43,14 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use(listRouter);
 app.use(productRouter);
+
+const scrapePriceTag = () => { 
+	console.log("running a task every two minutes");
+	console.log("Here goes Eric's web scraping script");
+};
+//'*/10 * * * *'
+const scrapingTime = cron.schedule('*/2 * * * *', scrapePriceTag);
+// scrapingTime.destroy(); - add it to destroy scheduled task
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
