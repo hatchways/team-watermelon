@@ -15,13 +15,18 @@ ExpressJS  | Back-end (Server)
 ReactJS    | Front-end (Client)
 NodeJS     | JavaScript Runtime Env
 ### Routing
-Routes                      | Use
-------                      | ----
-GET /users                  | Get all users
-POST /users                 | Create a new user
-GET /user/:id/lists         | Get all lists of one user
-POST /user/:id/lists/new    | Create a new list
-- [ ] add more routes to the table
+Routes                                 | Use
+------                                 | ----
+GET /auth                              | Get all users
+POST /auth/register                    | Create a new user
+POST /auth/login                       | Login user
+GET /lists                             | Get all lists of one user
+POST /lists/new                        | Create a new list
+PUT /lists/:id                         | Edit that list
+DELETE /lists/:id                      | Delete that list
+GET /lists/:id                         | Get all products of one list
+POST /lists/:id                        | Add a new product to that list
+DELETE /lists/:id/products/:product_id | Delete the product from that list
 
 ## How to Use
 - [ ] add the deployed url
