@@ -5,7 +5,6 @@ const User = require('../models/User.js');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken.js');
-const verifyToken = require('../middleware/verify.js');
 
 // @route    POST api/registerUser
 // @desc     Register user

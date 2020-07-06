@@ -1,5 +1,4 @@
 const createError = require('http-errors');
-const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const express = require('express');
 const { join } = require('path');
@@ -13,7 +12,6 @@ const authRouter = require('./routes/auth');
 const { json, urlencoded } = express;
 
 var app = express();
-dotenv.config();
 
 //EXTERNAL DB CONFIG
 mongoose
