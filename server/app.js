@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const express = require('express');
 const { join } = require('path');
@@ -12,15 +13,11 @@ const authRouter = require('./routes/auth');
 const { json, urlencoded } = express;
 
 var app = express();
+dotenv.config();
 
 //EXTERNAL DB CONFIG
 mongoose
-	.connect(
-		'mongodb+srv://surhud004:' +
-			process.env.MDBATLAS_PWD +
-			'@cluster0-7zxck.mongodb.net/watermelondb?retryWrites=true&w=majority',
-		{ useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
-	)
+	.connect(process.env.MDB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 	.then(() => {
 		console.log('Connected to external DB!');
 	})

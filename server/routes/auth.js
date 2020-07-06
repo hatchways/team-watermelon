@@ -105,7 +105,7 @@ router.get('/', authMiddleware, async (req, res) => {
 	}
 });
 
-router.post('/verify', verifyToken, async (req, res) => {
+router.post('/verify', authMiddleware, async (req, res) => {
 	try {
 		res.status(200).send('Cookie token verified');
 	} catch (err) {
