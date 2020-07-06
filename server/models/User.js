@@ -16,13 +16,13 @@ const UserSchema = new mongoose.Schema({
 	my_lists: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Product List'
+			ref: 'List'
 		}
 	],
 	friends_list: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Friends List'
+			ref: 'User'
 		}
 	]
 });

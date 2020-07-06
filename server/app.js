@@ -1,15 +1,19 @@
 const createError = require('http-errors');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const express = require('express');
 const { join } = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+
 const indexRouter = require('./routes/index');
 const pingRouter = require('./routes/ping');
 const authRouter = require('./routes/auth');
+const listRouter = require('./routes/lists');
+const productRouter = require('./routes/products');
 
-const { json, urlencoded } = express;
+const { json } = express;
 
 var app = express();
 
@@ -31,13 +35,14 @@ mongoose
 app.use(logger('dev'));
 app.use(json());
 app.use(cors());
-app.use(urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/ping', pingRouter);
 app.use('/auth', authRouter);
+app.use(listRouter);
+app.use(productRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -53,12 +58,6 @@ app.use(function (err, req, res, next) {
 	// render the error page
 	res.status(err.status || 500);
 	res.json({ error: err });
-});
-
-const PORT = 8084;
-
-app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = app;
