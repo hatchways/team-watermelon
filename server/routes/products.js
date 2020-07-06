@@ -10,7 +10,7 @@ const verifyToken = require("../middleware/verify");
 router.post("/lists/:id", verifyToken, function(req, res) {
 	List.findById(req.params.id, function(err, foundList) {
 		if(err){
-			console.log("error: List not found.");
+			res.status(500).send({response: "error: List not found."});
 			res.redirect("/lists");
 		} else {
 			let url = req.body.url;
@@ -21,7 +21,7 @@ router.post("/lists/:id", verifyToken, function(req, res) {
 			var newProduct = {name: name, description: description, url: url, lastprice: 0.0, currentprice: price};
 			Product.create(newProduct, function(err, product) {
 				if(err){
-					console.log("error: Aw, Snap! Something went wrong.");
+					res.status(500).send({response: "error: Aw, Snap! Something went wrong."});
 				} else {
 					foundList.products.push(product);
 					foundList.save();
@@ -37,11 +37,11 @@ router.post("/lists/:id", verifyToken, function(req, res) {
 router.delete("/lists/:id/products/:product_id", verifyToken, function(req, res) {
 	Product.findByIdAndRemove(req.params.product_id, function(err, foundProduct) {
 		if(err){
-			console.log("error: Product not found.");
+			res.status(500).send({response: "error: Product not found."});
 		} else {
 			List.findById(req.params.id, function(err, foundList) {
 				if(err){
-					console.log("error: Product not found.");
+					res.status(500).send({response: "error: Product not found."});
 				} else { //delete associated product id from products array of list too
 					foundList.products.forEach(function(product, index) {
 						if(product.equals(req.params.product_id)) {

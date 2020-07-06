@@ -40,7 +40,6 @@ app.use(cookieParser());
 app.use(express.static(join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/ping', pingRouter);
 app.use('/auth', authRouter);
 app.use(listRouter);
 app.use(productRouter);
