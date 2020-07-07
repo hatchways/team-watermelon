@@ -7,7 +7,6 @@ const { join } = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const listRouter = require('./routes/lists');
@@ -19,12 +18,7 @@ var app = express();
 
 //EXTERNAL DB CONFIG
 mongoose
-	.connect(
-		'mongodb+srv://surhud004:' +
-			process.env.MDBATLAS_PWD +
-			'@cluster0-7zxck.mongodb.net/watermelondb?retryWrites=true&w=majority',
-		{ useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
-	)
+	.connect(process.env.MDB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 	.then(() => {
 		console.log('Connected to external DB!');
 	})
@@ -35,7 +29,7 @@ mongoose
 app.use(logger('dev'));
 app.use(json());
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, 'public')));
 
@@ -66,6 +60,10 @@ app.use(function (err, req, res, next) {
 	// render the error page
 	res.status(err.status || 500);
 	res.json({ error: err });
+});
+
+app.listen(process.env.PORT, () => {
+	console.log(`Server running on port ${process.env.PORT}`);
 });
 
 module.exports = app;
