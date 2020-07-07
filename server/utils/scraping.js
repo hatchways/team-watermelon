@@ -20,7 +20,7 @@ function domainName(url) {
 	return domain;
 }
 const scraping = async (url) => {
-	let pageData;
+	let pageData = {};
 
 	try {
 		const browser = await puppeteer.launch({ headless: true });
@@ -107,13 +107,14 @@ const scraping = async (url) => {
 			});
 
 			await browser.close();
-			console.log(pageData);
+			// console.log(pageData);
 		}
 	} catch (err) {
 		console.log(err);
 		await browser.close();
 		console.log('Browser Closed');
 	}
+	// return Promise.resolve(pageData);
 };
 
 console.log(scraping('https://newyork.craigslist.org/lgi/cto/d/hempstead-2004-acura-rsx-automatic/7155188223.html'));
