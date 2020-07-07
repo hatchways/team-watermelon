@@ -58,7 +58,7 @@ const Navbar = ()=>{
                 Shopping Lists
             </Link>
             <Link component={RouterLink}
-                to="#" 
+                to="/friendslist" 
                 variant="button" 
                 color="textPrimary" 
                 className={classes.link}>

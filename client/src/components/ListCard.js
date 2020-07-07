@@ -7,6 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import CardActionArea from '@material-ui/core/CardActionArea';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -30,19 +31,21 @@ const ListCard = (list)=>{
     const classes = useStyles();
     return (
         <Card className={classes.card}>
-            <CardMedia
-            className={classes.cardMedia}
-            image={list.cover_img}
-            title={list.name}
-            />
-            <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="h5" component="h2">
-                    {list.name}
-                </Typography>
-                <Typography>
-                    {list.products_list.length} items
-                </Typography>
-            </CardContent>
+            <CardActionArea>
+                <CardMedia
+                className={classes.cardMedia}
+                image={list.cover_img}
+                title={list.name}
+                />
+                <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {list.name}
+                    </Typography>
+                    <Typography>
+                        {list.products_list.length} items
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
             <CardActions>
                 <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
                     View

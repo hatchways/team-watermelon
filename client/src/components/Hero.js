@@ -12,7 +12,7 @@ const backgroundImage = "assets/images/bg.jpg";
 const styles = (theme) => ({
   background: {
     backgroundImage: `url(${backgroundImage})`,
-    backgroundColor: '#7fc7d9', // Average color of the background image.
+    backgroundColor: '#FF7F50', // Average color of the background image.
     backgroundPosition: 'center',
   },
   button: {

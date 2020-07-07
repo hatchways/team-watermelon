@@ -7,6 +7,8 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AuthContext from '../state_management/AuthContext';
 import ProductsList from '../components/ProductsList';
+import FriendsList from '../components/FriendsList';
+import {placeholderPL, placeholderFriends} from '../components/PlaceHolder';
 
 //disabling privateRoutes for now for developing FE
 
@@ -18,53 +20,6 @@ import ProductsList from '../components/ProductsList';
 //     />
 // )
 
-const placeholderPL = [
-    {
-        _id:"1",
-        name: "product 1",
-        description:"description 1",
-        url: "https://source.unsplash.com",
-        lastprice: 20.5,
-        currentprice: 18.3,
-        image:"https://source.unsplash.com/random",
-    },
-    {
-        _id:"2",
-        name: "product 2",
-        description:"description 2",
-        url: "https://source.unsplash.com",
-        lastprice: 20.5,
-        currentprice: 18.3,
-        image:"https://source.unsplash.com/random",
-    },
-    {
-        _id:"3",
-        name: "product 3",
-        description:"description 3",
-        url: "https://source.unsplash.com",
-        lastprice: 20.5,
-        currentprice: 18.3,
-        image:"https://source.unsplash.com/random",
-    },
-    {
-        _id:"4",
-        name: "product 4",
-        description:"description 4",
-        url: "https://source.unsplash.com",
-        lastprice: 20.5,
-        currentprice: 18.3,
-        image:"https://source.unsplash.com/random",
-    },
-    {
-        _id:"5",
-        name: "product 5",
-        description:"description 5",
-        url: "https://source.unsplash.com",
-        lastprice: 20.5,
-        currentprice: 18.3,
-        image:"https://source.unsplash.com/random",
-    },
-];
 
 
 const history = createBrowserHistory();
@@ -83,6 +38,7 @@ const Routes = ()=> {
                             auth={authContext.isAuthenticated}
                             component={MainPage} /> */}
                 <Route path='/productslist' component={()=><ProductsList products={placeholderPL}/>}/>
+                <Route path='/friendslist' component={()=><FriendsList products={placeholderFriends}/>}/>
                 <Redirect to="/home" />
             </Switch>
             <Footer/>
