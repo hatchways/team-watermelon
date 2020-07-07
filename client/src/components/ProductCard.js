@@ -7,7 +7,9 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
-
+const linethrough= {
+    "textDecoration": "line-through",
+}
 
 const useStyles = makeStyles({
     card: {
@@ -43,7 +45,7 @@ export default function ProductCard(product) {
                         </Typography>
                         <Grid container>
                             <Grid item xs={12} md={6} lg={6}>
-                            <Typography color="textSecondary" component="linethrough">
+                            <Typography color="textSecondary" style={linethrough}>
                                 price: {product.lastprice}$
                             </Typography>
                             </Grid>
