@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import ProductCard from './ProductCard';
-
+import AddNewItemBar from '../form/AddNewItemBar';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,10 +17,15 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductsList(props) {
     const classes = useStyles();
     const products = props.products;
-    console.log(products);
 
     return (
         <section className={classes.root}>
+            <Container maxWidth="sm" component="main" className={classes.TopContent}>
+                <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
+                Add New Item:
+                </Typography>
+                <AddNewItemBar/>
+            </Container>
             <Container maxWidth="md" component="main">
                 <Typography variant="h5" align="left" color="textSecondary" component="p">
                 Lists Name:

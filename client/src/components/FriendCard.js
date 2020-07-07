@@ -62,7 +62,7 @@ export default function ProductCard(friend) {
                     </Typography> */}
                 </CardContent>
                 <CardActions>
-                    <Button variant="outlined" color="primary" href="#">follow</Button>
+                    <Button variant="outlined" color="primary" href="#" size="small">follow</Button>
                 </CardActions>
             </div>
         </Card>

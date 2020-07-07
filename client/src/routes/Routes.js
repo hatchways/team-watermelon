@@ -38,7 +38,7 @@ const Routes = ()=> {
                             auth={authContext.isAuthenticated}
                             component={MainPage} /> */}
                 <Route path='/productslist' component={()=><ProductsList products={placeholderPL}/>}/>
-                <Route path='/friendslist' component={()=><FriendsList products={placeholderFriends}/>}/>
+                <Route path='/friendslist' component={()=><FriendsList friends={placeholderFriends}/>}/>
                 <Redirect to="/home" />
             </Switch>
             <Footer/>

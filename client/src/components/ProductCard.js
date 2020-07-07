@@ -34,12 +34,13 @@ export default function ProductCard(product) {
 
     return (
 
-        <CardActionArea component="a" href={product.url} target="_blank" rel="noreferrer">
+        
             <Card className={classes.card}>
                 <CardMedia className={classes.cardMedia} image={product.image} title={product.name}/>
-                <div className={classes.cardDetails}>
+                {/* <Grid container className={classes.cardDetails}> */}
+                <CardActionArea component="a" href={product.url} target="_blank" rel="noreferrer">
                     <CardContent className={classes.cardContent}>
-                        <Typography component="h2" variant="h5">
+                        <Typography variant="h5">
                             {product.name}
                         </Typography>
                         <Typography variant="subtitle1" paragraph>
@@ -58,12 +59,13 @@ export default function ProductCard(product) {
                             </Grid>
                         </Grid>
                     </CardContent>
-                    <CardActions>
-                    <Button variant="outlined" color="primary" href="#">remove</Button>
+                    </CardActionArea>
+                    <CardActions >
+                    <Button variant="outlined" color="primary" to="#" size="small">remove</Button>
                     </CardActions>
-                </div>
+                {/* </Grid> */}
                 </Card>
-        </CardActionArea>
+        
 
     );
 }

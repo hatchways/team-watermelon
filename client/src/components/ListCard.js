@@ -8,6 +8,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import CardActionArea from '@material-ui/core/CardActionArea';
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -47,7 +48,7 @@ const ListCard = (list)=>{
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
+                <Button fullWidth component={RouterLink} to="/productslist" color="primary" variant="outlined" className={classes.link}>
                     View
                 </Button>
                 <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
