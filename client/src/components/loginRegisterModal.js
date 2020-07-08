@@ -108,6 +108,7 @@ export default function LoginRegisterModal(props) {
 			setAsyncStart(false);
 		}
 		// return () => thisComponentMounted = false;
+		// eslint-disable-next-line
 	  }, [asyncStart]);
 
 	return (
