@@ -8,14 +8,7 @@ import Footer from '../components/Footer';
 import AuthContext from '../state_management/AuthContext';
 
 //disabling privateRoutes for now for developing FE
-
-// const PrivateRoute = ({component: Component, auth }) => (
-//     <Route render={props => auth === true
-//       ? <Component auth={auth} {...props} />
-//       : <Redirect to={{pathname:'/home'}} />
-//     }
-//     />
-// )
+//import PrivateRoute from '../components/privateRoute';
 
 
 const history = createBrowserHistory();
@@ -29,9 +22,9 @@ const Routes = ()=> {
             <Switch>
                 <Route path='/home' component={()=><LandingPage/>} />
                 <Route exact path='/main' component={MainPage} />
-                {/* <PrivateRoute path='/shoppinglists'
+                {/*<PrivateRoute exact path='/main'
                             auth={authContext.isAuthenticated}
-                            component={MainPage} /> */}
+                            component={MainPage} />*/}
                 <Redirect to="/home" />
             </Switch>
             <Footer/>
