@@ -43,25 +43,28 @@ const scraping = async (url) => {
 				// 	(elem) => elem.innerText
 				// );
 
-				let pageDataObject = {
+				// let pageDataObject = {
+				// 	title: titleData.innerText,
+				// 	price: priceData.innerText.replace(priceBeginning, '').replace(dollarSign, ''),
+				// 	image: imageData.src
+				// 	// description: descriptionData.innerText
+				// };
+				return {
 					title: titleData.innerText,
 					price: priceData.innerText.replace(priceBeginning, '').replace(dollarSign, ''),
 					image: imageData.src
-					// description: descriptionData.innerText
 				};
-				return JSON.stringify(pageDataObject);
 			});
 
 			await browser.close();
 			// return `page data: ${pageData}`;
 
-			console.log(pageData);
+			return pageData;
 		} else if (domainName(url) === 'ebay') {
 			//EBAY SECTION
 			await page.waitForSelector('#itemTitle');
 			pageData = await page.evaluate(() => {
 				const priceBeginning = /[a-zA-Z]*/;
-				const dollarSign = /[$]/;
 				let titleData = document.getElementById(`itemTitle`);
 				let titleDataText = titleData.innerText.split('').splice(16).join('');
 				let priceData = document.getElementById(`prcIsum`);
@@ -72,7 +75,6 @@ const scraping = async (url) => {
 
 				let pageDataObject = {
 					title: titleDataText,
-					//will want to change this to just the number
 					price: priceData.innerText.replace(priceBeginning, ''),
 					image: imageData.src
 					// description: descriptionData
@@ -81,7 +83,7 @@ const scraping = async (url) => {
 			});
 
 			await browser.close();
-			console.log(pageData);
+			return pageData;
 		} else if (domainName(url) === 'craigslist') {
 			//CRAIGSLIST SECTION
 			await page.waitForSelector('#titletextonly');
@@ -114,9 +116,13 @@ const scraping = async (url) => {
 		await browser.close();
 		console.log('Browser Closed');
 	}
-	// return Promise.resolve(pageData);
+	// return pageData;
 };
 
-console.log(scraping('https://newyork.craigslist.org/lgi/cto/d/hempstead-2004-acura-rsx-automatic/7155188223.html'));
+console.log(
+	scraping(
+		'https://www.amazon.com/AmazonBasics-Lightning-USB-Cable-Certified/dp/B07DC9SBLQ/ref=sr_1_1?dchild=1&keywords=amazonbasics&pf_rd_p=9349ffb9-3aaa-476f-8532-6a4a5c3da3e7&pf_rd_r=49TNSFGBW7YQBGC1R78J&qid=1594166698&sr=8-1'
+	)
+);
 
 module.exports = scraping;
