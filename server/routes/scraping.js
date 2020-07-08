@@ -79,21 +79,16 @@ router.post('/', async (req, res) => {
 			//CRAIGSLIST SECTION
 			await page.waitForSelector('#titletextonly');
 			pageData = await page.evaluate(() => {
-				const priceBeginning = /[a-zA-Z]*/;
-				const dollarSign = /[$]/;
 				let titleData = document.getElementById(`titletextonly`);
 				let priceData = document.querySelector(`.price`);
 				let imageData = document.querySelector(`.swipe .swipe-wrap div img`);
-				// let descriptionData = [...document.querySelectorAll(`#feature-bullets div div div`)].map(
-				// 	(elem) => elem.innerText
-				// );
 				let descriptionData = document.querySelector('#postingbody');
 
 				return {
 					title: titleData.innerText,
 					price: priceData.innerText,
 					image: imageData.src,
-					description: descriptionData.innerText
+					description: descriptionData.innerText.replace(/\n/g, '')
 				};
 			});
 
