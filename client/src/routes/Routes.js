@@ -11,14 +11,7 @@ import FriendsList from '../components/FriendsList';
 import {placeholderPL, placeholderFriends} from '../components/PlaceHolder';
 
 //disabling privateRoutes for now for developing FE
-
-// const PrivateRoute = ({component: Component, auth }) => (
-//     <Route render={props => auth === true
-//       ? <Component auth={auth} {...props} />
-//       : <Redirect to={{pathname:'/home'}} />
-//     }
-//     />
-// )
+import PrivateRoute from '../components/privateRoute';
 
 
 
@@ -34,11 +27,12 @@ const Routes = ()=> {
             <Switch>
                 <Route path='/home' component={()=><LandingPage/>} />
                 <Route exact path='/main' component={MainPage} />
-                {/* <PrivateRoute path='/shoppinglists'
+                {/*<PrivateRoute exact path='/main'
                             auth={authContext.isAuthenticated}
                             component={MainPage} /> */}
                 <Route path='/productslist' component={()=><ProductsList products={placeholderPL}/>}/>
                 <Route path='/friendslist' component={()=><FriendsList friends={placeholderFriends}/>}/>
+
                 <Redirect to="/home" />
             </Switch>
             <Footer/>

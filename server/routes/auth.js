@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/auth.js');
 const User = require('../models/User.js');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
@@ -95,7 +94,7 @@ router.post(
 // @desc     Get user by token
 // @access   Private
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.id);
 		res.send(user);
