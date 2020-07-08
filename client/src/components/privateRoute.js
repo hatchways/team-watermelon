@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-const PrivateRoute = ({component: Component, auth }) => (
-    <Route render={props => auth === true
-        ? <Component auth={auth} {...props} />
+const PrivateRoute = ({component: Component, isAuthenticated }) => (
+    <Route render={props => isAuthenticated === true
+        ? <Component auth={isAuthenticated} {...props} />
         : <Redirect to={{pathname:'/home'}} />
     }
     />

@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 import AuthContext from '../state_management/AuthContext';
 
 //disabling privateRoutes for now for developing FE
-//import PrivateRoute from '../components/privateRoute';
+import PrivateRoute from '../components/privateRoute';
 
 
 const history = createBrowserHistory();
