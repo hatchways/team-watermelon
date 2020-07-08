@@ -1,4 +1,6 @@
 const puppeteer = require('puppeteer');
+const express = require('express');
+const router = express.Router();
 
 function domainName(url) {
 	const urlBeginning = /^https?:\/\/?w+\./;
@@ -19,8 +21,8 @@ function domainName(url) {
 	}
 	return domain;
 }
-const scraping = async (url) => {
-	let pageData = {};
+router.post('/', async (req, res) => {
+	const url = req.body.url;
 
 	try {
 		const browser = await puppeteer.launch({ headless: true });
@@ -34,7 +36,6 @@ const scraping = async (url) => {
 			pageData = await page.evaluate(() => {
 				const priceBeginning = /[a-zA-Z]*/;
 				const dollarSign = /[$]/;
-				//nothing inside or outside of page.evaluate is available outside of it's closure, because it is running purely in the dom
 				let titleData = document.getElementById(`productTitle`);
 				let priceData = document.getElementById(`price_inside_buybox`);
 				let imageData = document.getElementById(`landingImage`);
@@ -42,24 +43,15 @@ const scraping = async (url) => {
 				// let descriptionData = [...document.querySelectorAll(`#feature-bullets ul li span`)].map(
 				// 	(elem) => elem.innerText
 				// );
-
-				// let pageDataObject = {
-				// 	title: titleData.innerText,
-				// 	price: priceData.innerText.replace(priceBeginning, '').replace(dollarSign, ''),
-				// 	image: imageData.src
-				// 	// description: descriptionData.innerText
-				// };
 				return {
 					title: titleData.innerText,
-					price: priceData.innerText.replace(priceBeginning, '').replace(dollarSign, ''),
+					price: priceData.innerText.replace(priceBeginning, '').replace(dollarSign, '').trim(),
 					image: imageData.src
 				};
 			});
 
 			await browser.close();
-			// return `page data: ${pageData}`;
-
-			return pageData;
+			res.status(200).send(pageData);
 		} else if (domainName(url) === 'ebay') {
 			//EBAY SECTION
 			await page.waitForSelector('#itemTitle');
@@ -73,17 +65,16 @@ const scraping = async (url) => {
 					(elem) => elem.innerText
 				);
 
-				let pageDataObject = {
+				return {
 					title: titleDataText,
 					price: priceData.innerText.replace(priceBeginning, ''),
 					image: imageData.src
 					// description: descriptionData
 				};
-				return JSON.stringify(pageDataObject);
 			});
 
 			await browser.close();
-			return pageData;
+			res.status(200).send(pageData);
 		} else if (domainName(url) === 'craigslist') {
 			//CRAIGSLIST SECTION
 			await page.waitForSelector('#titletextonly');
@@ -98,31 +89,23 @@ const scraping = async (url) => {
 				// );
 				let descriptionData = document.querySelector('#postingbody');
 
-				let pageDataObject = {
+				return {
 					title: titleData.innerText,
-					//will want to change this to just the number
 					price: priceData.innerText,
 					image: imageData.src,
 					description: descriptionData.innerText
 				};
-				return JSON.stringify(pageDataObject);
 			});
 
 			await browser.close();
-			// console.log(pageData);
+			res.status(200).send(pageData);
 		}
 	} catch (err) {
 		console.log(err);
 		await browser.close();
 		console.log('Browser Closed');
+		res.status(500).send('Server Error');
 	}
-	// return pageData;
-};
+});
 
-console.log(
-	scraping(
-		'https://www.amazon.com/AmazonBasics-Lightning-USB-Cable-Certified/dp/B07DC9SBLQ/ref=sr_1_1?dchild=1&keywords=amazonbasics&pf_rd_p=9349ffb9-3aaa-476f-8532-6a4a5c3da3e7&pf_rd_r=49TNSFGBW7YQBGC1R78J&qid=1594166698&sr=8-1'
-	)
-);
-
-module.exports = scraping;
+module.exports = router;
