@@ -29,10 +29,9 @@ router.post('/', async (req, res) => {
 		const page = await browser.newPage();
 		await page.goto(url);
 
-		//This makes sure that the page has loaded based on one selector
 		if (domainName(url) === 'amazon') {
+			//Amazon Section
 			await page.waitForSelector('span#productTitle');
-
 			pageData = await page.evaluate(() => {
 				const priceBeginning = /[a-zA-Z]*/;
 				const dollarSign = /[$]/;
@@ -53,7 +52,7 @@ router.post('/', async (req, res) => {
 			await browser.close();
 			res.status(200).send(pageData);
 		} else if (domainName(url) === 'ebay') {
-			//EBAY SECTION
+			//Ebay Section
 			await page.waitForSelector('#itemTitle');
 			pageData = await page.evaluate(() => {
 				const priceBeginning = /[a-zA-Z]*/;
@@ -76,7 +75,7 @@ router.post('/', async (req, res) => {
 			await browser.close();
 			res.status(200).send(pageData);
 		} else if (domainName(url) === 'craigslist') {
-			//CRAIGSLIST SECTION
+			//Craigslist Section
 			await page.waitForSelector('#titletextonly');
 			pageData = await page.evaluate(() => {
 				let titleData = document.getElementById(`titletextonly`);
