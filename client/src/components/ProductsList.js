@@ -22,7 +22,7 @@ export default function ProductsList(props) {
         <section className={classes.root}>
             <Container maxWidth="sm" component="main" className={classes.TopContent}>
                 <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
-                Add New Item:
+                Add New Product
                 </Typography>
                 <AddNewItemBar/>
             </Container>
