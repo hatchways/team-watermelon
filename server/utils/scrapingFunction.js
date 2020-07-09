@@ -24,6 +24,8 @@ const promiseTest = async () => {
 		return bob;
 	} catch (error) {}
 };
-
+const promiseReturn = () => {
+	return promiseTest();
+};
 console.log(promiseTest());
 // console.log(scraping(amazonUrl));
