@@ -28,22 +28,26 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const ListCard = (list)=>{
+const ListCard = (prop)=>{
+    const list =prop.list
     const classes = useStyles();
     return (
         <Card className={classes.card}>
             <CardActionArea>
                 <CardMedia
                 className={classes.cardMedia}
-                image={list.cover_img}
-                title={list.name}
+                image={list.image}
+                title={list.title}
                 />
                 <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {list.name}
+                        {list.title}
+                    </Typography>
+                    <Typography gutterBottom component="h5">
+                        {list.subtitle}
                     </Typography>
                     <Typography>
-                        {list.products_list.length} items
+                        {list.products.length} items
                     </Typography>
                 </CardContent>
             </CardActionArea>
