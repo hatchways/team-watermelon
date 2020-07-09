@@ -15,8 +15,10 @@ const scraping = async (url) => {
 		});
 		await browser.close();
 		return pageData;
-		// console.log(pageData);
+		console.log(pageData);
 	} catch (error) {}
+	console.log(pageData);
+	return pageData;
 };
 const promiseTest = async () => {
 	try {
@@ -27,5 +29,13 @@ const promiseTest = async () => {
 const promiseReturn = () => {
 	return promiseTest();
 };
-console.log(promiseTest());
-// console.log(scraping(amazonUrl));
+async function run() {
+	const data = await scraping(amazonUrl).then((result) => {
+		return result;
+	});
+	return data;
+	// Your logic goes here.
+}
+// console.log(Promise.resolve(scraping(amazonUrl)));
+console.log(scraping(amazonUrl));
+// console.log(run());
