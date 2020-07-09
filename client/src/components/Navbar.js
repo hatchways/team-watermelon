@@ -1,9 +1,11 @@
-import React,{useContext} from 'react';
+import React,{useContext, useEffect} from 'react';
 import {Toolbar, AppBar, Box, Typography, Link, IconButton, Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import AuthContext from '../state_management/AuthContext';
+import {fetchShLists} from '../state_management/actionCreators/shoppingListsActs';
+import ShListsContext from '../state_management/ShListsContext';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -23,11 +25,21 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-
+let needsFetchingLists = true;
 
 const Navbar = ()=>{
     const classes = useStyles();
     const authContext = useContext(AuthContext);
+    const shListsContext = useContext(ShListsContext);
+    
+
+    useEffect(() => {
+        if(authContext.isAuthenticated && needsFetchingLists){ //pretects, because private route is uncommented for developing
+            fetchShLists(shListsContext.dispatchShLists,shListsContext.handleShListsFailure);
+            needsFetchingLists = false;
+            console.log("Navbar/useEffet is fetching");
+        }
+    });
 
     return(
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
@@ -72,7 +84,7 @@ const Navbar = ()=>{
                 Notifications
             </Link>
             {authContext.isAuthenticated?
-                <Button onClick={()=>authContext.handleLogout({})} 
+                <Button onClick={()=>{authContext.handleLogout({});needsFetchingLists = true;}} 
                     color="primary" 
                     variant="outlined" 
                     className={classes.link}

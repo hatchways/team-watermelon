@@ -1,145 +1,14 @@
-import React from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import ListCard from './ListCard';
 import { makeStyles } from '@material-ui/core/styles';
 import AddNewItemBar from '../form/AddNewItemBar';
-
-// placeholder
-const lists = [
-    {
-        _id:1,
-        name: 'List 1',
-        products_list: [
-            {
-                _id:1,
-                name:"product 1",
-                description:"product description 1",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            },
-            {
-                _id:2,
-                name:"product 2",
-                description:"product description 2",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            },
-            {
-                _id:3,
-                name:"product 3",
-                description:"product description 3",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            }
-        ],
-        items: 35,
-        cover_img:"https://source.unsplash.com/random"
-    },
-    {   
-        _id:2,
-        name: 'List 2',
-        products_list: [
-            {
-                _id:4,
-                name:"product 4",
-                description:"product description 4",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            },
-            {
-                _id:5,
-                name:"product 5",
-                description:"product description 5",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            }
-        ],
-        items: 11,
-        cover_img:"https://source.unsplash.com/random"
-    },
-    {
-        _id:3,
-        name: 'List 3',
-        products_list: [
-            {
-                _id:6,
-                name:"product 6",
-                description:"product description 6",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            },
-            {
-                _id:7,
-                name:"product 7",
-                description:"product description 7",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            }
-        ],
-        items: 8,
-        cover_img:"https://source.unsplash.com/random"
-    }
-    ,
-    {
-        _id:4,
-        name: 'List 4',
-        products_list: [
-            {
-                _id:8,
-                name:"product 8",
-                description:"product description 8",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            },
-            {
-                _id:9,
-                name:"product 9",
-                description:"product description 9",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            },
-            {
-                _id:2,
-                name:"product 10",
-                description:"product description 10",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            }
-        ],
-        items: 8,
-        cover_img:"https://source.unsplash.com/random"
-    }
-    ,
-    {
-        _id:5,
-        name: 'List 5',
-        products_list: [
-            {
-                _id:11,
-                name:"product 11",
-                description:"product description 11",
-                url:"https://source.unsplash.com/random",
-                last_price:20,
-                current_price:10
-            }
-        ],
-        items: 8,
-        cover_img:"https://source.unsplash.com/random"
-    }
-  ];
-
+import ShListsContext from '../state_management/ShListsContext';
+import AuthContext from '../state_management/AuthContext';
+import {addNewList} from '../state_management/actionCreators/shoppingListsActs';
+import Button from '@material-ui/core/Button';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -152,9 +21,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
 const ShoppingLists = ()=>{
     const classes = useStyles();
+    const authContext = useContext(AuthContext);
+    const shListsContext = useContext(ShListsContext);
+    const lists = shListsContext.lists;
 
+    const newList = {
+        title:"tlist_2",
+        image:"https://source.unsplash.com/pPzQP35zh4o/1920x1280",
+        description:"description test",
+        user:authContext.name,
+    }
+    
+      
     return(
         <section className={classes.root}>
             <Container maxWidth="sm" component="main" className={classes.TopContent}>
@@ -162,9 +43,13 @@ const ShoppingLists = ()=>{
                 Add New Item:
                 </Typography>
                 <AddNewItemBar/>
+               
             </Container>
-            
             <Container maxWidth="md" component="main">
+                {ShListsContext.isLoading?"true":"fales"}
+            <Button color="primary" variant="outlined"
+            onClick={()=>addNewList(shListsContext.dispatchNewShList,newList)}>test add a new list</Button>
+                
                 <Typography variant="h5" align="left" color="textSecondary" component="p">
                 My Shopping Lists:
                 </Typography>
@@ -177,6 +62,8 @@ const ShoppingLists = ()=>{
                 ))}
                 </Grid>
             </Container>
+            
+                
         </section>
     )
 }
