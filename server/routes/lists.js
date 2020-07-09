@@ -51,7 +51,7 @@ router.post("/lists/new", verifyToken, function(req, res) {
 				} else {
 					foundUser.my_lists.push(createdList);
 					foundUser.save();
-					res.status(200).send({list_id: createdList._id});
+					res.status(200).send({list: createdList});
 				}
 			});
 		}
