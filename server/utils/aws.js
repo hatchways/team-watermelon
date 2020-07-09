@@ -2,22 +2,39 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
 
-aws_access_key_id = process.env.AWS_ACCESS_KEY_ID;
-aws_secret_access_key = process.env.AWS_SECRET_ACCESS_KEY;
+// aws_access_key_id = process.env.AWS_ACCESS_KEY_ID;
+// aws_secret_access_key = process.env.AWS_SECRET_ACCESS_KEY;
 
-AWS.config.update({
+// AWS.config.update({
+// 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+// 	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+// });
+
+// AWS.config.getCredentials(function (err) {
+// 	if (err) console.log(err.stack);
+// 	// credentials not loaded
+// 	else {
+// 		console.log('Access key:', AWS.config.credentials.accessKeyId);
+// 	}
+// });
+
+const s3 = new AWS.S3({
 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
 	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
-AWS.config.getCredentials(function (err) {
-	if (err) console.log(err.stack);
-	// credentials not loaded
-	else {
-		console.log('Access key:', AWS.config.credentials.accessKeyId);
+const params = {
+	Bucket: 'test',
+	CreateBucketConfiguration: {
+		// Set your region here
+		LocationConstraint: 'us-east-1'
 	}
-});
+};
 
+s3.createBucket(params, function (err, data) {
+	if (err) console.log(err, err.stack);
+	else console.log('Bucket Created Successfully', data.Location);
+});
 //configuring the AWS environment
 // AWS.config.update({
 // 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
