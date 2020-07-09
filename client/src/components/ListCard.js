@@ -28,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const ListCard = (list)=>{
+const ListCard = (prop)=>{
+    const list =prop.list
     const classes = useStyles();
     return (
         <Card className={classes.card}>

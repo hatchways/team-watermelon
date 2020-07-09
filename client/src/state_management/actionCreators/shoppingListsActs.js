@@ -23,30 +23,19 @@ export const fetchShLists = (dispatch,handleErr) => {
     })
     .then(response => response.json())
     .then(res=>dispatch(res))
-    .catch(error => handleErr(error.message));
+    .catch(error => handleErr(error));
 }
 
 
 export const addNewList = (dispatch,list) => {
 
-
-    const newList = {
-        title: list.title,
-        imageurl: list.image,
-        listdescription: list.description,
-        products: []
-    };
     
     return fetch(baseUrl + "/lists/new", {
         method: "POST",
-        body: JSON.stringify(newList),
+        body: JSON.stringify(list),
         headers: {
           "Content-Type": "application/json"
         },
-        user:{
-            id: list.user,
-            // name: user_name //server end don't read this field?!
-        }
     })
     .then(response => {
         if (response.ok) {
@@ -61,7 +50,7 @@ export const addNewList = (dispatch,list) => {
             throw error;
       })
     .then(response => response.json())
-    .then(res=>console.log(res))  //BE returns old data
-    // .then(response => dispatch(response))  needs BE to send list id back
+    // .then(res=>console.log(res))
+    .then(response => dispatch(response))
     .catch(error =>  { console.log('post a new list', error.message); alert('Your new list could not be created\nError: '+error.message); });
 };

@@ -26,10 +26,10 @@ const Routes = ()=> {
             <Navbar/>
             <Switch>
                 <Route path='/home' component={()=><LandingPage/>} />
-                <Route exact path='/main' component={MainPage} />
+                <Route exact path='/main' component={()=><MainPage/>}/>
                 {/*<PrivateRoute exact path='/main'
                             auth={authContext.isAuthenticated}
-                            component={MainPage} /> */}
+                            component={()=><MainPage/>} /> */}
                 <Route path='/productslist' component={()=><ProductsList products={placeholderPL}/>}/>
                 <Route path='/friendslist' component={()=><FriendsList friends={placeholderFriends}/>}/>
 

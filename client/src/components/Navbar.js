@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 let needsFetchingLists = true;
+let needsCleanList = false;
 
 const Navbar = ()=>{
     const classes = useStyles();
@@ -38,6 +39,10 @@ const Navbar = ()=>{
             fetchShLists(shListsContext.dispatchShLists,shListsContext.handleShListsFailure);
             needsFetchingLists = false;
             console.log("Navbar/useEffet is fetching");
+        }
+        if(needsCleanList){
+            shListsContext.handleShListsFailure({response:""});
+            needsCleanList = false;
         }
     });
 
@@ -84,7 +89,9 @@ const Navbar = ()=>{
                 Notifications
             </Link>
             {authContext.isAuthenticated?
-                <Button onClick={()=>{authContext.handleLogout({});needsFetchingLists = true;}} 
+                <Button onClick={()=>{authContext.handleLogout({});
+                                        needsFetchingLists = true;
+                                        needsCleanList = true;}} 
                     color="primary" 
                     variant="outlined" 
                     className={classes.link}
