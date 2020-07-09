@@ -6,7 +6,7 @@ const List = require('../models/List');
 const Product = require('../models/Product');
 
 const verifyToken = require('../middleware/verify');
-
+const scrapingFunction = require('../utils/scrapingFunction');
 
 const scrapePriceTag = () => { 
 	console.log("scraping every two minutes");
@@ -15,10 +15,14 @@ const scrapePriceTag = () => {
 			console.log("error: No products for cron");
 		} else {
 			allProducts.forEach(function(eachProduct) {
-				console.log(eachProduct.url);
-				// router.post("/scraping", send_the_url_via_req.body)
-				// fetch("/scraping") --> npm node-fetch
-				// request.post("/scraping") --> npm request
+				// console.log(eachProduct.url);
+				scrapingFunction(eachProduct.url)
+				.then((result) => {
+					console.log(result);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 			});
 		}
 	});
