@@ -6,21 +6,19 @@ import { createBrowserHistory } from 'history'
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AuthContext from '../state_management/AuthContext';
+import ProductsList from '../components/ProductsList';
+import FriendsList from '../components/FriendsList';
+import {placeholderPL, placeholderFriends} from '../components/PlaceHolder';
 
 //disabling privateRoutes for now for developing FE
+import PrivateRoute from '../components/privateRoute';
 
-// const PrivateRoute = ({component: Component, auth }) => (
-//     <Route render={props => auth === true
-//       ? <Component auth={auth} {...props} />
-//       : <Redirect to={{pathname:'/home'}} />
-//     }
-//     />
-// )
 
 
 const history = createBrowserHistory();
 
 const Routes = ()=> {
+    // eslint-disable-next-line
     const authContext = useContext(AuthContext);
     return(
         
@@ -29,9 +27,12 @@ const Routes = ()=> {
             <Switch>
                 <Route path='/home' component={()=><LandingPage/>} />
                 <Route exact path='/main' component={MainPage} />
-                {/* <PrivateRoute path='/shoppinglists'
+                {/*<PrivateRoute exact path='/main'
                             auth={authContext.isAuthenticated}
                             component={MainPage} /> */}
+                <Route path='/productslist' component={()=><ProductsList products={placeholderPL}/>}/>
+                <Route path='/friendslist' component={()=><FriendsList friends={placeholderFriends}/>}/>
+
                 <Redirect to="/home" />
             </Switch>
             <Footer/>

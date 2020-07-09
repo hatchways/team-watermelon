@@ -9,6 +9,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const listRouter = require('./routes/lists');
+const scrapingRouter = require('./routes/scraping');
 const productRouter = require('./routes/products');
 
 const { json } = express;
@@ -34,6 +35,8 @@ app.use(express.static(join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/scraping', scrapingRouter);
+
 app.use(listRouter);
 app.use(productRouter);
 
