@@ -1,10 +1,31 @@
 const express = require("express");
 const router = express.Router();
+const cron = require('node-cron');
 
 const List = require("../models/List");
 const Product = require("../models/Product");
 
 const verifyToken = require("../middleware/verify");
+
+
+const scrapePriceTag = () => { 
+	console.log("scraping every two minutes");
+	Product.find({}).exec(function(err, allProducts){
+		if(err || !allProducts.length){
+			console.log("error: No products for cron");
+		} else {
+			allProducts.forEach(function(eachProduct) {
+				console.log(eachProduct.url);
+				
+			});
+		}
+	});
+};
+//'*/10 * * * *'
+const scrapingTime = cron.schedule('*/2 * * * *', scrapePriceTag);
+// scrapingTime.destroy(); - add it to destroy scheduled task
+
+
 
 // ADD new product
 router.post("/lists/:id/products/new", verifyToken, function(req, res) {
