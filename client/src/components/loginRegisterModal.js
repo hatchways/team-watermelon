@@ -99,14 +99,17 @@ export default function LoginRegisterModal(props) {
 		if (asyncStart){
 			loginRegister(name, email, password, loginActive)
 			.then(res=>{
-				if (res != null) {
+				if (res && res != null && res.data != null) {
 					setUserData(res.data);
 					authContext.handleLogin(res.data);
 					console.log(res);
+				}else{
+					console.log("error: fetching user data failed.");
 				};
 			});
 			setAsyncStart(false);
 		}
+		console.log("test login/useEffect");
 		// return () => thisComponentMounted = false;
 		// eslint-disable-next-line
 	  }, [asyncStart]);

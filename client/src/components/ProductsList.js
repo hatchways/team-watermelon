@@ -22,7 +22,7 @@ export default function ProductsList(props) {
         <section className={classes.root}>
             <Container maxWidth="sm" component="main" className={classes.TopContent}>
                 <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
-                Add New Item:
+                Add New Product
                 </Typography>
                 <AddNewItemBar/>
             </Container>
@@ -34,7 +34,7 @@ export default function ProductsList(props) {
                 <Grid container spacing={1} alignItems="center">
                     {products.map((product) => (
                         <Grid item key={product._id} xs = {12} md = {12} lg={12}>
-                        {ProductCard(product)}
+                        <ProductCard product={product}/>
                         </Grid>
                     ))}
                 </Grid>
