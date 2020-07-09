@@ -16,7 +16,9 @@ const scrapePriceTag = () => {
 		} else {
 			allProducts.forEach(function(eachProduct) {
 				console.log(eachProduct.url);
-				
+				// router.post("/scraping", send_the_url_via_req.body)
+				// fetch("/scraping") --> npm node-fetch
+				// request.post("/scraping") --> npm request
 			});
 		}
 	});
