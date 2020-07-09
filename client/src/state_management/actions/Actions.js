@@ -44,35 +44,3 @@ export const delete_shoppingList = (list) => {
         payload: list
     }
 };
-
-
-// dispatching products in a list
-export const products_loading = (products) => {
-    return{
-        type: ACTION_TYPES.PRODUCTS_SUCCESS,
-        payload: products,
-    }
-};
-
-export const products_loading_failed = (errmess) => {
-    return{
-        type: ACTION_TYPES.PRODUCTS_FAILED,
-        payload: errmess
-    }
-};
-
-
-// dispatching a products
-export const add_product = (product) => {
-    return{
-        type: ACTION_TYPES.ADD_PRODUCT,
-        payload: product
-    }
-};
-
-export const delete_product = (product) => {
-    return{
-        type: ACTION_TYPES.DELETE_PRODUCT,
-        payload: product
-    }
-};

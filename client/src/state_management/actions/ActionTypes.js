@@ -15,15 +15,3 @@ export const ADD_SH_LIST = "ADD_SHOPPING_LIST"
 export const DELETE_SH_LIST = "DELETE_SHOPPING_LIST"
 
 
-// dispatching products in a list
-export const PRODUCTS_SUCCESS = "PRODUCTS_SUCCESS";
-
-export const PRODUCTS_FAILED = 'COMMENTS_FAILED';
-
-
-// dispatching a product
-export const ADD_PRODUCT = "ADD_PRODUCT"
-
-export const DELETE_PRODUCT = "DELETE_PRODUCT"
-
-
