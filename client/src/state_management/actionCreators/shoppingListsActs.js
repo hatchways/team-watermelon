@@ -1,11 +1,7 @@
-// import axios from 'axios';
-
 
 const baseUrl = '';
 
 export const fetchShLists = (dispatch,handleErr) => {
-
-
 
     return fetch(baseUrl + "/lists")
     .then(response => {
@@ -29,7 +25,6 @@ export const fetchShLists = (dispatch,handleErr) => {
 
 export const addNewList = (dispatch,list) => {
 
-    
     return fetch(baseUrl + "/lists/new", {
         method: "POST",
         body: JSON.stringify(list),
@@ -50,7 +45,6 @@ export const addNewList = (dispatch,list) => {
             throw error;
       })
     .then(response => response.json())
-    // .then(res=>console.log(res))
     .then(response => dispatch(response))
     .catch(error =>  { console.log('post a new list', error.message); alert('Your new list could not be created\nError: '+error.message); });
 };
