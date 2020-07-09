@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export default function BasicTextFields(props) {
   const classes = useStyles();
   const [productUrl, setProductUrl] = useState('');
+  console.log("AddNewItemBar",props.listId);
 
   const handleSubmit = (e) => {
     e.preventDefault();
