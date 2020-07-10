@@ -1,28 +1,26 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
-const router = express.Router();
 
-function domainName(url) {
-	const urlBeginning = /^https?:\/\/?w+\./;
-	const ebayRe = /^\bebay\b/;
-	const amazonRe = /^\bamazon\b/;
-	const craigslistRe = /\b\.craigslist\.\b/;
-	let domain = '';
-	let domainNoEnd = url.replace(urlBeginning, '');
+const scraping = async (url) => {
+	function domainName(address) {
+		const urlBeginning = /^https?:\/\/?w+\./;
+		const ebayRe = /^\bebay\b/;
+		const amazonRe = /^\bamazon\b/;
+		const craigslistRe = /\b\.craigslist\.\b/;
+		let domain = '';
+		let domainNoEnd = address.replace(urlBeginning, '');
 
-	if (ebayRe.test(domainNoEnd)) {
-		domain = 'ebay';
-	} else if (amazonRe.test(domainNoEnd)) {
-		domain = 'amazon';
-	} else if (craigslistRe.test(domainNoEnd)) {
-		domain = 'craigslist';
-	} else {
-		domain = 'Please enter an ebay or amazon domain';
+		if (ebayRe.test(domainNoEnd)) {
+			domain = 'ebay';
+		} else if (amazonRe.test(domainNoEnd)) {
+			domain = 'amazon';
+		} else if (craigslistRe.test(domainNoEnd)) {
+			domain = 'craigslist';
+		} else {
+			domain = 'Please enter an ebay or amazon domain';
+		}
+		return domain;
 	}
-	return domain;
-}
-router.post('/', async (req, res) => {
-	const url = req.body.url;
 
 	try {
 		const browser = await puppeteer.launch({ headless: true });
@@ -82,7 +80,7 @@ router.post('/', async (req, res) => {
 			});
 
 			await browser.close();
-			res.status(200).send(pageData);
+			return pageData;
 		} else if (domainName(url) === 'ebay') {
 			//EBAY SECTION
 			await page.waitForSelector('#itemTitle');
@@ -100,7 +98,7 @@ router.post('/', async (req, res) => {
 			});
 			pageData.url = url;
 			await browser.close();
-			res.status(200).send(pageData);
+			return pageData;
 		} else if (domainName(url) === 'craigslist') {
 			//CRAIGSLIST SECTION
 			await page.waitForSelector('#titletextonly');
@@ -129,14 +127,13 @@ router.post('/', async (req, res) => {
 			});
 
 			await browser.close();
-			res.status(200).send(pageData);
+			return pageData;
 		}
 	} catch (err) {
 		console.log(err);
 		await browser.close();
 		console.log('Browser Closed');
-		res.status(500).send('Server Error');
 	}
-});
+};
 
-module.exports = router;
+module.exports = scraping;
