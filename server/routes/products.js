@@ -25,7 +25,7 @@ const scrapePriceTag = async () => {
 					// TO-DO add image field to Product Schema...
 					//eachProduct.image = productDetails.image;
 					eachProduct.save();
-					console.log("success: Updated price of "+productDetails.title);
+					console.log("success: Updated price "+ productDetails.price +" of "+productDetails.title);
 				}
 			});
 		}
