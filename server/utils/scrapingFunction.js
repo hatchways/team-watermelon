@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer');
-const express = require('express');
 
 const scraping = async (url) => {
 	function domainName(address) {
