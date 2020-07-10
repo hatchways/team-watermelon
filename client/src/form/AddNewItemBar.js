@@ -27,42 +27,17 @@ export default function BasicTextFields(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(productUrl);
-    axios.post('/scraping', {
-      url: productUrl
-    })
-    .then((response) => {
-      console.log(response);
 
-      axios.post("/lists/"+props.listId+"/products/new", {
-        url: productUrl,
-        name: response.data.title,
-        description: response.data.description,
-        image: response.data.image,
-        price: response.data.price
-      })
-      .then(function(response) {
-        console.log("will return nothing"+ response);
-        //can return product id or just re-render the product details from DB.
-      })
-      .catch((error) => {
-        console.log(error);
-      });  
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
-    /*This will be uncommented if we remove /scraping and just pass url to BE.
     axios.post("/lists/"+props.listId+"/products/new", {
       url: productUrl
     })
     .then(function(response) {
-      console.log("will return nothing"+ response);
-      //can return extracted data or just re-render the product details from DB.
+      console.log("success: Product scraped and added to DB");
+      console.log(response.data);
     })
     .catch((error) => {
       console.log(error);
-    });*/
+    });
 
   }
 
