@@ -35,7 +35,6 @@ app.use(express.static(join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/scraping', scrapingRouter);
 
 app.use(listRouter);
 app.use(productRouter);
