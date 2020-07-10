@@ -14,11 +14,10 @@ router.post('/lists/:id/products/new', verifyToken, function (req, res) {
 			res.redirect('/lists');
 		} else {
 			let url = req.body.url;
-
-			let name = 'tempProduct';
-			let description = 'tempDesc';
-			let price = 23.46;
-			// WEB SCRAPING FROM URL - SCRAPE name, description, price
+			let name = req.body.title;
+			let description = req.body.description;
+			let price = parseFloat(req.body.price.trim().substring(1)).toFixed(2);
+			// Call web scraper function here then above just pass url, or else keep the /scraping route and this as it is.
 			var newProduct = { name: name, description: description, url: url, lastprice: 0.0, currentprice: price };
 			Product.create(newProduct, function (err, product) {
 				if (err) {
