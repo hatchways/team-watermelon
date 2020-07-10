@@ -1,29 +1,139 @@
 const puppeteer = require('puppeteer');
-const arr = [];
-// let obj = {};
-const amazonUrl =
-    'https://www.amazon.ca/Namco-Bandai-Dark-Souls-Fades/dp/B06XTJMF4B/ref=sr_1_1?dchild=1&keywords=dark+souls+4&qid=1594306190&sr=8-1';
+const express = require('express');
 
 const scraping = async (url) => {
-    return new Promise((resolve, reject) => {
-        puppeteer.launch({ headless: true })
-        .then(browser => (_browser = browser))
-        .then(browser => (_page = browser.newPage()))
-        .then(page => page.goto(url, {"waitUntil":["load", "networkidle2"]}))
-        .then(() => _page)
-        .then(page => page.waitForSelector('span#productTitle'))
-        .then(pageSelector => pageSelector.evaluate(() => {
-            let titleData = document.getElementById(`productTitle`);
-            return { title: titleData.innerText };
-        }))
-        .then(pageData => resolve(pageData))
-        .catch(err => reject(err));
-    });
-}
+	function domainName(address) {
+		const urlBeginning = /^https?:\/\/?w+\./;
+		const ebayRe = /^\bebay\b/;
+		const amazonRe = /^\bamazon\b/;
+		const craigslistRe = /\b\.craigslist\.\b/;
+		let domain = '';
+		let domainNoEnd = address.replace(urlBeginning, '');
 
-/*scraping(amazonUrl)
-.then((result) => {
-    console.log(result.title);
-});*/
+		if (ebayRe.test(domainNoEnd)) {
+			domain = 'ebay';
+		} else if (amazonRe.test(domainNoEnd)) {
+			domain = 'amazon';
+		} else if (craigslistRe.test(domainNoEnd)) {
+			domain = 'craigslist';
+		} else {
+			domain = 'Please enter an ebay or amazon domain';
+		}
+		return domain;
+	}
+
+	try {
+		const browser = await puppeteer.launch({ headless: true });
+		const page = await browser.newPage();
+		await page.goto(url);
+
+		if (domainName(url) === 'amazon') {
+			await page.waitForSelector('span#productTitle');
+
+			pageData = await page.evaluate(() => {
+				const priceBeginning = /[a-zA-Z]*/;
+				let titleData = '';
+				let priceData = '';
+				let imageData = '';
+				let descriptionData = '';
+				titleData = document.getElementById(`productTitle`);
+
+				if (document.getElementById(`priceblock_dealprice`) !== null) {
+					priceData = document
+						.getElementById(`priceblock_dealprice`)
+						.innerText.replace(priceBeginning, '')
+						.replace(/\s/, '')
+						.trim();
+				} else if (document.getElementById(`price_inside_buybox`) !== null) {
+					priceData = document
+						.getElementById(`price_inside_buybox`)
+						.innerText.replace(priceBeginning, '')
+						.replace(/\s/, '')
+						.trim();
+				} else if (document.getElementById(`priceblock_ourprice`) !== null) {
+					priceData = document
+						.getElementById(`priceblock_ourprice`)
+						.innerText.replace(priceBeginning, '')
+						.replace(/\s/, '')
+						.trim();
+				} else {
+					priceData = 'Unknown';
+				}
+
+				imageData = document.getElementById(`landingImage`);
+				if (document.querySelector(`#productDescription p`)) {
+					descriptionData = document.querySelector(`#productDescription p`).innerText;
+				} else if ([...document.querySelectorAll(`#feature-bullets ul li span`)][0] !== null) {
+					descriptionData = [...document.querySelectorAll(`#feature-bullets ul li span`)].map(
+						(elem) => elem.innerText
+					);
+				} else {
+					descriptionData = 'Unknown';
+				}
+
+				return {
+					title: titleData.innerText,
+					price: priceData,
+					image: imageData.src,
+					description: descriptionData
+				};
+			});
+
+			await browser.close();
+			return pageData;
+		} else if (domainName(url) === 'ebay') {
+			//EBAY SECTION
+			await page.waitForSelector('#itemTitle');
+			pageData = await page.evaluate(() => {
+				const priceBeginning = /[a-zA-Z]*/;
+				let titleData = document.getElementById(`itemTitle`);
+				let titleDataText = titleData.innerText.split('').splice(16).join('');
+				let priceData = document.getElementById(`prcIsum`);
+				let imageData = document.getElementById(`viEnlargeImgLayer_img_ctr`);
+				return {
+					title: titleDataText,
+					price: priceData.innerText.replace(priceBeginning, ''),
+					image: imageData.src
+				};
+			});
+			pageData.url = url;
+			await browser.close();
+			return pageData;
+		} else if (domainName(url) === 'craigslist') {
+			//CRAIGSLIST SECTION
+			await page.waitForSelector('#titletextonly');
+
+			pageData = await page.evaluate(() => {
+				let titleData = '';
+				let priceData = '';
+				let imageData = '';
+				let descriptionData = '';
+
+				titleData = document.getElementById(`titletextonly`);
+				if (document.querySelector(`.price`) !== null) {
+					priceData = document.querySelector(`.price`).innerText;
+				} else {
+					priceData = 'Unknown';
+				}
+				imageData = document.querySelector(`.swipe .swipe-wrap div img`);
+				descriptionData = document.querySelector('#postingbody');
+
+				return {
+					title: titleData.innerText,
+					price: priceData,
+					image: imageData.src,
+					description: descriptionData.innerText.replace(/\n/g, '')
+				};
+			});
+
+			await browser.close();
+			return pageData;
+		}
+	} catch (err) {
+		console.log(err);
+		await browser.close();
+		console.log('Browser Closed');
+	}
+};
 
 module.exports = scraping;
