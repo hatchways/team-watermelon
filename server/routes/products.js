@@ -1,23 +1,26 @@
 const express = require('express');
 const router = express.Router();
+const scrapingFunction = require('../utils/scrapingFunction.js');
 
 const List = require('../models/List');
 const Product = require('../models/Product');
 
 const verifyToken = require('../middleware/verify');
 
+const amazonUrl =
+	'https://www.amazon.ca/Namco-Bandai-Dark-Souls-Fades/dp/B06XTJMF4B/ref=sr_1_1?dchild=1&keywords=dark+souls+4&qid=1594306190&sr=8-1';
+
 // ADD new product
-router.post('/lists/:id/products/new', verifyToken, function (req, res) {
-	List.findById(req.params.id, function (err, foundList) {
+router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
+	List.findById(req.params.id, async function (err, foundList) {
 		if (err) {
 			res.status(400).send({ response: 'error: List not found.' });
 			res.redirect('/lists');
 		} else {
 			let url = req.body.url;
-			let name = req.body.title;
-			let description = req.body.description;
-			let price = parseFloat(req.body.price.trim().substring(1)).toFixed(2);
-			// Call web scraper function here then above just pass url, or else keep the /scraping route and this as it is.
+			// WEB SCRAPING FROM URL - SCRAPE name, description, price
+			const product = await scrapingFunction(url);
+			console.log(product);
 			var newProduct = { name: name, description: description, url: url, lastprice: 0.0, currentprice: price };
 			Product.create(newProduct, function (err, product) {
 				if (err) {
@@ -57,5 +60,11 @@ router.delete('/lists/:id/products/:product_id', verifyToken, function (req, res
 		}
 	});
 });
-
+router.get('/lists2', async function (req, res) {
+	try {
+		const product = await scrapingFunction(amazonUrl);
+		console.log(product);
+		res.send(product);
+	} catch (error) {}
+});
 module.exports = router;
