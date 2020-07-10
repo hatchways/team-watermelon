@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductsList(props) {
     const classes = useStyles();
     const products = props.products;
+    // console.log(props.listId);
 
     return (
         <section className={classes.root}>
@@ -24,7 +25,7 @@ export default function ProductsList(props) {
                 <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
                 Add New Product
                 </Typography>
-                <AddNewItemBar/>
+                <AddNewItemBar listId={props.listId}/>
             </Container>
             <Container maxWidth="md" component="main">
                 <Typography variant="h5" align="left" color="textSecondary" component="p">

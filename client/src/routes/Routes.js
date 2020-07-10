@@ -5,21 +5,33 @@ import MainPage from "../pages/MainPage";
 import { createBrowserHistory } from 'history'
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import AuthContext from '../state_management/AuthContext';
+// import AuthContext from '../state_management/AuthContext';
 import ProductsList from '../components/ProductsList';
 import FriendsList from '../components/FriendsList';
 import {placeholderPL, placeholderFriends} from '../components/PlaceHolder';
+import ShListsContext from '../state_management/ShListsContext';
 
 //disabling privateRoutes for now for developing FE
-import PrivateRoute from '../components/privateRoute';
+// import PrivateRoute from '../components/privateRoute';
 
 
 
 const history = createBrowserHistory();
 
 const Routes = ()=> {
-    // eslint-disable-next-line
-    const authContext = useContext(AuthContext);
+    const shListsContext = useContext(ShListsContext);
+    // const authContext = useContext(AuthContext);
+
+    const productsWithListId = ({match}) => {
+        return(
+            <ProductsList 
+                listId={match.params.listId}
+                products={placeholderPL} 
+            />
+        );
+    };
+
+
     return(
         
         <Router history={history}>
@@ -30,8 +42,14 @@ const Routes = ()=> {
                 {/*<PrivateRoute exact path='/main'
                             auth={authContext.isAuthenticated}
                             component={()=><MainPage/>} /> */}
-                <Route path='/productslist' component={()=><ProductsList products={placeholderPL}/>}/>
-                <Route path='/friendslist' component={()=><FriendsList friends={placeholderFriends}/>}/>
+                <Route 
+                    path='/productslist/:listId' 
+                    component={productsWithListId}
+                    />
+                <Route 
+                    path='/friendslist' 
+                    component={()=><FriendsList friends={placeholderFriends}/>}
+                    />
 
                 <Redirect to="/home" />
             </Switch>

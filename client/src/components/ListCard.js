@@ -52,7 +52,7 @@ const ListCard = (prop)=>{
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button fullWidth component={RouterLink} to="/productslist" color="primary" variant="outlined" className={classes.link}>
+                <Button fullWidth component={RouterLink} to={`/productslist/${list._id}`} color="primary" variant="outlined" className={classes.link}>
                     View
                 </Button>
                 <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
