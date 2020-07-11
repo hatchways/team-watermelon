@@ -51,14 +51,11 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 			res.redirect('/lists');
 		} else {
 			let url = req.body.url;
-
-			let name = 'tempProduct';
-			let description = 'tempDesc';
-			let price = 23.46;
 			// WEB SCRAPING FROM URL - SCRAPE name, description, price
-			const product = await scrapingFunction(amazonUrl);
+			const product = await scrapingFunction(url);
 			console.log(product);
-			var newProduct = { name: name, description: description, url: url, lastprice: 0.0, currentprice: price };
+			let price = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
+			var newProduct = { name: product.title, description: product.description, url: url, lastprice: 0.0, currentprice: price };
 			Product.create(newProduct, function (err, product) {
 				if (err) {
 					res.status(500).send({ response: 'error: Aw, Snap! Something went wrong.' });
@@ -66,7 +63,7 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 					foundList.products.push(product);
 					foundList.save();
 					console.log('success: Product added to list.');
-					res.redirect('/lists/' + req.params.id);
+					res.status(200).send({newProduct: product});
 				}
 			});
 		}

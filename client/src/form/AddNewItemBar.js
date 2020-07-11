@@ -27,16 +27,18 @@ export default function BasicTextFields(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(productUrl);
-    axios.post('/scraping', {
-        url: productUrl
-      })
-      .then(function (response) {
-        console.log(response);
-        //axios.post("/lists/:id/products/new", response.data: title, image, desc, price)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+    axios.post("/lists/"+props.listId+"/products/new", {
+      url: productUrl
+    })
+    .then(function(response) {
+      console.log("success: Product scraped and added to DB");
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   }
 
   return (
