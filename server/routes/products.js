@@ -14,20 +14,26 @@ const scrapePriceTag = async () => {
 		if(err || !allProducts.length){
 			console.log("error: No products for cron");
 		} else {
-			allProducts.forEach(async function(eachProduct) {
+			for await (const eachProduct of allProducts) {
+			//allProducts.forEach(async function(eachProduct) {
 				const productDetails = await scrapingFunction(eachProduct.url);
+				console.log("title "+productDetails.title);
 				if(productDetails) {
 					const newPrice = parseFloat(productDetails.price.trim().substring(1)).toFixed(2);
-					eachProduct.lastprice = eachProduct.currentprice;
-					eachProduct.currentprice = newPrice;
-					eachProduct.name = productDetails.title;
-					eachProduct.description = productDetails.description;
-					// TO-DO add image field to Product Schema...
-					//eachProduct.image = productDetails.image;
-					eachProduct.save();
-					console.log("success: Updated price "+ productDetails.price +" of "+productDetails.title);
+					if(newPrice !== eachProduct.currentprice) {
+						eachProduct.lastprice = eachProduct.currentprice;
+						eachProduct.currentprice = newPrice;
+						eachProduct.name = productDetails.title;
+						eachProduct.description = productDetails.description;
+						// TO-DO add image field to Product Schema...
+						//eachProduct.image = productDetails.image;
+						eachProduct.save();
+						console.log("success: Updated price "+ productDetails.price +" of "+productDetails.title);
+					} else {
+						console.log("error: Price did not change for "+productDetails.title);
+					}
 				}
-			});
+			}//);
 		}
 	});
 };
