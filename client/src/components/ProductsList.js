@@ -7,7 +7,8 @@ import AddNewItemBar from '../form/AddNewItemBar';
 import AuthContext from '../state_management/AuthContext';
 import ShListsContext from '../state_management/ShListsContext';
 import { Link as RouterLink } from 'react-router-dom';
-import {baseUrl} from '../utils/baseUrl';
+import {fetchProducts} from '../state_management/actionCreators/productActs';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,10 +20,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// const baseUrl = '';
 
 let needsFetchAllProducts = true;
-let productToRemove = null;
 
 export default function ProductsList(props) {
     const classes = useStyles();
@@ -32,26 +31,7 @@ export default function ProductsList(props) {
     const url = `/lists/${props.listId}`;
     
 
-    const fetchProductsData = () => {
-
-        return fetch(baseUrl + url)
-        .then(response => {
-            if (response.ok) {
-              return response;
-            } else {
-              var error = new Error('Error ' + response.status + ': ' + response.statusText);
-              error.response = response;
-              throw error;
-            }
-            },
-            error => {
-                    var errmess = new Error(error.message);
-                    throw errmess;
-        })
-        .then(response => response.json())
-        .then(res=>{shListsContext.dispatchProducts(res.list.products)})
-        .catch(error =>console.log('fetching products failed', error.message));
-    }
+    
 
     
     useEffect(() => {
@@ -60,7 +40,7 @@ export default function ProductsList(props) {
             if(authContext.isAuthenticated && needsFetchAllProducts){
                 needsFetchAllProducts = false;
                 console.log("test Products/useEffect");
-                fetchProductsData()
+                fetchProducts(url,shListsContext.dispatchProducts,shListsContext.handleProductsFailure);
             }
         }
         return () => {

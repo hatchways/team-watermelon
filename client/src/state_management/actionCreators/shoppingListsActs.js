@@ -1,5 +1,5 @@
 
-const baseUrl = '';
+import {baseUrl} from '../../utils/baseUrl';
 
 export const fetchShLists = (dispatch,handleErr) => {
 
