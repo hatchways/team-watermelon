@@ -24,7 +24,7 @@ const scraping = async (url) => {
 	try {
 		const browser = await puppeteer.launch({ headless: true });
 		const page = await browser.newPage();
-		await page.goto(url);
+		await page.goto(url, {"waitUntil": "load"});
 
 		if (domainName(url) === 'amazon') {
 			await page.waitForSelector('span#productTitle');

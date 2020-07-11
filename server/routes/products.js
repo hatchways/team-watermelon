@@ -1,11 +1,44 @@
 const express = require('express');
 const router = express.Router();
+const cron = require('node-cron');
 const scrapingFunction = require('../utils/scrapingFunction.js');
 
 const List = require('../models/List');
 const Product = require('../models/Product');
 
 const verifyToken = require('../middleware/verify');
+
+const scrapePriceTag = async () => { 
+	console.log("scraping every two minutes");
+	Product.find({}).exec(async function(err, allProducts){
+		if(err || !allProducts.length){
+			console.log("error: No products for cron");
+		} else {
+			for await (const eachProduct of allProducts) {
+				const productDetails = await scrapingFunction(eachProduct.url);
+				if(productDetails) {
+					const newPrice = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
+					if(newPrice !== Number(eachProduct.currentprice)) {
+						eachProduct.lastprice = eachProduct.currentprice;
+						eachProduct.currentprice = newPrice;
+						eachProduct.name = productDetails.title;
+						eachProduct.description = productDetails.description;
+						// TO-DO add image field to Product Schema...
+						//eachProduct.image = productDetails.image;
+						eachProduct.save();
+						console.log("success: Updated price "+ productDetails.price +" of "+productDetails.title);
+					} else {
+						console.log("error: Price did not change for "+productDetails.title);
+					}
+				}
+			}
+		}
+	});
+};
+//'*/10 * * * *'
+const scrapingTime = cron.schedule('*/2 * * * *', scrapePriceTag);
+// scrapingTime.destroy(); - add it to destroy scheduled task
+
 
 const amazonUrl =
 	'https://www.amazon.ca/Namco-Bandai-Dark-Souls-Fades/dp/B06XTJMF4B/ref=sr_1_1?dchild=1&keywords=dark+souls+4&qid=1594306190&sr=8-1';
