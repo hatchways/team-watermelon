@@ -17,7 +17,7 @@ const scrapePriceTag = async () => {
 			for await (const eachProduct of allProducts) {
 				const productDetails = await scrapingFunction(eachProduct.url);
 				if(productDetails) {
-					const newPrice = parseFloat(productDetails.price.trim().substring(1));
+					const newPrice = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
 					if(newPrice !== Number(eachProduct.currentprice)) {
 						eachProduct.lastprice = eachProduct.currentprice;
 						eachProduct.currentprice = newPrice;
