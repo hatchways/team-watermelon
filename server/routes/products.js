@@ -9,18 +9,16 @@ const Product = require('../models/Product');
 const verifyToken = require('../middleware/verify');
 
 const scrapePriceTag = async () => { 
-	console.log("scraping every minute");
+	console.log("scraping every two minutes");
 	Product.find({}).exec(async function(err, allProducts){
 		if(err || !allProducts.length){
 			console.log("error: No products for cron");
 		} else {
 			for await (const eachProduct of allProducts) {
-			//allProducts.forEach(async function(eachProduct) {
 				const productDetails = await scrapingFunction(eachProduct.url);
-				console.log("title "+productDetails.title);
 				if(productDetails) {
-					const newPrice = parseFloat(productDetails.price.trim().substring(1)).toFixed(2);
-					if(newPrice !== eachProduct.currentprice) {
+					const newPrice = parseFloat(productDetails.price.trim().substring(1));
+					if(newPrice !== Number(eachProduct.currentprice)) {
 						eachProduct.lastprice = eachProduct.currentprice;
 						eachProduct.currentprice = newPrice;
 						eachProduct.name = productDetails.title;
@@ -33,12 +31,12 @@ const scrapePriceTag = async () => {
 						console.log("error: Price did not change for "+productDetails.title);
 					}
 				}
-			}//);
+			}
 		}
 	});
 };
 //'*/10 * * * *'
-const scrapingTime = cron.schedule('*/1 * * * *', scrapePriceTag);
+const scrapingTime = cron.schedule('*/2 * * * *', scrapePriceTag);
 // scrapingTime.destroy(); - add it to destroy scheduled task
 
 
