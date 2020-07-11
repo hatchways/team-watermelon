@@ -21,7 +21,7 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 			// WEB SCRAPING FROM URL - SCRAPE name, description, price
 			const product = await scrapingFunction(url);
 			console.log(product);
-			let price = parseFloat(product.price.trim().substring(1)).toFixed(2);
+			let price = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
 			var newProduct = { name: product.title, description: product.description, url: url, lastprice: 0.0, currentprice: price };
 			Product.create(newProduct, function (err, product) {
 				if (err) {
