@@ -23,8 +23,7 @@ const scrapePriceTag = async () => {
 						eachProduct.currentprice = newPrice;
 						eachProduct.name = productDetails.title;
 						eachProduct.description = productDetails.description;
-						// TO-DO add image field to Product Schema...
-						//eachProduct.image = productDetails.image;
+						eachProduct.image = productDetails.image;
 						eachProduct.save();
 						console.log("success: Updated price "+ productDetails.price +" of "+productDetails.title);
 					} else {
@@ -39,10 +38,6 @@ const scrapePriceTag = async () => {
 const scrapingTime = cron.schedule('*/2 * * * *', scrapePriceTag);
 // scrapingTime.destroy(); - add it to destroy scheduled task
 
-
-const amazonUrl =
-	'https://www.amazon.ca/Namco-Bandai-Dark-Souls-Fades/dp/B06XTJMF4B/ref=sr_1_1?dchild=1&keywords=dark+souls+4&qid=1594306190&sr=8-1';
-
 // ADD new product
 router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 	List.findById(req.params.id, async function (err, foundList) {
@@ -51,11 +46,10 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 			res.redirect('/lists');
 		} else {
 			let url = req.body.url;
-			// WEB SCRAPING FROM URL - SCRAPE name, description, price
 			const product = await scrapingFunction(url);
 			console.log(product);
 			let price = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
-			var newProduct = { name: product.title, description: product.description, url: url, lastprice: 0.0, currentprice: price };
+			var newProduct = { name: product.title, image: product.image, description: product.description, url: url, lastprice: 0.0, currentprice: price };
 			Product.create(newProduct, function (err, product) {
 				if (err) {
 					res.status(500).send({ response: 'error: Aw, Snap! Something went wrong.' });
@@ -94,11 +88,5 @@ router.delete('/lists/:id/products/:product_id', verifyToken, function (req, res
 		}
 	});
 });
-router.get('/lists2', async function (req, res) {
-	try {
-		const product = await scrapingFunction(amazonUrl);
-		console.log(product);
-		res.send(product);
-	} catch (error) {}
-});
+
 module.exports = router;
