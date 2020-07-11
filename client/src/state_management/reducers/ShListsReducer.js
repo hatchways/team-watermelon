@@ -4,6 +4,7 @@ export const initialState = {
     lists:[],
     isLoading: false, 
     errMess: null,
+    products:[],
 };
   
   
@@ -22,7 +23,7 @@ export const ShListsReducer = (state, action) => {
                 ...state,
                 lists:[],
                 isLoading:false,
-                errMess:action.payload.response,
+                errMess:action.payload,
             };
         case ACTION_TYPES.ADD_SH_LIST:
             return {
@@ -37,6 +38,41 @@ export const ShListsReducer = (state, action) => {
                 lists:state.lists.filter(list=> list._id !== action.payload._id),
                 isLoading:false,
                 errMess: null,
+            };
+        case ACTION_TYPES.DELETE_PRODUCT:
+            let temp = [];
+            state.lists.forEach(list => {
+                if(list._id === action.list){
+                    list.products = list.products.filter(p=> p !== action.payload)
+                    // console.log(list.products);
+                    temp.push(list)
+                }else{
+                    temp.push(list)
+                }
+            });
+            // console.log("payload",action.payload);
+            return {
+                ...state,
+                lists:temp,
+                isLoading:false,
+                errMess: null,
+            };
+        case ACTION_TYPES.PRODUCTS_LOADING:
+            return {
+                ...state,
+                products: action.payload,
+                errMess: null,
+            };
+        case ACTION_TYPES.PRODUCTS_FAILED:
+            return {
+                ...state,
+                products:[],
+                errMess:action.payload,
+            };
+        case ACTION_TYPES.HIDE_PRODUCT:
+            return {
+                ...state,
+                products:state.products.filter(p=> p._id !== action.payload._id),
             };
         default:
         return state;

@@ -14,4 +14,17 @@ export const ADD_SH_LIST = "ADD_SHOPPING_LIST"
 
 export const DELETE_SH_LIST = "DELETE_SHOPPING_LIST"
 
+//dispatching products
+export const PRODUCTS_LOADING = "PRODUCTS_LOADING"
+
+export const PRODUCTS_FAILED = "PRODUCTS_FAILED"
+
+export const DELETE_PRODUCT = "DELETE_PRODUCT"
+
+export const ADD_PRODUCT = "ADD_PRODUCT"
+
+export const SHOW_PRODUCT = "SHOW_PRODUCT"
+
+export const HIDE_PRODUCT = "HIDE_PRODUCT"
+
 

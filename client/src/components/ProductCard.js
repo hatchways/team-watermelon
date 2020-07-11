@@ -1,14 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import ShListsContext from '../state_management/ShListsContext';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from'@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+import {
+    Typography, 
+    Grid, 
+    Card, 
+    CardActionArea, 
+    CardActions, 
+    CardContent, 
+    CardMedia, 
+    Button
+} from '@material-ui/core';
+import {baseUrl} from '../utils/baseUrl';
 
 const linethrough= {
     "textDecoration": "line-through",
@@ -51,16 +55,50 @@ const covertNumberDecimal=(numberDecimal)=>{
 };
 
 
-export default function ProductCard(prop) {
-    const product = prop.product
+
+
+
+
+
+export default function ProductCard(props) {
+    const shListsContext = useContext(ShListsContext);
+    const product = props.product
+    const deleteProductUrl = `/lists/${props.listId}/products/${props.product._id}`; //'/lists/:id/products/:product_id'
     const classes = useStyles();
     const addDefaultImg=(ev)=>{
         ev.target.src = 'https://source.unsplash.com/8ca1no8JQ1w/640x426'
     }
     
+
+    const handleRevome = () => {
+
+        return fetch(baseUrl + deleteProductUrl, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json"
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+              return response;
+            } else {
+              var error = new Error('Error ' + response.status + ': ' + response.statusText);
+              error.response = response;
+              throw error;
+            }
+            },
+            error => {
+                    var errmess = new Error(error.message);
+                    throw errmess;
+        })
+        .then(response => response.json())
+        .then(res=>{shListsContext.hideProduct(props.product);
+            shListsContext.handleProductDeletion(props.listId,props.product._id);})
+        .catch(error =>console.log('product-deleting failed', error.message));
+    }
+
     return (
 
-        
             <Card className={classes.card} >
                 <CardMedia 
                     component="img"
@@ -69,7 +107,6 @@ export default function ProductCard(prop) {
                     src={product.url} 
                     title={product.name}
                     alt={product.name}/>
-                {/* <Grid container className={classes.cardDetails}> */}
                 <CardActionArea component="a" href={product.url} target="_blank" rel="noreferrer">
                     <CardContent className={classes.cardContent}>
                         <Typography variant="h6">
@@ -93,9 +130,14 @@ export default function ProductCard(prop) {
                     </CardContent>
                 </CardActionArea>
                 <CardActions >
-                    <Button variant="outlined" color="primary" to="#" size="small">remove</Button>
+                    <Button 
+                        variant="outlined" 
+                        color="primary" 
+                        size="small"
+                        onClick={()=>handleRevome()}
+                >remove
+                </Button>
                 </CardActions>
-                {/* </Grid> */}
                 </Card>
         
 

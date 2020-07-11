@@ -29,6 +29,12 @@ function AuthContextState() {
                 handleShListsFailure: (payload) =>shListsDispatch(ACTIONS.shoppingLists_loading_failed(payload)),
                 dispatchNewShList: (payload) =>shListsDispatch(ACTIONS.add_shoppingList(payload)),
                 handleShListDeletion: (payload) =>shListsDispatch(ACTIONS.delete_shoppingList(payload)),
+                handleProductDeletion: (listId,productId) =>shListsDispatch(ACTIONS.delete_product(listId,productId)),
+                dispatchProducts: (payload) =>shListsDispatch(ACTIONS.products_loading(payload)),
+                handleProductsFailure: (payload) =>shListsDispatch(ACTIONS.products_loading_failed(payload)),
+                showProduct: (payload) =>shListsDispatch(ACTIONS.show_product(payload)),
+                hideProduct:(payload) =>shListsDispatch(ACTIONS.hide_product(payload)),
+
             } }
         >
             <Routes/>

@@ -22,10 +22,10 @@ const Routes = ()=> {
     const shListsContext = useContext(ShListsContext);
     // const authContext = useContext(AuthContext);
     //{this.props.dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
-    const productsWithListId = ({match}) => {
+    const ProductsWithListId = (props) => {
         return(
             <ProductsList 
-                listId={(shListsContext.lists.filter(list=>list._id === match.params.listId))? match.params.listId:""}
+                listId={(shListsContext.lists.filter(list=>list._id === props.listId))? props.listId:""}
                 products={placeholderPL} 
             />
         );
@@ -44,7 +44,7 @@ const Routes = ()=> {
                             component={()=><MainPage/>} /> */}
                 <Route 
                     path='/productslist/:listId' 
-                    component={productsWithListId}
+                    component={({match})=><ProductsWithListId listId={match.params.listId}/>}
                     />
                 <Route 
                     path='/friendslist' 
