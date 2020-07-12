@@ -1,13 +1,11 @@
-import React,{useEffect,useContext} from 'react';
+import React,{useContext} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {Typography, Grid, Container, Button} from '@material-ui/core';
 import ProductCard from './ProductCard';
 import AddNewItemBar from '../form/AddNewItemBar';
-import AuthContext from '../state_management/AuthContext';
 import ShListsContext from '../state_management/ShListsContext';
 import { Link as RouterLink } from 'react-router-dom';
-import {fetchProducts} from '../state_management/actionCreators/productActs';
 
 
 
@@ -20,33 +18,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-let needsFetchAllProducts = true;
-
 export default function ProductsList(props) {
     const classes = useStyles();
-    const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
     
-    const url = `/lists/${props.listId}`;
-    
-
-    
-
-    
-    useEffect(() => {
-        let didCancel = false;
-        if(!didCancel){
-            if(authContext.isAuthenticated && needsFetchAllProducts){
-                needsFetchAllProducts = false;
-                console.log("test Products/useEffect");
-                fetchProducts(url,shListsContext.dispatchProducts,shListsContext.handleProductsFailure);
-            }
-        }
-        return () => {
-            didCancel = true;
-          };
-    });
 
     return (
         <section className={classes.root}>

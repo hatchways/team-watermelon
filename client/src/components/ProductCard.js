@@ -55,15 +55,10 @@ const covertNumberDecimal=(numberDecimal)=>{
 };
 
 
-
-
-
-
-
 export default function ProductCard(props) {
     const shListsContext = useContext(ShListsContext);
     const product = props.product
-    const deleteProductUrl = `/lists/${props.listId}/products/${props.product._id}`; //'/lists/:id/products/:product_id'
+    const deleteProductUrl = `/lists/${props.listId}/products/${props.product._id}`; 
     const classes = useStyles();
     const addDefaultImg=(ev)=>{
         ev.target.src = 'https://source.unsplash.com/8ca1no8JQ1w/640x426'
@@ -71,6 +66,8 @@ export default function ProductCard(props) {
     
 
     const handleRevome = () => {
+            shListsContext.hideProduct(props.product);
+            shListsContext.handleProductDeletion(props.listId,props.product._id)
 
         return fetch(baseUrl + deleteProductUrl, {
             method: "DELETE",
@@ -134,7 +131,7 @@ export default function ProductCard(props) {
                         variant="outlined" 
                         color="primary" 
                         size="small"
-                        onClick={()=>handleRevome()}
+                        onClick={handleRevome}
                 >remove
                 </Button>
                 </CardActions>

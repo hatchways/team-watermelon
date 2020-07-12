@@ -4,11 +4,14 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import React from 'react';
+import React,{useContext} from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { Link as RouterLink } from 'react-router-dom';
+import AuthContext from '../state_management/AuthContext';
+import ShListsContext from '../state_management/ShListsContext';
+import {fetchProducts} from '../state_management/actionCreators/productActs';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -31,6 +34,17 @@ const useStyles = makeStyles((theme) => ({
 const ListCard = (prop)=>{
     const list =prop.list
     const classes = useStyles();
+    const authContext = useContext(AuthContext);
+    const shListsContext = useContext(ShListsContext);
+    const url = `/lists/${list._id}`;
+
+    const getProductList=()=>{
+        if(authContext.isAuthenticated){
+            shListsContext.handleProductsFailure(null);//clean used product list
+            console.log("test ListCard/getPL");
+            fetchProducts(url,shListsContext.dispatchProducts,shListsContext.handleProductsFailure);
+        }
+    }
     return (
         <Card className={classes.card}>
             <CardActionArea>
@@ -52,7 +66,15 @@ const ListCard = (prop)=>{
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button fullWidth component={RouterLink} to={`/productslist/${list._id}`} color="primary" variant="outlined" className={classes.link}>
+                <Button 
+                    fullWidth 
+                    // onClick={getProductList}
+                    component={RouterLink} 
+                    onClick={getProductList}
+                    to={`/productslist/${list._id}`} 
+                    color="primary" 
+                    variant="outlined" 
+                    className={classes.link}>
                     View
                 </Button>
                 <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
