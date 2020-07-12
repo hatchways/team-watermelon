@@ -41,7 +41,7 @@ const Navbar = ()=>{
             console.log("Navbar/useEffet is fetching");
         }
         if(needsCleanList){
-            shListsContext.handleShListsFailure({response:""});
+            shListsContext.handleShListsFailure({response:null});
             needsCleanList = false;
         }
     });
@@ -62,34 +62,33 @@ const Navbar = ()=>{
                 </Box>
             </Typography>
             {authContext.isAuthenticated?
+            <>
                 <Typography variant="body1" color="inherit">
                 Welcome! {authContext.name}
-                </Typography>:""
-            }
-            
-            <Link variant="button" 
-                component={RouterLink} 
-                to="/main"
-                color="textPrimary" 
-                className={classes.link}>
-                Shopping Lists
-            </Link>
-            <Link component={RouterLink}
-                to="/friendslist" 
-                variant="button" 
-                color="textPrimary" 
-                className={classes.link}>
-                Friends
-            </Link>
-            <Link component={RouterLink}
-                to="#" 
-                variant="button" 
-                color="textPrimary" 
-                className={classes.link}>
-                Notifications
-            </Link>
-            {authContext.isAuthenticated?
-                <Button onClick={()=>{authContext.handleLogout({});
+                </Typography>
+                <Link variant="button" 
+                    component={RouterLink} 
+                    to="/main"
+                    color="textPrimary" 
+                    className={classes.link}>
+                    Shopping Lists
+                </Link>
+                <Link component={RouterLink}
+                    to="/friendslist" 
+                    variant="button" 
+                    color="textPrimary" 
+                    className={classes.link}>
+                    Friends
+                </Link>
+                <Link component={RouterLink}
+                    to="#" 
+                    variant="button" 
+                    color="textPrimary" 
+                    className={classes.link}>
+                    Notifications
+                </Link>
+                <Button 
+                    onClick={()=>{authContext.handleLogout({});
                                         needsFetchingLists = true;
                                         needsCleanList = true;}} 
                     color="primary" 
@@ -97,8 +96,9 @@ const Navbar = ()=>{
                     className={classes.link}
                     >
                     Logout
-                </Button>: ""
-            }
+                </Button>
+            </>:null
+            }  
             </Toolbar>
         </AppBar>
     )

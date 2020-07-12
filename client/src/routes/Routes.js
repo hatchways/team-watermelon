@@ -44,9 +44,12 @@ const Routes = ()=> {
                     component={()=><MainPage/>} />
                 <Route 
                     path='/productslist/:listId' 
-                    component={({match})=><ProductsWithListId listId={match.params.listId}/>}
+                    component={({match})=>{
+                        if(authContext.isAuthenticated)
+                            return <ProductsWithListId listId={match.params.listId}/>
+                        return <Redirect to={{pathname:'/home'}} />}}
                     />
-                <Route 
+                <PrivateRoute 
                     path='/friendslist' 
                     component={()=><FriendsList friends={placeholderFriends}/>}
                     />
