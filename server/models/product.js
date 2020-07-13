@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
     name: String,
+    image: String,
     description: String,
     url: String,
     lastprice: mongoose.Types.Decimal128,
