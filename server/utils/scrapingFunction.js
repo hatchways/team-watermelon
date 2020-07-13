@@ -85,8 +85,13 @@ const scraping = async (url) => {
 			await page.waitForSelector('#itemTitle');
 			pageData = await page.evaluate(() => {
 				let imageData;
+				let titleData;
 				const priceBeginning = /[a-zA-Z]*/;
-				let titleData = document.getElementById(`itemTitle`);
+				if (document.getElementById(`itemTitle`)) {
+					titleData = document.getElementById(`itemTitle`);
+				} else {
+					titleData = 'Unknown Title';
+				}
 				let titleDataText = titleData.innerText.split('').splice(16).join('');
 				let priceData = document.getElementById(`prcIsum`);
 				if (document.getElementById(`viEnlargeImgLayer_img_ctr`)) {
@@ -119,7 +124,7 @@ const scraping = async (url) => {
 
 				titleData = document.getElementById(`titletextonly`);
 				if (document.querySelector(`.price`) !== null) {
-					priceData = document.querySelector(`.price`).innerText;
+					priceData = document.querySelector(`.price`).innerText.trim();
 				} else {
 					priceData = 'Unknown';
 				}
@@ -143,5 +148,9 @@ const scraping = async (url) => {
 		console.log('Browser Closed');
 	}
 };
-
+console.log(
+	scraping(
+		'https://www.ebay.ca/itm/AmazonBasics-Enameled-Cast-Iron-Covered-Dutch-Oven-4-3-Quart-Green/402274846573?hash=item5da973076d:g:KaMAAOSwKulezN41'
+	)
+);
 module.exports = scraping;
