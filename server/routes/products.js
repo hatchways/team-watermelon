@@ -27,8 +27,7 @@ router.post('/lists/:id/products/new', verifyToken, function (req, res) {
 					foundList.products.push(product);
 					foundList.save();
 					console.log('success: Product added to list.');
-					res.status(200).send({product: product});
-					// res.redirect('/lists/' + req.params.id);
+					res.status(200).send({newProduct: product});
 				}
 			});
 		}

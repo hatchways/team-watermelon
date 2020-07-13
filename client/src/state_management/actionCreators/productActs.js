@@ -19,7 +19,7 @@ export const fetchProducts = (url,dispath,handleErr) => {
     })
     .then(response => response.json())
     .then(res=>{dispath(res.list.products)})
-    .catch(error =>{handleErr(error.message);console.log('fetching products failed', error.message);});
+    .catch(error =>{handleErr(error.message);alert('fetching products failed'+error.message);});
 }
 
 export const addNewProduct = (list_id,dispatch,product) => {
@@ -44,6 +44,6 @@ export const addNewProduct = (list_id,dispatch,product) => {
             throw error;
       })
     .then(response => response.json())
-    .then(response => {dispatch(list_id,response.product._id);})
-    .catch(error =>  { console.log('post a new product', error.message); alert('Your new product could not be created\nError: '+error.message); });
+    .then(response => {dispatch(list_id,response.newProduct._id);})
+    .catch(error =>  {alert('Your new product could not be created\nError: '+error.message); });
   };
