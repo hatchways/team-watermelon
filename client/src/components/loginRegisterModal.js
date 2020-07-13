@@ -84,9 +84,8 @@ export default function LoginRegisterModal(props) {
 			setDialogOpen(false);
 			return res
 		} catch (err) {
-			const errors = err.response.data.errors;
-			console.log(errors);
-			setErrorMsg(errors[0].msg);
+			const errors = err.response.data.errors;//server-end doesn't return msg
+			setErrorMsg("Logging in failed. Try again.");
 			setTimeout(() => {
 				setErrorMsg('');
 			}, 4000);

@@ -79,12 +79,12 @@ router.delete('/lists/:id/products/:product_id', verifyToken, function (req, res
 						if (product.equals(req.params.product_id)) {
 							foundList.products.remove(product);
 							foundList.save();
+							res.status(200).send({});
 						}
 					});
 				}
 			});
-			console.log('error: Product deleted.');
-			res.redirect('/lists/' + req.params.id);
+			console.log(req.params.product_id,'Product deleted.');
 		}
 	});
 });
