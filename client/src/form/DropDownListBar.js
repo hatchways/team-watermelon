@@ -57,10 +57,6 @@ export default function BasicTextFields() {
             setErrMsg({open:true,errMsg:"ERROR: List is required."})
             return
         }
-        setItemData({
-            listId: '',
-            url: '',
-        })
         
         addNewProduct(itemData.listId,shListsContext.dispatchNewProduct,{url:itemData.url});
         setItemData({
