@@ -84,19 +84,28 @@ const scraping = async (url) => {
 			//EBAY SECTION
 			await page.waitForSelector('#itemTitle');
 			pageData = await page.evaluate(() => {
+				let imageData;
 				const priceBeginning = /[a-zA-Z]*/;
 				let titleData = document.getElementById(`itemTitle`);
 				let titleDataText = titleData.innerText.split('').splice(16).join('');
 				let priceData = document.getElementById(`prcIsum`);
-				let imageData = document.getElementById(`viEnlargeImgLayer_img_ctr`);
+				if (document.getElementById(`viEnlargeImgLayer_img_ctr`)) {
+					imageData = document.getElementById(`viEnlargeImgLayer_img_ctr`).src;
+				} else if (document.getElementById(`icImg`)) {
+					imageData = document.getElementById(`icImg`).src;
+				} else {
+					imageData = 'Unable to source image';
+				}
+
 				return {
 					title: titleDataText,
 					price: priceData.innerText.replace(priceBeginning, ''),
-					image: imageData.src
+					image: imageData
 				};
 			});
 			pageData.url = url;
 			await browser.close();
+			console.log(pageData);
 			return pageData;
 		} else if (domainName(url) === 'craigslist') {
 			//CRAIGSLIST SECTION
