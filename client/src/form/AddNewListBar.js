@@ -1,45 +1,56 @@
 import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import {Button, Typography, Grid, TextField} from '@material-ui/core';
 import {addNewList} from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-        margin: theme.spacing(1),
-        },
-    },
-    link: {
-        margin: theme.spacing(1),
+    button: {
+        marginTop: theme.spacing(1),
     },
     text: {
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
+    hidden:{
+		visibility: "hidden",
+    },
+    shown:{
+		visibility: "visible",
+	},
 }));
 
 export default function BasicTextFields(props) {
     const shListsContext = useContext(ShListsContext);
     const classes = useStyles();
     const [listData, setListData] = useState({
-        title: '',
+        title: "",
         imageurl: '',
-        listdescription: ''
+        listdescription: 'My shopping list',
+        errMsg:'None',
     });
     const onChange = (e) => setListData({ ...listData, [e.target.name]: e.target.value });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(listData);
+        if(listData.title.length < 1){
+            setListData({ ...listData, errMsg: "Title is required."})
+            return
+        };
+        if(listData.imageurl.length < 1){
+            setListData({ ...listData, errMsg: "Image is required."})
+            return
+        };
+        setListData({ ...listData, errMsg: 'None'})
+        if(listData.listdescription.length < 1)
+            setListData({ ...listData, listdescription: "My shopping list"});
         addNewList(shListsContext.dispatchNewShList,listData);
+        
     }
 
   return (
-    <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
+    <form noValidate autoComplete="off" onSubmit={handleSubmit}>
 
-        <Grid container spacing={1} justify="center">
+        <Grid container spacing={1} justify="center" align="center">
             <Grid item xs={10} md={8} style={{textAlign:'center'}}>
                 <TextField 
                     fullWidth
@@ -48,9 +59,13 @@ export default function BasicTextFields(props) {
                     color="secondary"
                     name="title" 
                     placeholder="Enter list title" 
-                    variant="outlined" 
+                    variant="standard" 
                     onChange={(e) => onChange(e)}
-                    className={classes.text}/>
+                    className={classes.text}
+                    inputProps={{ maxLength: 20 }}
+                    helperText="max length 20 charaters"
+                    required
+                    />
                 <TextField 
                     fullWidth
                     label="Image Url"
@@ -58,9 +73,11 @@ export default function BasicTextFields(props) {
                     color="secondary"
                     name="imageurl" 
                     placeholder="Paste list cover image url" 
-                    variant="outlined"
+                    variant="standard"
                     onChange={(e) => onChange(e)} 
-                    className={classes.text}/>
+                    className={classes.text}
+                    required
+                    />
                 <TextField 
                     fullWidth
                     multiline
@@ -68,11 +85,20 @@ export default function BasicTextFields(props) {
                     name="listdescription"
                     id="list-description" 
                     color="secondary" 
-                    placeholder="Enter list description" 
-                    variant="outlined" 
+                    placeholder="My shopping list" 
+                    variant="standard" 
                     onChange={(e) => onChange(e)}
-                    className={classes.text}/>
-                <Button type="submit" size="large" variant="contained" color="primary" className={classes.link}>
+                    className={classes.text}
+                    inputProps={{ maxLength: 200 }}
+                    helperText="max length 200 charaters. Default: My shopping list"
+                    />
+            <Typography 
+                color="error" 
+                align="center" 
+                className={listData.errMsg==='None'?classes.hidden:classes.shown}>
+                {listData.errMsg}
+            </Typography>
+                <Button type="submit" size="large" variant="contained" color="primary" className={classes.button}>
                     Create List
                 </Button>
             </Grid>

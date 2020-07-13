@@ -13,6 +13,7 @@ import {
     Button
 } from '@material-ui/core';
 import {baseUrl} from '../utils/baseUrl';
+import {cutContentLength, covertNumberDecimal} from '../utils/transformText';
 
 const linethrough= {
     "textDecoration": "line-through",
@@ -34,25 +35,6 @@ const useStyles = makeStyles((theme)=>({
         width:"100%",
     },
 }));
-
-const cutContentLength = (str, limit,defaultStrin)=>{
-    if(!str || str == null){
-        return defaultStrin
-    }
-    str = str.toString();
-    if(str.length > limit){
-        return str.slice(0, limit) + '...'
-    }
-    return str
-}
-
-const covertNumberDecimal=(numberDecimal)=>{
-    const strArr = JSON.stringify(numberDecimal).split('"')
-    if(strArr.length >= 4){
-        return strArr[3];
-    }
-    return ""
-};
 
 
 export default function ProductCard(props) {
@@ -101,7 +83,7 @@ export default function ProductCard(props) {
                     component="img"
                     className={classes.cardMedia} 
                     onError={addDefaultImg}
-                    src={product.url} 
+                    src={product.image} 
                     title={product.name}
                     alt={product.name}/>
                 <CardActionArea component="a" href={product.url} target="_blank" rel="noreferrer">

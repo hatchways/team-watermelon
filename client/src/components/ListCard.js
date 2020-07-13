@@ -12,6 +12,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import AuthContext from '../state_management/AuthContext';
 import ShListsContext from '../state_management/ShListsContext';
 import {fetchProducts} from '../state_management/actionCreators/productActs';
+import {cutContentLength} from '../utils/transformText';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -40,8 +41,7 @@ const ListCard = (prop)=>{
 
     const getProductList=()=>{
         if(authContext.isAuthenticated){
-            shListsContext.handleProductsFailure(null);//clean used product list
-            console.log("test ListCard/getPL");
+            shListsContext.handleProductsFailure(null);
             fetchProducts(url,shListsContext.dispatchProducts,shListsContext.handleProductsFailure);
         }
     }
@@ -58,7 +58,7 @@ const ListCard = (prop)=>{
                         {list.title}
                     </Typography>
                     <Typography gutterBottom component="h5">
-                        {list.subtitle}
+                        {cutContentLength(list.subtitle,30,"my list")}
                     </Typography>
                     <Typography>
                         {list.products.length} items
@@ -68,7 +68,6 @@ const ListCard = (prop)=>{
             <CardActions>
                 <Button 
                     fullWidth 
-                    // onClick={getProductList}
                     component={RouterLink} 
                     onClick={getProductList}
                     to={`/productslist/${list._id}`} 

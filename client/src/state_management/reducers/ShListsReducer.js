@@ -39,18 +39,32 @@ export const ShListsReducer = (state, action) => {
                 isLoading:false,
                 errMess: null,
             };
+        case ACTION_TYPES.ADD_PRODUCT:
+            let tmp = [];
+            state.lists.forEach(list => {
+                if(list._id === action.list){
+                    list.products.push(action.payload)
+                    tmp.push(list)
+                }else{
+                    tmp.push(list)
+                }
+            });
+            return {
+                ...state,
+                lists:tmp,
+                isLoading:false,
+                errMess: null,
+        };
         case ACTION_TYPES.DELETE_PRODUCT:
             let temp = [];
             state.lists.forEach(list => {
                 if(list._id === action.list){
                     list.products = list.products.filter(p=> p !== action.payload)
-                    // console.log(list.products);
                     temp.push(list)
                 }else{
                     temp.push(list)
                 }
             });
-            // console.log("payload",action.payload);
             return {
                 ...state,
                 lists:temp,

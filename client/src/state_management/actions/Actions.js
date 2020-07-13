@@ -70,10 +70,10 @@ export const delete_product = (list_id,product_id) => {
     }
 };
 
-export const add_product = (list_id,product) => {
+export const add_product = (list_id,product_id) => {
     return{
         type: ACTION_TYPES.ADD_PRODUCT,
-        payload: product,
+        payload: product_id,
         list:list_id
     }
 };
