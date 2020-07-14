@@ -84,19 +84,33 @@ const scraping = async (url) => {
 			//EBAY SECTION
 			await page.waitForSelector('#itemTitle');
 			pageData = await page.evaluate(() => {
+				let imageData;
+				let titleData;
 				const priceBeginning = /[a-zA-Z]*/;
-				let titleData = document.getElementById(`itemTitle`);
+				if (document.getElementById(`itemTitle`)) {
+					titleData = document.getElementById(`itemTitle`);
+				} else {
+					titleData = 'Unknown Title';
+				}
 				let titleDataText = titleData.innerText.split('').splice(16).join('');
 				let priceData = document.getElementById(`prcIsum`);
-				let imageData = document.getElementById(`viEnlargeImgLayer_img_ctr`);
+				if (document.getElementById(`viEnlargeImgLayer_img_ctr`)) {
+					imageData = document.getElementById(`viEnlargeImgLayer_img_ctr`).src;
+				} else if (document.getElementById(`icImg`)) {
+					imageData = document.getElementById(`icImg`).src;
+				} else {
+					imageData = 'Unable to source image';
+				}
+
 				return {
 					title: titleDataText,
 					price: priceData.innerText.replace(priceBeginning, ''),
-					image: imageData.src
+					image: imageData
 				};
 			});
 			pageData.url = url;
 			await browser.close();
+			console.log(pageData);
 			return pageData;
 		} else if (domainName(url) === 'craigslist') {
 			//CRAIGSLIST SECTION
@@ -110,7 +124,7 @@ const scraping = async (url) => {
 
 				titleData = document.getElementById(`titletextonly`);
 				if (document.querySelector(`.price`) !== null) {
-					priceData = document.querySelector(`.price`).innerText;
+					priceData = document.querySelector(`.price`).innerText.trim();
 				} else {
 					priceData = 'Unknown';
 				}
@@ -134,5 +148,9 @@ const scraping = async (url) => {
 		console.log('Browser Closed');
 	}
 };
-
+console.log(
+	scraping(
+		'https://www.ebay.ca/itm/AmazonBasics-Enameled-Cast-Iron-Covered-Dutch-Oven-4-3-Quart-Green/402274846573?hash=item5da973076d:g:KaMAAOSwKulezN41'
+	)
+);
 module.exports = scraping;
