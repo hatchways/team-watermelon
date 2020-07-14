@@ -21,3 +21,5 @@ yarn-error.log*
 
 #added .env to gitignore
 *.env
+
+makefile
