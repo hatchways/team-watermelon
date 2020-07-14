@@ -9,7 +9,6 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const listRouter = require('./routes/lists');
-const scrapingRouter = require('./routes/scraping');
 const productRouter = require('./routes/products');
 const uploadRouter = require('./routes/imageUpload');
 

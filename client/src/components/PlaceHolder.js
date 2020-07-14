@@ -1,0 +1,80 @@
+export const placeholderPL = [
+    {
+        _id:"1",
+        name: "product 1",
+        description:"description 1",
+        url: "https://source.unsplash.com",
+        lastprice: 20.5,
+        currentprice: 18.3,
+        image:"https://source.unsplash.com/random",
+    },
+    {
+        _id:"2",
+        name: "product 2",
+        description:"description 2",
+        url: "https://source.unsplash.com",
+        lastprice: 20.5,
+        currentprice: 18.3,
+        image:"https://source.unsplash.com/random",
+    },
+    {
+        _id:"3",
+        name: "product 3",
+        description:"description 3",
+        url: "https://source.unsplash.com",
+        lastprice: 20.5,
+        currentprice: 18.3,
+        image:"https://source.unsplash.com/random",
+    },
+    {
+        _id:"4",
+        name: "product 4",
+        description:"description 4",
+        url: "https://source.unsplash.com",
+        lastprice: 20.5,
+        currentprice: 18.3,
+        image:"https://source.unsplash.com/random",
+    },
+    {
+        _id:"5",
+        name: "product 5",
+        description:"description 5",
+        url: "https://source.unsplash.com",
+        lastprice: 20.5,
+        currentprice: 18.3,
+        image:"https://source.unsplash.com/random",
+    },
+];
+
+export const placeholderFriends = [
+    {
+        _id:"1",
+        name: "user 1",
+        description:"description 1",
+        image:"assets/images/avatar_1.jpg",
+    },
+    {
+        _id:"2",
+        name: "user 2",
+        description:"description 2",
+        image:"assets/images/avatar_2.jpg",
+    },
+    {
+        _id:"3",
+        name: "user 3",
+        description:"description 3",
+        image:"assets/images/avatar_3.jpg",
+    },
+    {
+        _id:"4",
+        name: "user 4",
+        description:"description 4",
+        image:"assets/images/avatar_4.jpg",
+    },
+    {
+        _id:"5",
+        name: "user 5",
+        description:"description 5",
+        image:"assets/images/avatar_5.jpg",
+    },
+];

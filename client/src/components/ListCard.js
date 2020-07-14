@@ -4,9 +4,15 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import React from 'react';
+import React,{useContext} from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import { Link as RouterLink } from 'react-router-dom';
+import AuthContext from '../state_management/AuthContext';
+import ShListsContext from '../state_management/ShListsContext';
+import {fetchProducts} from '../state_management/actionCreators/productActs';
+import {cutContentLength} from '../utils/transformText';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -26,25 +32,48 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const ListCard = (list)=>{
+const ListCard = (prop)=>{
+    const list =prop.list
     const classes = useStyles();
+    const authContext = useContext(AuthContext);
+    const shListsContext = useContext(ShListsContext);
+    const url = `/lists/${list._id}`;
+
+    const getProductList=()=>{
+        if(authContext.isAuthenticated){
+            shListsContext.handleProductsFailure(null);
+            fetchProducts(url,shListsContext.dispatchProducts,shListsContext.handleProductsFailure);
+        }
+    }
     return (
         <Card className={classes.card}>
-            <CardMedia
-            className={classes.cardMedia}
-            image={list.cover_img}
-            title={list.name}
-            />
-            <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="h5" component="h2">
-                    {list.name}
-                </Typography>
-                <Typography>
-                    {list.products_list.length} items
-                </Typography>
-            </CardContent>
+            <CardActionArea>
+                <CardMedia
+                className={classes.cardMedia}
+                image={list.image}
+                title={list.title}
+                />
+                <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {list.title}
+                    </Typography>
+                    <Typography gutterBottom component="h5">
+                        {cutContentLength(list.subtitle,30,"my list")}
+                    </Typography>
+                    <Typography>
+                        {list.products.length} items
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
             <CardActions>
-                <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
+                <Button 
+                    fullWidth 
+                    component={RouterLink} 
+                    onClick={getProductList}
+                    to={`/productslist/${list._id}`} 
+                    color="primary" 
+                    variant="outlined" 
+                    className={classes.link}>
                     View
                 </Button>
                 <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>

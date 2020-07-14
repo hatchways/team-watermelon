@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,36 +19,47 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function BasicTextFields() {
+export default function BasicTextFields(props) {
   const classes = useStyles();
+  const [productUrl, setProductUrl] = useState('');
+  console.log("AddNewItemBar",props.listId);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(productUrl);
+
+    axios.post("/lists/"+props.listId+"/products/new", {
+      url: productUrl
+    })
+    .then(function(response) {
+      console.log("success: Product scraped and added to DB");
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  }
 
   return (
-    <form className={classes.root} noValidate autoComplete="off">
+    <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
         
-        <Grid container spacing={1} alignItems="flex-end">
-            <Grid item xs={10} md={6}>
+        <Grid container spacing={1} justify="center">
+            <Grid item xs={10} md={8} style={{textAlign:'center'}}>
             <TextField 
                 fullWidth
-                id="outlined-basic" 
+                label="Product Url"
+                id="product-url" 
                 color="secondary" 
-                placeholder="Paste your link here" 
-                variant="standard" 
-                className={classes.text}/>
+                placeholder="Paste product link here" 
+                variant="outlined" 
+                className={classes.text}
+                onChange={e => setProductUrl(e.target.value)}/>
+            <Button type="submit" size="large" variant="contained" color="primary" className={classes.link}>
+                Add Product
+            </Button>
             </Grid>
-            <Grid item xs={8} md={5}>
-            <TextField 
-                fullWidth
-                id="outlined-basic" 
-                color="secondary" 
-                variant="standard" 
-                className={classes.text}/>
-            </Grid>
-            <Grid item xs={2} md={1}>
-            <IconButton color="secondary" aria-label="add" className={classes.link} href="#">
-                <AddBoxIcon fontSize="large"/>
-            </IconButton>
-            </Grid>
-            </Grid>
+        </Grid>
         
     </form>
   );

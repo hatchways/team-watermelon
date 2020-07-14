@@ -84,9 +84,8 @@ export default function LoginRegisterModal(props) {
 			setDialogOpen(false);
 			return res
 		} catch (err) {
-			const errors = err.response.data.errors;
-			console.log(errors);
-			setErrorMsg(errors[0].msg);
+			const errors = err.response.data.errors;//server-end doesn't return msg
+			setErrorMsg("Logging in failed. Try again.");
 			setTimeout(() => {
 				setErrorMsg('');
 			}, 4000);
@@ -99,15 +98,19 @@ export default function LoginRegisterModal(props) {
 		if (asyncStart){
 			loginRegister(name, email, password, loginActive)
 			.then(res=>{
-				if (res != null) {
+				if (res && res != null && res.data != null) {
 					setUserData(res.data);
 					authContext.handleLogin(res.data);
 					console.log(res);
+				}else{
+					console.log("error: fetching user data failed.");
 				};
 			});
 			setAsyncStart(false);
 		}
+		console.log("test login/useEffect");
 		// return () => thisComponentMounted = false;
+		// eslint-disable-next-line
 	  }, [asyncStart]);
 
 	return (
