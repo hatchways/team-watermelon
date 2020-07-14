@@ -12,7 +12,7 @@ AWS.config.getCredentials(function (err) {
 });
 
 const fileFilter = (req, file, cb) => {
-	if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+	if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/gif') {
 		cb(null, true);
 	} else {
 		cb(new Error('Invalid Mime Type, only JPEG and PNG'), false);
@@ -24,7 +24,6 @@ const upload = multer({
 	storage: multerS3({
 		s3: s3,
 		bucket: 'team-watermelon-bigdeal-images',
-		//this is breaking it now
 		acl: 'public-read',
 		metadata: function (req, file, cb) {
 			cb(null, { fieldName: 'TESTING_METADATA' });

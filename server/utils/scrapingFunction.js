@@ -24,7 +24,7 @@ const scraping = async (url) => {
 	try {
 		const browser = await puppeteer.launch({ headless: true });
 		const page = await browser.newPage();
-		await page.goto(url, {"waitUntil": "load"});
+		await page.goto(url, { waitUntil: 'load' });
 
 		if (domainName(url) === 'amazon') {
 			await page.waitForSelector('span#productTitle');
@@ -130,8 +130,8 @@ const scraping = async (url) => {
 		}
 	} catch (err) {
 		console.log(err);
-		await browser.close();
-		console.log('Browser Closed');
+		// await browser.close();
+		// console.log('Browser Closed');
 	}
 };
 

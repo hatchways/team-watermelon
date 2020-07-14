@@ -11,6 +11,7 @@ const authRouter = require('./routes/auth');
 const listRouter = require('./routes/lists');
 const productRouter = require('./routes/products');
 const uploadRouter = require('./routes/imageUpload');
+const dotenv = require('dotenv').config();
 
 const { json } = express;
 
