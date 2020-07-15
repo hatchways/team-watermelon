@@ -8,26 +8,27 @@ const Product = require('../models/Product');
 
 const verifyToken = require('../middleware/verify');
 
-const scrapePriceTag = async () => { 
-	console.log("scraping every two minutes");
-	Product.find({}).exec(async function(err, allProducts){
-		if(err || !allProducts.length){
-			console.log("error: No products for cron");
+const scrapePriceTag = async (url) => {
+	console.log('scraping every two minutes');
+	Product.find({}).exec(async function (err, allProducts) {
+		if (err || !allProducts.length) {
+			console.log('error: No products for cron');
 		} else {
 			for await (const eachProduct of allProducts) {
 				const productDetails = await scrapingFunction(eachProduct.url);
-				if(productDetails) {
+				const product = await scrapingFunction();
+				if (productDetails) {
 					const newPrice = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
-					if(newPrice !== Number(eachProduct.currentprice)) {
+					if (newPrice !== Number(eachProduct.currentprice)) {
 						eachProduct.lastprice = eachProduct.currentprice;
 						eachProduct.currentprice = newPrice;
 						eachProduct.name = productDetails.title;
 						eachProduct.description = productDetails.description;
 						eachProduct.image = productDetails.image;
 						eachProduct.save();
-						console.log("success: Updated price "+ productDetails.price +" of "+productDetails.title);
+						console.log('success: Updated price ' + productDetails.price + ' of ' + productDetails.title);
 					} else {
-						console.log("error: Price did not change for "+productDetails.title);
+						console.log('error: Price did not change for ' + productDetails.title);
 					}
 				}
 			}
@@ -55,7 +56,14 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 			} else {
 				description = product.description[0];
 			}
-			var newProduct = { name: product.title, image: product.image, description: description, url: url, lastprice: 0.0, currentprice: price };
+			var newProduct = { 
+				name: product.title, 
+				image: product.image, 
+				description: description, 
+				url: url, 
+				lastprice: 0.0, 
+				currentprice: price
+			};
 			Product.create(newProduct, function (err, product) {
 				if (err) {
 					console.log(err);
@@ -64,7 +72,7 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 					foundList.products.push(product);
 					foundList.save();
 					console.log('success: Product added to list.');
-					res.status(200).send({newProduct: product});
+					res.status(200).send({ newProduct: product });
 				}
 			});
 		}
@@ -91,7 +99,7 @@ router.delete('/lists/:id/products/:product_id', verifyToken, function (req, res
 					});
 				}
 			});
-			console.log(req.params.product_id,'Product deleted.');
+			console.log(req.params.product_id, 'Product deleted.');
 		}
 	});
 });
