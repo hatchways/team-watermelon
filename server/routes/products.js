@@ -8,17 +8,16 @@ const Product = require('../models/Product');
 
 const verifyToken = require('../middleware/verify');
 
-const scrapePriceTag = async (url) => {
-	console.log('scraping every two minutes');
+const scrapePriceTag = async () => {
+	console.log('scraping every ten minutes');
 	Product.find({}).exec(async function (err, allProducts) {
 		if (err || !allProducts.length) {
 			console.log('error: No products for cron');
 		} else {
 			for await (const eachProduct of allProducts) {
 				const productDetails = await scrapingFunction(eachProduct.url);
-				const product = await scrapingFunction();
 				if (productDetails) {
-					const newPrice = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
+					const newPrice = parseFloat(productDetails.price.trim().substring(1).replace(/,/g, ''));
 					if (newPrice !== Number(eachProduct.currentprice)) {
 						eachProduct.lastprice = eachProduct.currentprice;
 						eachProduct.currentprice = newPrice;
@@ -35,9 +34,10 @@ const scrapePriceTag = async (url) => {
 		}
 	});
 };
-//'*/10 * * * *'
-// const scrapingTime = cron.schedule('*/2 * * * *', scrapePriceTag);
-// scrapingTime.destroy(); - add it to destroy scheduled task
+
+// Cron job runs every 10 minutes (time increased as no. of products increased)
+const scrapingTime = cron.schedule('*/10 * * * *', scrapePriceTag);
+
 
 // ADD new product
 router.post('/lists/:id/products/new', verifyToken, async function (req, res) {

@@ -110,7 +110,6 @@ const scraping = async (url) => {
 			});
 			pageData.url = url;
 			await browser.close();
-			console.log(pageData);
 			return pageData;
 		} else if (domainName(url) === 'craigslist') {
 			//CRAIGSLIST SECTION
@@ -148,9 +147,4 @@ const scraping = async (url) => {
 		// console.log('Browser Closed');
 	}
 };
-console.log(
-	scraping(
-		'https://www.ebay.ca/itm/AmazonBasics-Enameled-Cast-Iron-Covered-Dutch-Oven-4-3-Quart-Green/402274846573?hash=item5da973076d:g:KaMAAOSwKulezN41'
-	)
-);
 module.exports = scraping;
