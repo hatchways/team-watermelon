@@ -55,7 +55,6 @@ export default function FindNewFriendsModal(props) {
 		getUsers();
 	}, []);
 
-	const usersToFollow = () => {};
 	console.log(usersData);
 	return (
 		<div>
