@@ -35,7 +35,7 @@ const scrapePriceTag = async () => {
 	});
 };
 //'*/10 * * * *'
-const scrapingTime = cron.schedule('*/2 * * * *', scrapePriceTag);
+// const scrapingTime = cron.schedule('*/2 * * * *', scrapePriceTag);
 // scrapingTime.destroy(); - add it to destroy scheduled task
 
 // ADD new product
@@ -49,9 +49,16 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 			const product = await scrapingFunction(url);
 			console.log(product);
 			let price = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
-			var newProduct = { name: product.title, image: product.image, description: product.description, url: url, lastprice: 0.0, currentprice: price };
+			let description = '';
+			if(typeof product.description === "string") {
+				description = product.description;
+			} else {
+				description = product.description[0];
+			}
+			var newProduct = { name: product.title, image: product.image, description: description, url: url, lastprice: 0.0, currentprice: price };
 			Product.create(newProduct, function (err, product) {
 				if (err) {
+					console.log(err);
 					res.status(500).send({ response: 'error: Aw, Snap! Something went wrong.' });
 				} else {
 					foundList.products.push(product);

@@ -4,10 +4,10 @@ dotenv.config();
 
 const generateToken = (res, payload) => {
 	const token = jwt.sign(payload, process.env.SECRET_KEY, {
-		expiresIn: 360000
+		expiresIn: 960000
 	});
 	return res.cookie('token', token, {
-		expires: new Date(Date.now() + 360000),
+		expires: new Date(Date.now() + 960000),
 		secure: false, // set to true if your using https
 		httpOnly: true
 	});
