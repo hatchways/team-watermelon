@@ -8,7 +8,7 @@ const Product = require('../models/Product');
 
 const verifyToken = require('../middleware/verify');
 
-const scrapePriceTag = async (url) => {
+const scrapePriceTag = async () => {
 	console.log('scraping every two minutes');
 	Product.find({}).exec(async function (err, allProducts) {
 		if (err || !allProducts.length) {

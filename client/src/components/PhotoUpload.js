@@ -1,13 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
-import Button from '@material-ui/core/Button';
 import FormData from 'form-data';
 import axios from 'axios';
-import { Typography } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
+import { Typography, CircularProgress, Dialog, DialogActions, Button, Container } from '@material-ui/core';
 import AuthContext from '../state_management/AuthContext';
 
-const loadingImage = 'https://team-watermelon-bigdeal-images.s3.amazonaws.com/1594749857168';
 const style = {
 	error: {
 		color: 'red'
@@ -93,7 +89,6 @@ export default function PhotoUpload(props) {
 	const onSubmitForm = (e) => {
 		e.preventDefault();
 		uploadImage(image);
-		console.log('Form Submitted');
 	};
 
 	return (
@@ -102,40 +97,39 @@ export default function PhotoUpload(props) {
 				Profile Photo Upload
 			</Button>
 			<Dialog style={style.dialog} open={dialogOpen}>
-				<form enctype="multipart/form-data" style={style.formStyle}>
-					<Typography
-						style={style.header}
-						component="h2"
-						variant="h4"
-						align="center"
-						color="textPrimary"
-						gutterBottom
+				<Container style={{ width: '95%' }}>
+					<form encType="multipart/form-data" style={style.formStyle}>
+						<Typography style={style.header} component="h3" align="center" color="textPrimary" gutterBottom>
+							Upload Profile Picture
+						</Typography>
+						<div style={style.noProfileImg}>
+							{imageIsLoading ? (
+								<CircularProgress style={style.imgPreview} color="secondary" />
+							) : (
+								<img style={style.imgPreview} src={uploadedImageUrl} />
+							)}
+						</div>
+						<p style={style.error}>{errorMsg}</p>
+						<input onChange={onChange} name="image" type="file" />
+					</form>
+					<DialogActions>
+						<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
+							Upload
+						</Button>
+						<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
+							Cancel
+						</Button>
+					</DialogActions>
+					<Button
+						style={uploadedImageUrl ? { display: 'flex', marginBottom: '10px' } : { display: 'none' }}
+						onClick={() => setDialogOpen(false)}
+						color="primary"
+						fullWidth
+						variant="contained"
 					>
-						Upload Profile Picture
-					</Typography>
-					<div style={style.noProfileImg}>
-						<img style={style.imgPreview} src={imageIsLoading ? loadingImage : uploadedImageUrl} />
-					</div>
-					<p style={style.error}>{errorMsg}</p>
-					<input onChange={onChange} name="image" type="file" />
-				</form>
-				<DialogActions>
-					<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
-						Upload
+						Save Profile Picture
 					</Button>
-					<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
-						Cancel
-					</Button>
-				</DialogActions>
-				<Button
-					style={uploadedImageUrl ? { display: 'flex', marginBottom: '10px' } : { display: 'none' }}
-					onClick={() => setDialogOpen(false)}
-					color="primary"
-					fullWidth
-					variant="contained"
-				>
-					Save Profile Picture
-				</Button>
+				</Container>
 			</Dialog>
 		</div>
 	);

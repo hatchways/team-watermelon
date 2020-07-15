@@ -40,23 +40,26 @@ const style = {
 
 export default function LoginRegisterModal(props) {
 	const authContext = useContext(AuthContext);
-
 	const [loginActive, setLoginActive] = useState(true);
 	const [userData, setUserData] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [asyncStart, setAsyncStart] = useState(false);
-
-	const [value, setValue] = useState(0); //handle tabs
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	}; //handle tabs
-
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
 		password: ''
 	});
+	const [value, setValue] = useState(0); //handle tabs
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+		setFormData({
+			name: '',
+			email: '',
+			password: ''
+		});
+	};
+
 	const { name, email, password } = formData;
 	const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -83,7 +86,7 @@ export default function LoginRegisterModal(props) {
 			return res;
 		} catch (err) {
 			const errors = err.response.data.errors; //server-end doesn't return msg
-			setErrorMsg('Logging in failed. Try again.');
+			setErrorMsg('login / register failed');
 			setTimeout(() => {
 				setErrorMsg('');
 			}, 4000);
@@ -97,16 +100,12 @@ export default function LoginRegisterModal(props) {
 				if (res && res != null && res.data != null) {
 					setUserData(res.data);
 					authContext.handleLogin(res.data);
-					console.log(res);
 				} else {
 					console.log('error: fetching user data failed.');
 				}
 			});
 			setAsyncStart(false);
 		}
-		console.log('test login/useEffect');
-		// return () => thisComponentMounted = false;
-		// eslint-disable-next-line
 	}, [asyncStart]);
 
 	return (
