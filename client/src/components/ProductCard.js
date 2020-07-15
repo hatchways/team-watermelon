@@ -12,6 +12,7 @@ import {
     CardMedia, 
     Button
 } from '@material-ui/core';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import {baseUrl} from '../utils/baseUrl';
 import {cutContentLength, covertNumberDecimal} from '../utils/transformText';
 
@@ -89,7 +90,7 @@ export default function ProductCard(props) {
                 <CardActionArea component="a" href={product.url} target="_blank" rel="noreferrer">
                     <CardContent className={classes.cardContent}>
                         <Typography variant="h6">
-                            {cutContentLength(product.name,15,"no product name")}
+                            {cutContentLength(product.name,40,"no product name")}
                         </Typography>
                         <Typography variant="subtitle2" paragraph className={classes.description}>
                             {cutContentLength(product.description,100,"no description")}
@@ -97,12 +98,12 @@ export default function ProductCard(props) {
                         <Grid container>
                             <Grid item xs={12} md={6} lg={6}>
                             <Typography color="textSecondary" style={linethrough}>
-                                price: {covertNumberDecimal(product.lastprice)}$
+                                Price: $ {covertNumberDecimal(product.lastprice)}
                             </Typography>
                             </Grid>
                             <Grid item xs={12} md={6} lg={6}>
                             <Typography color="primary">
-                                new price: {covertNumberDecimal(product.currentprice)}$
+                                New Price: $ {covertNumberDecimal(product.currentprice)}
                             </Typography>
                             </Grid>
                         </Grid>
@@ -113,6 +114,7 @@ export default function ProductCard(props) {
                         variant="outlined" 
                         color="primary" 
                         size="small"
+                        startIcon={<DeleteForeverIcon />}
                         onClick={handleRevome}
                 >remove
                 </Button>

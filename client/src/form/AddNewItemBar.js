@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {
   TextField,
   Grid,
@@ -28,10 +28,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#fff5ee',
       opacity: 1,
     },
-    wrapper: {
-      margin: theme.spacing(1),
-      position: 'relative',
-    },
     buttonProgress: {
       color: '#DF1B1B',
       position: 'absolute',
@@ -45,7 +41,6 @@ export default function BasicTextFields(props) {
   const shListsContext = useContext(ShListsContext);
   const [productUrl, setProductUrl] = useState('');
   const [loading, setLoading] = useState(false);
-  console.log("AddNewItemBar",props.listId);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -83,7 +78,7 @@ export default function BasicTextFields(props) {
                       className={classes.link}
                       disabled={loading}
                       onClick={handleSubmit}>
-                      <AddBoxIcon fontSize="large"/>
+                      <AddCircleIcon fontSize="large"/>
                       {loading && <CircularProgress size={48} className={classes.buttonProgress} />}
                   </IconButton>
                 </Grid>
