@@ -19,8 +19,8 @@ function AuthContextState() {
             value={ {
                 ...authState,
                 handleLogin: (payload) =>authDispatch(ACTIONS.login_success(payload)),
-                handleLogout: (payload) =>authDispatch(ACTIONS.login_failure(payload))
-            } }
+                handleLogout: (payload) =>authDispatch(ACTIONS.login_failure(payload)),
+} }
         >
         <ShListsContext.Provider
             value={ {

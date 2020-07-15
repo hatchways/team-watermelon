@@ -24,6 +24,33 @@ app.set("port", port);
 var server = http.createServer(app);
 
 /**
+ * Create sockets for notification
+ */
+var io = require('socket.io')(server, {
+  pingTimeout: 60000,
+});
+
+io.on('connection', function (socket) {
+    console.log('a user connected');
+    socket.on( 'join_room', function( data ) {
+        socket.join(data.userId);
+        socket.emit('show_notification', { 
+        title: "joined a private room", 
+        message: "msg", 
+        });
+    });
+    socket.on( 'leave_room', function( data ) {
+        console.log("leave roome",data.userId);
+        socket.leave(data.userId);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });           
+});
+
+app.io = io;
+/**
  * Listen on provided port, on all network interfaces.
  */
 
@@ -87,3 +114,6 @@ function onListening() {
 
   console.log("Listening on " + bind);
 }
+
+
+

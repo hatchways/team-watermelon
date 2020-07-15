@@ -1,4 +1,4 @@
-import React,{useContext, useEffect} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import {Toolbar, AppBar, Box, Typography, Link, IconButton, Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
@@ -6,6 +6,9 @@ import LocalMallIcon from '@material-ui/icons/LocalMall';
 import AuthContext from '../state_management/AuthContext';
 import {fetchShLists} from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
+import socketIOClient from "socket.io-client";
+
+const ENDPOINT = "http://localhost:3001";
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -26,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 let needsFetchingLists = true;
-let needsCleanList = false;
 
 const Navbar = ()=>{
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
-    
+    const [notification, setNotification] = useState({socket:null, message:""});
+
 
     useEffect(() => {
         if(authContext.isAuthenticated && needsFetchingLists){ //pretects, because private route is uncommented for developing
@@ -40,11 +43,31 @@ const Navbar = ()=>{
             needsFetchingLists = false;
             console.log("Navbar/useEffet is fetching");
         }
-        if(needsCleanList){
-            shListsContext.handleShListsFailure({response:null});
-            needsCleanList = false;
+        if(authContext.isAuthenticated){
+            const socket = socketIOClient(ENDPOINT);
+            setNotification({socket:socket,message:""});
+
+            socket.on('show_notification', data => {
+            console.log("test 1");
+                console.log(data.title,data.message);
+            });
+            socket.emit('join_room', {
+                message: "",
+                userId: authContext._id,
+                title: "join room",
+            });
+            console.log("Navbar/useEffect socket");
+            
         }
-    });
+    },[authContext.isAuthenticated]);
+
+    const leaveSocketRoom=()=>{
+        notification.socket.emit('leave_room', {
+            message: "",
+            userId: authContext._id,
+            title: "leave room",
+        });
+    }
 
     return(
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
@@ -88,9 +111,12 @@ const Navbar = ()=>{
                     Notifications
                 </Link>
                 <Button 
-                    onClick={()=>{authContext.handleLogout({});
-                                        needsFetchingLists = true;
-                                        needsCleanList = true;}} 
+                    onClick={()=>{
+                        authContext.handleLogout({});
+                        shListsContext.handleShListsFailure({response:null});
+                        leaveSocketRoom();
+                        needsFetchingLists = true;
+                    }} 
                     color="primary" 
                     variant="outlined" 
                     className={classes.link}
