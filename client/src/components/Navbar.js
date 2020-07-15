@@ -1,5 +1,5 @@
 import React,{useContext, useEffect, useState} from 'react';
-import {Toolbar, AppBar, Box, Typography, Link, IconButton, Button} from '@material-ui/core';
+import {Toolbar, AppBar, Box, Typography, Link, IconButton, Button,Badge} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -34,7 +34,8 @@ const Navbar = ()=>{
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
-    const [notification, setNotification] = useState({socket:null, message:""});
+    const [notification, setNotification] = useState({messages:[]});
+    const [socket, setSocket] = useState({socket:null})
 
 
     useEffect(() => {
@@ -45,28 +46,34 @@ const Navbar = ()=>{
         }
         if(authContext.isAuthenticated){
             const socket = socketIOClient(ENDPOINT);
-            setNotification({socket:socket,message:""});
+            
 
             socket.on('show_notification', data => {
             console.log("test 1");
                 console.log(data.title,data.message);
+                let tmp = notification.messages;
+                tmp.push(data.message);
+                setNotification({ messages:tmp });
             });
             socket.emit('join_room', {
                 message: "",
                 userId: authContext._id,
                 title: "join room",
             });
+            setSocket({socket:socket});
             console.log("Navbar/useEffect socket");
             
         }
     },[authContext.isAuthenticated]);
 
     const leaveSocketRoom=()=>{
-        notification.socket.emit('leave_room', {
+        
+        socket.socket.emit('leave_room', {
             message: "",
             userId: authContext._id,
             title: "leave room",
         });
+        setNotification({ messages:[] });
     }
 
     return(
@@ -103,13 +110,15 @@ const Navbar = ()=>{
                     className={classes.link}>
                     Friends
                 </Link>
-                <Link component={RouterLink}
-                    to="#" 
-                    variant="button" 
-                    color="textPrimary" 
-                    className={classes.link}>
-                    Notifications
-                </Link>
+                <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
+                    <Link component={RouterLink}
+                        to="#" 
+                        variant="button" 
+                        color="textPrimary" 
+                        className={classes.link}>
+                        Notifications
+                    </Link>
+                </Badge>
                 <Button 
                     onClick={()=>{
                         authContext.handleLogout({});
