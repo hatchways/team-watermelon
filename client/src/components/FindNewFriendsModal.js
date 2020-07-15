@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { Dialog, Button, Grid, Tabs, Tab, AppBar } from '@material-ui/core';
+import { Dialog, Button, Grid, Tabs, Tab, AppBar, CircularProgress, Typography } from '@material-ui/core';
 import FriendCard from './FriendCard.js';
 import AuthContext from '../state_management/AuthContext';
 
@@ -43,6 +43,7 @@ export default function FindNewFriendsModal(props) {
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+	const currentUserId = authContext.id;
 	const getUsers = async () => {
 		try {
 			const res = await axios.get('/users/allUsers');
@@ -55,11 +56,11 @@ export default function FindNewFriendsModal(props) {
 		getUsers();
 	}, []);
 
-	console.log(usersData);
+	console.log(authContext);
 	return (
 		<div>
 			<Button onClick={() => setDialogOpen(true)} {...props}>
-				Follow New Friends
+				Friends
 			</Button>
 			<Dialog style={style.dialog} open={dialogOpen}>
 				<AppBar style={style.appBar} position="static" color="default">
@@ -77,15 +78,26 @@ export default function FindNewFriendsModal(props) {
 							Following
 						</Tab>
 					</Tabs>
-                </AppBar>
-                { usersData ? 
-				<Grid container spacing={1} alignItems="center">
-					{usersData.map((friend) => (
-						<Grid item key={friend._id} xs={12} md={12} lg={12}>
-							{FriendCard(friend)}
+				</AppBar>
+				{suggestedActive ? (
+					usersData ? (
+						<Grid container spacing={1} alignItems="center">
+							{usersData
+								.filter((friend) => friend._id !== currentUserId)
+								.map((friend) => (
+									<FriendCard
+										key={friend.id}
+										name={friend.name}
+										profile_picture={friend.profile_picture}
+									/>
+								))}
 						</Grid>
-					))}
-				</Grid>
+					) : (
+						<CircularProgress />
+					)
+				) : (
+					<Typography>You are not Following anyone yet</Typography>
+				)}
 				<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
 					X
 				</Button>

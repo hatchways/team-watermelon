@@ -40,14 +40,12 @@ const style = {
 
 export default function LoginRegisterModal(props) {
 	const authContext = useContext(AuthContext);
-
 	const [loginActive, setLoginActive] = useState(true);
-	const [userData, setUserData] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [asyncStart, setAsyncStart] = useState(false);
 
-	const [value, setValue] = useState(0); //handle tabs
+	const [value, setValue] = useState(0);
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	}; //handle tabs
@@ -94,10 +92,8 @@ export default function LoginRegisterModal(props) {
 	useEffect(() => {
 		if (asyncStart) {
 			loginRegister(name, email, password, loginActive).then((res) => {
-				if (res && res != null && res.data != null) {
-					setUserData(res.data);
+				if (res) {
 					authContext.handleLogin(res.data);
-					console.log(res);
 				} else {
 					console.log('error: fetching user data failed.');
 				}
