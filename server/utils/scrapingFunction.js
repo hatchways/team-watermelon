@@ -28,7 +28,7 @@ const scraping = async (url) => {
 
 		if (domainName(url) === 'amazon') {
 			await page.waitForSelector('span#productTitle');
-
+			//AMAZON SECTION
 			pageData = await page.evaluate(() => {
 				const priceBeginning = /[a-zA-Z]*/;
 				let titleData = '';
@@ -65,7 +65,7 @@ const scraping = async (url) => {
 				} else if ([...document.querySelectorAll(`#feature-bullets ul li span`)][0] !== null) {
 					descriptionData = [...document.querySelectorAll(`#feature-bullets ul li span`)].map(
 						(elem) => elem.innerText
-					);
+					).join;
 				} else {
 					descriptionData = 'Unknown';
 				}
@@ -79,6 +79,7 @@ const scraping = async (url) => {
 			});
 
 			await browser.close();
+			console.log(pageData);
 			return pageData;
 		} else if (domainName(url) === 'ebay') {
 			//EBAY SECTION
@@ -100,6 +101,7 @@ const scraping = async (url) => {
 			return pageData;
 		} else if (domainName(url) === 'craigslist') {
 			//CRAIGSLIST SECTION
+
 			await page.waitForSelector('#titletextonly');
 
 			pageData = await page.evaluate(() => {
@@ -130,9 +132,11 @@ const scraping = async (url) => {
 		}
 	} catch (err) {
 		console.log(err);
-		// await browser.close();
-		// console.log('Browser Closed');
 	}
 };
-
+console.log(
+	scraping(
+		'https://www.amazon.ca/Wireless-NANAMI-Charging-Compatible-Qi-Enabled/dp/B07MB9H9GW/ref=gbps_img_m-4_24b0_145160ea?smid=A2QODQRJR2TSCG&pf_rd_p=36f0bb06-73ed-4182-b5e7-5de025e924b0&pf_rd_s=merchandised-search-4&pf_rd_t=101&pf_rd_i=2055586011&pf_rd_m=A3DWYIK6Y9EEQB&pf_rd_r=RVDYVVK33GH08FXGMRCS'
+	)
+);
 module.exports = scraping;

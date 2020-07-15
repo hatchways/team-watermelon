@@ -105,8 +105,6 @@ export default function LoginRegisterModal(props) {
 			setAsyncStart(false);
 		}
 		console.log('test login/useEffect');
-		// return () => thisComponentMounted = false;
-		// eslint-disable-next-line
 	}, [asyncStart]);
 
 	return (

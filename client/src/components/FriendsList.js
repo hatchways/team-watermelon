@@ -5,38 +5,38 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import FriendCard from './FriendCard';
-
+import FindNewFriendsModal from './FindNewFriendsModal.js';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        margin: theme.spacing(5),
-    },
+	root: {
+		margin: theme.spacing(5)
+	}
 }));
 
-
 export default function FriendsList(props) {
-    const classes = useStyles();
-    const friends = props.friends;
+	const classes = useStyles();
+	const friends = props.friends;
 
-    return (
-        <section className={classes.root}>
-            <Container maxWidth="sm" component="main">
-                <Typography variant="h5" align="left" color="textSecondary" component="p">
-                Friends:
-                </Typography>
-                <br/>
-                <Grid container spacing={1} alignItems="center">
-                    {friends.map((friend) => (
-                        <Grid item key={friend._id} xs = {12} md = {12} lg={12}>
-                        {FriendCard(friend)}
-                        </Grid>
-                    ))}
-                </Grid>
-        </Container>
-        </section>
-        );
+	return (
+		<section className={classes.root}>
+			<Container maxWidth="sm" component="main">
+				<Typography variant="h5" align="left" color="textSecondary" component="p">
+					Friends:
+				</Typography>
+				<FindNewFriendsModal />
+				<br />
+				<Grid container spacing={1} alignItems="center">
+					{friends.map((friend) => (
+						<Grid item key={friend._id} xs={12} md={12} lg={12}>
+							{FriendCard(friend)}
+						</Grid>
+					))}
+				</Grid>
+			</Container>
+		</section>
+	);
 }
 
 FriendsList.propTypes = {
-    friends: PropTypes.array,
+	friends: PropTypes.array
 };
