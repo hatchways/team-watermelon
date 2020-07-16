@@ -56,7 +56,7 @@ export default function FindNewFriendsModal(props) {
 		getUsers();
 	}, []);
 
-	console.log(authContext);
+	console.log(authContext.friends_list);
 	return (
 		<div>
 			<Button onClick={() => setDialogOpen(true)} {...props}>
@@ -83,10 +83,14 @@ export default function FindNewFriendsModal(props) {
 					usersData ? (
 						<Grid container spacing={1} alignItems="center">
 							{usersData
-								.filter((friend) => friend._id !== currentUserId)
+								.filter(
+									(friend) =>
+										friend._id !== currentUserId && !authContext.friends_list.includes(friend._id)
+								)
 								.map((friend) => (
 									<FriendCard
-										key={friend.id}
+										key={friend._id}
+										id={friend._id}
 										name={friend.name}
 										profile_picture={friend.profile_picture}
 									/>
@@ -95,6 +99,22 @@ export default function FindNewFriendsModal(props) {
 					) : (
 						<CircularProgress />
 					)
+				) : usersData && authContext.friends_list.length > 0 ? (
+					<Grid container spacing={1} alignItems="center">
+						{usersData
+							.filter(
+								(friend) =>
+									friend._id !== currentUserId && authContext.friends_list.includes(friend._id)
+							)
+							.map((friend) => (
+								<FriendCard
+									key={friend._id}
+									id={friend._id}
+									name={friend.name}
+									profile_picture={friend.profile_picture}
+								/>
+							))}
+					</Grid>
 				) : (
 					<Typography>You are not Following anyone yet</Typography>
 				)}

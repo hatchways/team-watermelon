@@ -15,7 +15,10 @@ function AuthContextState() {
 			value={{
 				...authState,
 				handleLogin: (payload) => authDispatch(ACTIONS.login_success(payload)),
-				handleLogout: (payload) => authDispatch(ACTIONS.login_failure(payload))
+				handleLogout: (payload) => authDispatch(ACTIONS.login_failure(payload)),
+				handleFollow: (payload) => authDispatch(ACTIONS.follow_friend(payload)),
+				handleUnfollow: (payload) => authDispatch(ACTIONS.unfollow_friend(payload)),
+				handleNewProfilePicture: (payload) => authDispatch(ACTIONS.set_new_profile_picture(payload))
 			}}
 		>
 			<ShListsContext.Provider

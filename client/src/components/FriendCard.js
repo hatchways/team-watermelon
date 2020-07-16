@@ -1,13 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import CardActions from '@material-ui/core/CardActions';
-import CardActionArea from '@material-ui/core/CardActionArea';
+import { Typography, Card, CardContent, Avatar, Box, Button, CardActions, CardActionArea } from '@material-ui/core';
+import AuthContext from '../state_management/AuthContext';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -39,8 +34,21 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function ProductCard(props) {
+export default function FriendCard(props) {
 	const classes = useStyles();
+	const authContext = useContext(AuthContext);
+
+	const followUser = async (id) => {
+		try {
+			console.log(`friend card id is:${id}`);
+			const res = await axios.post(`/users/follow/${id}`);
+			await authContext.handleFollow(id);
+			console.log(`follow user response:${res}`);
+			return res;
+		} catch (error) {
+			console.log('error following user');
+		}
+	};
 
 	return (
 		<CardActionArea>
@@ -62,8 +70,14 @@ export default function ProductCard(props) {
 							<Typography component="h2">{props.name}</Typography>
 						</CardContent>
 						<CardActions>
-							<Button variant="outlined" color="primary" href="#" size="small">
-								follow
+							<Button
+								onClick={() => followUser(props.id)}
+								variant="outlined"
+								color="primary"
+								href="#"
+								size="small"
+							>
+								Follow
 							</Button>
 						</CardActions>
 					</div>

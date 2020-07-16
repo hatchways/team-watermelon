@@ -16,6 +16,7 @@ export const AuthReducer = (state, action) => {
 				...state,
 				name: action.payload.name,
 				email: action.payload.email,
+				profile_picture: action.payload.profile_picture,
 				id: action.payload._id,
 				my_lists: action.payload.my_lists,
 				friends_list: action.payload.friends_list,
@@ -29,6 +30,16 @@ export const AuthReducer = (state, action) => {
 				my_lists: [],
 				friends_list: [],
 				isAuthenticated: false
+			};
+		case ACTION_TYPES.FOLLOW_FRIEND:
+			return {
+				...state,
+				friends_list: state.friends_list.push(action.payload)
+			};
+		case ACTION_TYPES.UNFOLLOW_FRIEND:
+			return {
+				...state,
+				friends_list: state.friends_list.filter((friend) => friend !== action.payload)
 			};
 		default:
 			return state;

@@ -100,7 +100,6 @@ export default function LoginRegisterModal(props) {
 			});
 			setAsyncStart(false);
 		}
-		console.log('test login/useEffect');
 	}, [asyncStart]);
 
 	return (
@@ -121,12 +120,8 @@ export default function LoginRegisterModal(props) {
 						variant="fullWidth"
 						onChange={handleChange}
 					>
-						<Tab label="login" onClick={() => setLoginActive(true)}>
-							Login
-						</Tab>
-						<Tab label="register" onClick={() => setLoginActive(false)}>
-							Register
-						</Tab>
+						<Tab label="login" onClick={() => setLoginActive(true)} />
+						<Tab label="register" onClick={() => setLoginActive(false)} />
 					</Tabs>
 				</AppBar>
 				<form style={style.formStyle}>
