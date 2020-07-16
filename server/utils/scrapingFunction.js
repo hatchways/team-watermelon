@@ -28,7 +28,7 @@ const scraping = async (url) => {
 
 		if (domainName(url) === 'amazon') {
 			await page.waitForSelector('span#productTitle');
-
+			//AMAZON SECTION
 			pageData = await page.evaluate(() => {
 				const priceBeginning = /[a-zA-Z]*/;
 				let titleData = '';
@@ -65,7 +65,7 @@ const scraping = async (url) => {
 				} else if ([...document.querySelectorAll(`#feature-bullets ul li span`)][0] !== null) {
 					descriptionData = [...document.querySelectorAll(`#feature-bullets ul li span`)].map(
 						(elem) => elem.innerText
-					);
+					).join;
 				} else {
 					descriptionData = 'Unknown';
 				}
@@ -113,6 +113,7 @@ const scraping = async (url) => {
 			return pageData;
 		} else if (domainName(url) === 'craigslist') {
 			//CRAIGSLIST SECTION
+
 			await page.waitForSelector('#titletextonly');
 
 			pageData = await page.evaluate(() => {
@@ -143,8 +144,7 @@ const scraping = async (url) => {
 		}
 	} catch (err) {
 		console.log(err);
-		// await browser.close();
-		// console.log('Browser Closed');
 	}
 };
+
 module.exports = scraping;

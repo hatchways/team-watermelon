@@ -40,14 +40,12 @@ const style = {
 
 export default function LoginRegisterModal(props) {
 	const authContext = useContext(AuthContext);
-
 	const [loginActive, setLoginActive] = useState(true);
-	const [userData, setUserData] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [asyncStart, setAsyncStart] = useState(false);
 
-	const [value, setValue] = useState(0); //handle tabs
+	const [value, setValue] = useState(0);
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	}; //handle tabs
@@ -94,19 +92,16 @@ export default function LoginRegisterModal(props) {
 	useEffect(() => {
 		if (asyncStart) {
 			loginRegister(name, email, password, loginActive).then((res) => {
-				if (res && res != null && res.data != null) {
-					setUserData(res.data);
+
+				if (res) {
 					authContext.handleLogin(res.data);
-					console.log(res);
+
 				} else {
 					console.log('error: fetching user data failed.');
 				}
 			});
 			setAsyncStart(false);
 		}
-		console.log('test login/useEffect');
-		// return () => thisComponentMounted = false;
-		// eslint-disable-next-line
 	}, [asyncStart]);
 
 	return (
@@ -115,7 +110,7 @@ export default function LoginRegisterModal(props) {
 				''
 			) : (
 				<Button onClick={() => setDialogOpen(true)} {...props}>
-					Login
+					Login / Register
 				</Button>
 			)}
 			<Dialog style={style.dialog} open={dialogOpen}>
@@ -127,12 +122,8 @@ export default function LoginRegisterModal(props) {
 						variant="fullWidth"
 						onChange={handleChange}
 					>
-						<Tab label="login" onClick={() => setLoginActive(true)}>
-							Login
-						</Tab>
-						<Tab label="register" onClick={() => setLoginActive(false)}>
-							Register
-						</Tab>
+						<Tab label="login" onClick={() => setLoginActive(true)} />
+						<Tab label="register" onClick={() => setLoginActive(false)} />
 					</Tabs>
 				</AppBar>
 				<form style={style.formStyle}>

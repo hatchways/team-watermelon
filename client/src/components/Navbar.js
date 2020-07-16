@@ -7,6 +7,7 @@ import LocalMallIcon from '@material-ui/icons/LocalMall';
 import AuthContext from '../state_management/AuthContext';
 import { fetchShLists } from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
+import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
@@ -39,7 +40,6 @@ const Navbar = () => {
 			//protects, because private route is uncommented for developing
 			fetchShLists(shListsContext.dispatchShLists, shListsContext.handleShListsFailure);
 			needsFetchingLists = false;
-			console.log('Navbar/useEffet is fetching');
 		}
 		if (needsCleanList) {
 			shListsContext.handleShListsFailure({ response: null });
@@ -70,7 +70,6 @@ const Navbar = () => {
 							Welcome! {authContext.name}
 						</Typography>
 						<PhotoUpload />
-
 						<Link
 							variant="button"
 							component={RouterLink}
@@ -80,15 +79,7 @@ const Navbar = () => {
 						>
 							Shopping Lists
 						</Link>
-						<Link
-							component={RouterLink}
-							to="/friendslist"
-							variant="button"
-							color="textPrimary"
-							className={classes.link}
-						>
-							Friends
-						</Link>
+						<FindNewFriendsModal />
 						<Link
 							component={RouterLink}
 							to="#"
@@ -116,5 +107,6 @@ const Navbar = () => {
 		</AppBar>
 	);
 };
+
 
 export default Navbar;
