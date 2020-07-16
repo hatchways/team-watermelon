@@ -52,7 +52,7 @@ const Navbar = ()=>{
             const socket = socketIOClient(ENDPOINT);
             needsSetSocket = false;
 
-            socket.on('show_notification', data => {
+            socket.on('price_notification', data => {
                 setNewMsg(data.message);
                 msgHasBeenRead = false;
             });
@@ -83,7 +83,7 @@ const Navbar = ()=>{
 
     
     const [anchorEl, setAnchorEl] = useState(null);
-    const handleClick = (event) => {
+    const handleClickOnNotification = (event) => {
         if(notification.messages.length > 0){
             setAnchorEl(anchorEl ? null : event.currentTarget);
         }
@@ -137,7 +137,7 @@ const Navbar = ()=>{
                     <Link 
                     aria-describedby={id}
                     type="button"
-                    onClick={handleClick}
+                    onClick={handleClickOnNotification}
                     variant="button" 
                     color="textPrimary" 
                     className={classes.link}>
