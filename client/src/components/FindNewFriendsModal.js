@@ -43,7 +43,7 @@ export default function FindNewFriendsModal(props) {
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
-	const currentUserId = authContext.id;
+
 	const getUsers = async () => {
 		try {
 			const res = await axios.get('/users/allUsers');
@@ -56,7 +56,6 @@ export default function FindNewFriendsModal(props) {
 		getUsers();
 	}, []);
 
-	console.log(authContext.friends_list);
 	return (
 		<div>
 			<Button onClick={() => setDialogOpen(true)} {...props}>
@@ -71,12 +70,8 @@ export default function FindNewFriendsModal(props) {
 						variant="fullWidth"
 						onChange={handleChange}
 					>
-						<Tab label="Suggested" onClick={() => setSuggestedActive(true)}>
-							Suggested
-						</Tab>
-						<Tab label="Following" onClick={() => setSuggestedActive(false)}>
-							Following
-						</Tab>
+						<Tab label="Suggested" onClick={() => setSuggestedActive(true)} />
+						<Tab label="Following" onClick={() => setSuggestedActive(false)} />
 					</Tabs>
 				</AppBar>
 				{suggestedActive ? (
@@ -85,7 +80,7 @@ export default function FindNewFriendsModal(props) {
 							{usersData
 								.filter(
 									(friend) =>
-										friend._id !== currentUserId && !authContext.friends_list.includes(friend._id)
+										friend._id !== authContext.id && !authContext.friends_list.includes(friend._id)
 								)
 								.map((friend) => (
 									<FriendCard
@@ -104,7 +99,7 @@ export default function FindNewFriendsModal(props) {
 						{usersData
 							.filter(
 								(friend) =>
-									friend._id !== currentUserId && authContext.friends_list.includes(friend._id)
+									friend._id !== authContext.id && authContext.friends_list.includes(friend._id)
 							)
 							.map((friend) => (
 								<FriendCard

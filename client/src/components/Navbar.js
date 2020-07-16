@@ -40,7 +40,6 @@ const Navbar = () => {
 			//protects, because private route is uncommented for developing
 			fetchShLists(shListsContext.dispatchShLists, shListsContext.handleShListsFailure);
 			needsFetchingLists = false;
-			console.log('Navbar/useEffet is fetching');
 		}
 		if (needsCleanList) {
 			shListsContext.handleShListsFailure({ response: null });

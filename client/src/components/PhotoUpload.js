@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
 import { Typography, CircularProgress, Dialog, DialogActions, Button, Container } from '@material-ui/core';
@@ -103,6 +103,8 @@ export default function PhotoUpload(props) {
 			const res = await axios.post(`/users/updateProfilePicture`, body, config);
 			await setDialogOpen(false);
 			await setNewImgLoaded(false);
+			await authContext.handleNewProfilePicture(url);
+			await setUploadedImageUrl(null);
 			console.log(res);
 			return res;
 		} catch (err) {
@@ -129,6 +131,7 @@ export default function PhotoUpload(props) {
 							<img
 								src={newImgLoaded ? uploadedImageUrl : authContext.profile_picture}
 								style={style.noProfileImg}
+								alt="uploaded image preview"
 							/>
 						) : (
 							<CircularProgress style={style.imgPreview} color="secondary" />

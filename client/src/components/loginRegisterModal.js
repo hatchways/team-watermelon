@@ -108,7 +108,7 @@ export default function LoginRegisterModal(props) {
 				''
 			) : (
 				<Button onClick={() => setDialogOpen(true)} {...props}>
-					Login
+					Login / Register
 				</Button>
 			)}
 			<Dialog style={style.dialog} open={dialogOpen}>

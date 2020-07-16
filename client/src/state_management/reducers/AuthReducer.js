@@ -6,7 +6,8 @@ export const initialState = {
 	isAuthenticated: false,
 	email: '',
 	my_lists: [],
-	friends_list: []
+	friends_list: [],
+	profile_picture: ''
 };
 
 export const AuthReducer = (state, action) => {
@@ -34,12 +35,17 @@ export const AuthReducer = (state, action) => {
 		case ACTION_TYPES.FOLLOW_FRIEND:
 			return {
 				...state,
-				friends_list: state.friends_list.push(action.payload)
+				friends_list: [...state.friends_list, action.payload]
 			};
 		case ACTION_TYPES.UNFOLLOW_FRIEND:
 			return {
 				...state,
 				friends_list: state.friends_list.filter((friend) => friend !== action.payload)
+			};
+		case ACTION_TYPES.SET_NEW_PROFILE_PICTURE:
+			return {
+				...state,
+				profile_picture: action.payload
 			};
 		default:
 			return state;

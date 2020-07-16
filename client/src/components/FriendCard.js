@@ -40,14 +40,20 @@ export default function FriendCard(props) {
 
 	const followUser = async (id) => {
 		try {
-			console.log(`friend card id is:${id}`);
 			const res = await axios.post(`/users/follow/${id}`);
 			authContext.handleFollow(id);
-			console.log(`follow user response:${res}`);
-
 			return res;
 		} catch (error) {
 			console.log('error following user');
+		}
+	};
+	const unfollowUser = async (id) => {
+		try {
+			const res = await axios.post(`/users/unfollow/${id}`);
+			authContext.handleUnfollow(id);
+			return res;
+		} catch (error) {
+			console.log('error unfollowing user');
 		}
 	};
 	return (
@@ -70,15 +76,27 @@ export default function FriendCard(props) {
 							<Typography component="h2">{props.name}</Typography>
 						</CardContent>
 						<CardActions>
-							<Button
-								onClick={() => followUser(props.id)}
-								variant="outlined"
-								color="primary"
-								href="#"
-								size="small"
-							>
-								Follow
-							</Button>
+							{authContext.friends_list.includes(props.id) ? (
+								<Button
+									onClick={() => unfollowUser(props.id)}
+									variant="outlined"
+									color="primary"
+									href="#"
+									size="small"
+								>
+									Unfollow
+								</Button>
+							) : (
+								<Button
+									onClick={() => followUser(props.id)}
+									variant="outlined"
+									color="primary"
+									href="#"
+									size="small"
+								>
+									Follow
+								</Button>
+							)}
 						</CardActions>
 					</div>
 				</Card>
