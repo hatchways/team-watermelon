@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
@@ -53,6 +54,7 @@ const style = {
 };
 
 export default function PhotoUpload(props) {
+
 	const authContext = useContext(AuthContext);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
@@ -61,6 +63,7 @@ export default function PhotoUpload(props) {
 		image: ''
 	});
 	const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+
 	const [newImgLoaded, setNewImgLoaded] = useState(false);
 
 	const { image } = formData;
@@ -76,6 +79,7 @@ export default function PhotoUpload(props) {
 					'Content-Type': `multipart/form-data`
 				}
 			});
+
 			await setUploadedImageUrl(res.data.imageUrl);
 			await setImageIsLoading(false);
 			await setNewImgLoaded(true);

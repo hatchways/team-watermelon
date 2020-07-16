@@ -92,8 +92,10 @@ export default function LoginRegisterModal(props) {
 	useEffect(() => {
 		if (asyncStart) {
 			loginRegister(name, email, password, loginActive).then((res) => {
+
 				if (res) {
 					authContext.handleLogin(res.data);
+
 				} else {
 					console.log('error: fetching user data failed.');
 				}
