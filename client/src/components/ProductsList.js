@@ -2,6 +2,7 @@ import React,{useContext} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {Typography, Grid, Container, Button} from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ProductCard from './ProductCard';
 import AddNewItemBar from '../form/AddNewItemBar';
 import ShListsContext from '../state_management/ShListsContext';
@@ -53,6 +54,7 @@ export default function ProductsList(props) {
                     component={RouterLink} 
                     variant="contained" 
                     color="primary" 
+                    startIcon={<ArrowBackIcon />}
                     to="/main"
                 >Back To Lists
                 </Button>
