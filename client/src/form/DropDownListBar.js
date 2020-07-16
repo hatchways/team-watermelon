@@ -1,4 +1,4 @@
-import React,{useState, useContext} from 'react';
+import React,{useState, useContext, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {
@@ -65,17 +65,27 @@ export default function BasicTextFields() {
             setErrMsg({open:true,errMsg:"ERROR: List is required."})
             return
         }
-
         setLoading(true);
-        let promise = addNewProduct(itemData.listId,shListsContext.dispatchNewProduct,{url:itemData.url});
-        promise.then(() => {
-            setLoading(false); 
-            setItemData({
-                listId: '',
-                url: '',
-            });
-        });
     }
+
+    useEffect(() => {
+        let isUnmounted = false;
+        if(loading) {
+            let promise = addNewProduct(itemData.listId,shListsContext.dispatchNewProduct,{url:itemData.url});
+            promise.then(() => {
+                if(!isUnmounted) {
+                    setLoading(false);
+                    setItemData({
+                        listId: '',
+                        url: '',
+                    });
+                }
+            });
+        }
+        return () => {
+            isUnmounted = true;
+        };
+    }, [loading]);
 
     const handleSnackBarClose = (event, reason) => {
         setErrMsg({open:false,errMsg:""});

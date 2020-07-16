@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {
@@ -45,12 +45,24 @@ export default function BasicTextFields(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    let promise = addNewProduct(props.listId, shListsContext.dispatchNewProduct, {url: productUrl}, shListsContext.showProduct);
-    promise.then(() => {
-      setLoading(false);
-      setProductUrl('');
-    });
   }
+
+  useEffect(() => {
+    let isUnmounted = false;
+    if(loading) {
+      let promise = addNewProduct(props.listId, shListsContext.dispatchNewProduct, {url: productUrl}, shListsContext.showProduct);
+        promise.then(() => {
+            if(!isUnmounted) {
+                setLoading(false);
+                setProductUrl('');
+            }
+        });
+    }
+    return () => {
+        isUnmounted = true;
+    };
+}, [loading]);
+
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
