@@ -1,6 +1,6 @@
-import React,{useState, useContext} from 'react';
+import React,{useState, useContext, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {
     TextField,
     Grid,
@@ -9,6 +9,7 @@ import {
     Select,
     Container,
     Box,
+    CircularProgress
 }from '@material-ui/core';
 import ShListsContext from '../state_management/ShListsContext';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -32,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
     },
     snack:{
         backgroundColor: "red",
+    },
+    buttonProgress: {
+        color: '#DF1B1B',
+        position: 'absolute',
+        top: '5%',
+        left: '5%',
     }
 }));
 
@@ -40,6 +47,7 @@ const regex = RegExp("^https://.*|^http://.*");
 export default function BasicTextFields() {
     const classes = useStyles();
     const shListsContext = useContext(ShListsContext);
+    const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState({open:false, errMsg:""});
     const [itemData, setItemData] = useState({
         listId: '',
@@ -57,13 +65,27 @@ export default function BasicTextFields() {
             setErrMsg({open:true,errMsg:"ERROR: List is required."})
             return
         }
-        
-        addNewProduct(itemData.listId,shListsContext.dispatchNewProduct,{url:itemData.url});
-        setItemData({
-            listId: '',
-            url: '',
-        });
+        setLoading(true);
     }
+
+    useEffect(() => {
+        let isUnmounted = false;
+        if(loading) {
+            let promise = addNewProduct(itemData.listId,shListsContext.dispatchNewProduct,{url:itemData.url});
+            promise.then(() => {
+                if(!isUnmounted) {
+                    setLoading(false);
+                    setItemData({
+                        listId: '',
+                        url: '',
+                    });
+                }
+            });
+        }
+        return () => {
+            isUnmounted = true;
+        };
+    }, [loading]);
 
     const handleSnackBarClose = (event, reason) => {
         setErrMsg({open:false,errMsg:""});
@@ -113,9 +135,11 @@ export default function BasicTextFields() {
                 <IconButton 
                     color="secondary" 
                     aria-label="add" 
-                    className={classes.link} 
+                    className={classes.link}
+                    disabled={loading} 
                     onClick={handleSubmit}>
-                    <AddBoxIcon fontSize="large"/>
+                    <AddCircleIcon fontSize="large"/>
+                    {loading && <CircularProgress size={48} className={classes.buttonProgress} />}
                 </IconButton>
                 </Grid>
             </Grid>
