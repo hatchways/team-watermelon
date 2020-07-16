@@ -56,7 +56,7 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 			} else {
 				description = product.description[0];
 			}
-			var newProduct = { 
+			let newProduct = { 
 				name: product.title, 
 				image: product.image, 
 				description: description, 
