@@ -42,14 +42,14 @@ export default function FriendCard(props) {
 		try {
 			console.log(`friend card id is:${id}`);
 			const res = await axios.post(`/users/follow/${id}`);
-			await authContext.handleFollow(id);
+			authContext.handleFollow(id);
 			console.log(`follow user response:${res}`);
+
 			return res;
 		} catch (error) {
 			console.log('error following user');
 		}
 	};
-
 	return (
 		<CardActionArea>
 			<Box position="relative" left="0px">
