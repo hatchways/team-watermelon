@@ -1,4 +1,5 @@
 import React,{useContext, useEffect, useState} from 'react';
+import PhotoUpload from './PhotoUpload.js';
 import {Toolbar, AppBar, Box, Typography, Link, IconButton, Button,Badge, Popper} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
@@ -6,6 +7,7 @@ import LocalMallIcon from '@material-ui/icons/LocalMall';
 import AuthContext from '../state_management/AuthContext';
 import {fetchShLists} from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
+import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
 import socketIOClient from "socket.io-client";
 import Notifications from "./Notifications";
 
@@ -114,6 +116,7 @@ const Navbar = ()=>{
                 <Typography variant="body1" color="inherit">
                 Welcome! {authContext.name}
                 </Typography>
+                <PhotoUpload />
                 <Link variant="button" 
                     component={RouterLink} 
                     to="/main"
@@ -121,13 +124,7 @@ const Navbar = ()=>{
                     className={classes.link}>
                     Shopping Lists
                 </Link>
-                <Link component={RouterLink}
-                    to="/friendslist" 
-                    variant="button" 
-                    color="textPrimary" 
-                    className={classes.link}>
-                    Friends
-                </Link>
+                <FindNewFriendsModal />
                 <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
                     <Link 
                     aria-describedby={id}
