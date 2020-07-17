@@ -13,7 +13,7 @@ import {
     Button
 } from '@material-ui/core';
 import {baseUrl} from '../utils/baseUrl';
-import {cutContentLength, covertNumberDecimal} from '../utils/transformText';
+import {cutContentLength, convertNumberDecimal} from '../utils/transformText';
 
 const linethrough= {
     "textDecoration": "line-through",
@@ -97,12 +97,12 @@ export default function ProductCard(props) {
                         <Grid container>
                             <Grid item xs={12} md={6} lg={6}>
                             <Typography color="textSecondary" style={linethrough}>
-                                price: {covertNumberDecimal(product.lastprice)}$
+                                price: {convertNumberDecimal(product.lastprice)}$
                             </Typography>
                             </Grid>
                             <Grid item xs={12} md={6} lg={6}>
                             <Typography color="primary">
-                                new price: {covertNumberDecimal(product.currentprice)}$
+                                new price: {convertNumberDecimal(product.currentprice)}$
                             </Typography>
                             </Grid>
                         </Grid>

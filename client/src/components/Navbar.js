@@ -10,7 +10,6 @@ import socketIOClient from "socket.io-client";
 import Notifications from "./Notifications";
 
 
-const ENDPOINT = "http://localhost:3001";
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -41,7 +40,6 @@ const Navbar = ()=>{
     const [notification, setNotification] = useState({messages:[]});
     const [newMsg, setNewMsg] = useState(null);
     const [socket, setSocket] = useState({socket:null})
-    
 
     useEffect(() => {
         if(authContext.isAuthenticated && needsFetchingLists){ 
@@ -49,7 +47,7 @@ const Navbar = ()=>{
             needsFetchingLists = false;
         }
         if(authContext.isAuthenticated && needsSetSocket){
-            const socket = socketIOClient(ENDPOINT);
+            const socket = socketIOClient();
             needsSetSocket = false;
 
             socket.on('price_notification', data => {
@@ -57,23 +55,20 @@ const Navbar = ()=>{
                 msgHasBeenRead = false;
             });
             socket.emit('join_room', {
-                message: "",
-                userId: authContext._id,
+                userId: authContext.id,
             });
             setSocket({socket:socket});
         }
-        if(newMsg && newMsg !== null){
+        if(newMsg){
             setNotification({ messages:[...notification.messages,newMsg] });
             setNewMsg(null);
         }
-    },[authContext.isAuthenticated, authContext._id, newMsg, shListsContext.dispatchShLists, shListsContext.handleShListsFailure, notification.messages]);
+    },[authContext.isAuthenticated, authContext.id, newMsg, shListsContext.dispatchShLists, shListsContext.handleShListsFailure, notification.messages]);
 
     const leaveSocketRoom=()=>{
         if(socket.socket){
             socket.socket.emit('leave_room', {
-                message: "",
-                userId: authContext._id,
-                title: "leave room",
+                userId: authContext.id,
             });
         }
         socket.socket.close();

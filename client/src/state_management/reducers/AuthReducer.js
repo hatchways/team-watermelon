@@ -1,7 +1,7 @@
 import * as ACTION_TYPES from '../actions/ActionTypes'
 
 export const initialState = {
-    _id:"",
+    id:"",
     name: '',
     isAuthenticated: false,
     email: '',
@@ -16,7 +16,7 @@ export const AuthReducer = (state, action) => {
         case ACTION_TYPES.LOGIN_SUCCESS:
         return {
             ...state,
-            _id: action.payload._id,
+            id: action.payload._id,
             name: action.payload.name,
             email:action.payload.email,
             my_lists:action.payload.my_lists,
@@ -26,7 +26,7 @@ export const AuthReducer = (state, action) => {
         case ACTION_TYPES.LOGIN_FAILURE:
         return {
             ...state,
-            _id:'',
+            id:'',
             name:"",
             email:"",
             my_lists:[],
