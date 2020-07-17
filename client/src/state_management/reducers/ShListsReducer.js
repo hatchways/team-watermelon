@@ -88,6 +88,11 @@ export const ShListsReducer = (state, action) => {
                 ...state,
                 products:state.products.filter(p=> p._id !== action.payload._id),
             };
+        case ACTION_TYPES.SHOW_PRODUCT:
+            return {
+                ...state,
+                products:[...state.products,action.payload]
+            };
         default:
         return state;
     }

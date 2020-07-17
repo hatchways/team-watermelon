@@ -6,11 +6,14 @@ const { join } = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const listRouter = require('./routes/lists');
+const usersRouter = require('./routes/users');
 const productRouter = require('./routes/products');
 const uploadRouter = require('./routes/imageUpload');
+const dotenv = require('dotenv').config();
 
 const { json } = express;
 
@@ -36,7 +39,7 @@ app.use(express.static(join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/upload', uploadRouter);
-
+app.use('/users', usersRouter);
 app.use(listRouter);
 app.use(productRouter);
 

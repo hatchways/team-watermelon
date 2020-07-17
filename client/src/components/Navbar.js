@@ -5,35 +5,35 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import AuthContext from '../state_management/AuthContext';
-import {fetchShLists} from '../state_management/actionCreators/shoppingListsActs';
+import { fetchShLists } from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
 import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
 import socketIOClient from "socket.io-client";
 import Notifications from "./Notifications";
 
 
-
 const useStyles = makeStyles((theme) => ({
-    appBar: {
-      borderBottom: `1px solid ${theme.palette.divider}`,
-    },
-    toolbar: {
-      flexWrap: 'wrap',
-    },
-    toolbarTitle: {
-      flexGrow: 1,
-    },
-    link: {
-      margin: theme.spacing(1, 1.5),
-    },
-    margin:{
-        margin: theme.spacing(1),
-    }
-  }));
+	appBar: {
+		borderBottom: `1px solid ${theme.palette.divider}`
+	},
+	toolbar: {
+		flexWrap: 'wrap'
+	},
+	toolbarTitle: {
+		flexGrow: 1
+	},
+	link: {
+		margin: theme.spacing(1, 1.5)
+	},
+	margin: {
+		margin: theme.spacing(1)
+	}
+}));
 
 let needsFetchingLists = true;
 let msgHasBeenRead = false;
 let needsSetSocket = true;
+
 
 const Navbar = ()=>{
     const classes = useStyles();
@@ -156,10 +156,9 @@ const Navbar = ()=>{
             }  
             </Toolbar>
         </AppBar>
-    )
+	);
+};
 
-
-}
 
 
 export default Navbar;

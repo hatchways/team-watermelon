@@ -22,7 +22,7 @@ export const fetchProducts = (url,dispath,handleErr) => {
     .catch(error =>{handleErr(error.message);alert('fetching products failed'+error.message);});
 }
 
-export const addNewProduct = (list_id,dispatch,product) => {
+export const addNewProduct = (list_id,dispatch,product, dispatch_local) => {
     const apiUrl = `/lists/${list_id}/products/new`;
     return fetch(baseUrl + apiUrl, {
         method: "POST",
@@ -44,6 +44,11 @@ export const addNewProduct = (list_id,dispatch,product) => {
             throw error;
       })
     .then(response => response.json())
-    .then(response => {dispatch(list_id,response.newProduct._id);})
+    .then(response => {
+      dispatch(list_id,response.newProduct._id);
+      if(dispatch_local) {
+        dispatch_local(response.newProduct);
+      }
+    })
     .catch(error =>  {alert('Your new product could not be created\nError: '+error.message); });
   };

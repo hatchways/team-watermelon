@@ -104,6 +104,16 @@ router.get('/', verifyToken, async (req, res) => {
 	}
 });
 
+router.get('/allUsers', async (req, res) => {
+	try {
+		const users = await User.find();
+		res.send(users);
+	} catch (err) {
+		console.error('	');
+		res.status(500);
+	}
+});
+
 router.post('/verify', verifyToken, async (req, res) => {
 	try {
 		res.status(200).send('Cookie token verified');

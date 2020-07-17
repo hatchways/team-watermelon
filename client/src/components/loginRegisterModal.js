@@ -1,4 +1,4 @@
-import React, { useState, useContext,useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
@@ -9,50 +9,46 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AuthContext from '../state_management/AuthContext';
 
-
 const style = {
 	error: {
 		color: 'red'
 	},
-	dialog:{
+	dialog: {
 		padding: '10px 40px',
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
-	appBar:{
+	appBar: {
 		marginBottom: '30px'
 	},
-	formStyle:{
+	formStyle: {
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
 		marginBottom: '30px',
 		width: '100%'
 	},
-	hidden:{
-		visibility: "hidden",
+	hidden: {
+		visibility: 'hidden'
 	},
-	textField:{
+	textField: {
 		width: '70%'
-	},
-}
-
+	}
+};
 
 export default function LoginRegisterModal(props) {
-
 	const authContext = useContext(AuthContext);
-
 	const [loginActive, setLoginActive] = useState(true);
-	const [userData, setUserData] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
-	const [asyncStart,setAsyncStart] = useState(false);
+	const [asyncStart, setAsyncStart] = useState(false);
 
-
-	const [value, setValue] = React.useState(0);//handle tabs
-	const handleChange = (event, newValue) => {setValue(newValue);};//handle tabs
+	const [value, setValue] = useState(0);
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+	}; //handle tabs
 
 	const [formData, setFormData] = useState({
 		name: '',
@@ -82,96 +78,90 @@ export default function LoginRegisterModal(props) {
 				password: ''
 			});
 			setDialogOpen(false);
-			return res
+			return res;
 		} catch (err) {
-			const errors = err.response.data.errors;//server-end doesn't return msg
-			setErrorMsg("Logging in failed. Try again.");
+			const errors = err.response.data.errors; //server-end doesn't return msg
+			setErrorMsg('Logging in failed. Try again.');
 			setTimeout(() => {
 				setErrorMsg('');
 			}, 4000);
 		}
-		return null
+		return null;
 	};
-	
 
 	useEffect(() => {
-		if (asyncStart){
-			loginRegister(name, email, password, loginActive)
-			.then(res=>{
-				if (res && res != null && res.data != null) {
-					setUserData(res.data);
+		if (asyncStart) {
+			loginRegister(name, email, password, loginActive).then((res) => {
+
+				if (res) {
 					authContext.handleLogin(res.data);
-					console.log(res);
-				}else{
-					console.log("error: fetching user data failed.");
-				};
+
+				} else {
+					console.log('error: fetching user data failed.');
+				}
 			});
 			setAsyncStart(false);
 		}
-		console.log("test login/useEffect");
-		// return () => thisComponentMounted = false;
-		// eslint-disable-next-line
-	  }, [asyncStart]);
+	}, [asyncStart]);
 
 	return (
 		<div>
-			{authContext.isAuthenticated?"":
-			<Button onClick={() => setDialogOpen(true)} {...props}>
-				Login
-			</Button>}
+			{authContext.isAuthenticated ? (
+				''
+			) : (
+				<Button onClick={() => setDialogOpen(true)} {...props}>
+					Login / Register
+				</Button>
+			)}
 			<Dialog style={style.dialog} open={dialogOpen}>
-					<AppBar style={style.appBar} position="static" color="default">
-						<Tabs value={value} indicatorColor="primary" textColor="primary" variant="fullWidth" onChange={handleChange}>
-							<Tab
-								label="login"
-								onClick={() => setLoginActive(true)}
-							>
-								Login
-							</Tab>
-							<Tab
-								label="register"
-								onClick={() => setLoginActive(false)}
-							>
-								Register
-							</Tab>
-						</Tabs>
-					</AppBar>
-					<form style={style.formStyle}>
-						<p style={style.error}>{errorMsg}</p>
-						<TextField
-							style={loginActive ? style.hidden : style.textField}
-							id="standard-basic-name"
-							label="Name"
-							name="name"
-							value={name}
-							onChange={(e) => onChange(e)}
-						/>
-						<TextField
-							style={style.textField}
-							id="standard-basic-email"
-							label="Email"
-							name="email"
-							value={email}
-							onChange={(e) => onChange(e)}
-						/>
-						<TextField
-							style={style.textField}
-							id="standard-password-input"
-							type="password"
-							label="Password"
-							name="password"
-							value={password}
-							onChange={(e) => onChange(e)}
-						/>
-					</form>
-					<DialogActions>
-						<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
-							{loginActive ? 'Login' : 'Register'}
-						</Button>
-						<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
-							Cancel
-						</Button>
-					</DialogActions>
+				<AppBar style={style.appBar} position="static" color="default">
+					<Tabs
+						value={value}
+						indicatorColor="primary"
+						textColor="primary"
+						variant="fullWidth"
+						onChange={handleChange}
+					>
+						<Tab label="login" onClick={() => setLoginActive(true)} />
+						<Tab label="register" onClick={() => setLoginActive(false)} />
+					</Tabs>
+				</AppBar>
+				<form style={style.formStyle}>
+					<p style={style.error}>{errorMsg}</p>
+					<TextField
+						style={loginActive ? style.hidden : style.textField}
+						id="standard-basic-name"
+						label="Name"
+						name="name"
+						value={name}
+						onChange={(e) => onChange(e)}
+					/>
+					<TextField
+						style={style.textField}
+						id="standard-basic-email"
+						label="Email"
+						name="email"
+						value={email}
+						onChange={(e) => onChange(e)}
+					/>
+					<TextField
+						style={style.textField}
+						id="standard-password-input"
+						type="password"
+						label="Password"
+						name="password"
+						value={password}
+						onChange={(e) => onChange(e)}
+					/>
+				</form>
+				<DialogActions>
+					<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
+						{loginActive ? 'Login' : 'Register'}
+					</Button>
+					<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
+						Cancel
+					</Button>
+				</DialogActions>
 			</Dialog>
 		</div>
 	);
