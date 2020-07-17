@@ -115,6 +115,7 @@ export default function ProductCard(props) {
                         color="primary" 
                         size="small"
                         startIcon={<DeleteForeverIcon />}
+                        style={{borderRadius: '30px', padding: '10px'}}
                         onClick={handleRevome}
                 >remove
                 </Button>

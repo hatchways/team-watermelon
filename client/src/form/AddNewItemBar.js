@@ -1,10 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {
   TextField,
   Grid,
-  IconButton,
+  Button,
   Container,
   Box,
   CircularProgress
@@ -18,21 +17,27 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         },
     },
-    link: {
-        margin: theme.spacing(1),
+    btn: {
+      paddingTop: theme.spacing(1.5),
+      paddingBottom: theme.spacing(1.5),
+      borderRadius: '30px',
+      marginLeft: '20px'
     },
     text: {
-        margin: theme.spacing(1),
+        width: '350px',
     },
     box:{
-      backgroundColor: '#fff5ee',
-      opacity: 1,
+      backgroundColor: 'white',
+    },
+    bar: {
+        display: "flex",
+        flexWrap: "nowrap"
     },
     buttonProgress: {
       color: '#DF1B1B',
       position: 'absolute',
-      top: '5%',
-      left: '5%',
+      top: '2%',
+      left: '35%',
     }
 }));
 
@@ -66,10 +71,10 @@ export default function BasicTextFields(props) {
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
-        <Container align="center" maxWidth="sm" >
-            <Box width="sm" height="sm" className={classes.box} borderRadius={30}>
-                <Container width="90%">
-            <Grid container spacing={1} alignItems="flex-end" align="center" width="90%">
+        <Container align="center" maxWidth="md" >
+            <Box width="sm" height="sm" className={classes.box} borderRadius={50} flexGrow={1}>
+                <Container>
+            <Grid container spacing={1} direction="row" alignItems="flex-end" align="center" className={classes.bar}>
             
                 <Grid item xs={12} md={8}>
                 <TextField 
@@ -84,15 +89,19 @@ export default function BasicTextFields(props) {
                     onChange={e => setProductUrl(e.target.value)}/>
                 </Grid>
                 <Grid item xs={2} md={4}>
-                  <IconButton 
-                      color="secondary" 
-                      aria-label="add" 
-                      className={classes.link}
-                      disabled={loading}
-                      onClick={handleSubmit}>
-                      <AddCircleIcon fontSize="large"/>
-                      {loading && <CircularProgress size={48} className={classes.buttonProgress} />}
-                  </IconButton>
+                <Button 
+                    color="primary"
+                    variant="contained" 
+                    size="large"
+                    fullWidth
+                    aria-label="add" 
+                    className={classes.btn}
+                    disabled={loading}
+                    onClick={handleSubmit}
+                    disableElevation>
+                    Add
+                    {loading && <CircularProgress size={48} className={classes.buttonProgress} />}
+                </Button>
                 </Grid>
             </Grid>
             </Container>

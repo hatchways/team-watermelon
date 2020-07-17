@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
 
     link: {
       margin: theme.spacing(1, 1.5),
+      borderRadius: '30px',
+      padding: '10px'
     },
     card: {
       height: '100%',

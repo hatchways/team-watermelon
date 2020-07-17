@@ -49,7 +49,8 @@ const style = {
 		borderRadius: '50%'
 	},
 	header: {
-		margin: '10px'
+		margin: '10px',
+		fontWeight: 'bold'
 	}
 };
 
@@ -144,10 +145,10 @@ export default function PhotoUpload(props) {
 						<input onChange={onChange} name="image" type="file" />
 					</form>
 					<DialogActions>
-						<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
+						<Button style={{borderRadius: '30px', padding: '10px'}} fullWidth onClick={onSubmitForm} variant="contained" color="primary">
 							Upload
 						</Button>
-						<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
+						<Button style={{borderRadius: '30px', padding: '10px'}} fullWidth onClick={() => setDialogOpen(false)} color="primary">
 							Cancel
 						</Button>
 					</DialogActions>
@@ -157,6 +158,7 @@ export default function PhotoUpload(props) {
 						color="primary"
 						fullWidth
 						variant="contained"
+						style={{borderRadius: '30px', padding: '10px', marginBottom: '10px'}}
 					>
 						Save Profile Picture
 					</Button>

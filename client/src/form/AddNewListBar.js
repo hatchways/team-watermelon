@@ -1,22 +1,34 @@
 import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, Typography, Grid, TextField} from '@material-ui/core';
+import {Button, Typography, Grid, TextField, InputBase, Box} from '@material-ui/core';
 import {addNewList} from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(4),
+        marginBottom: theme.spacing(4),
+        borderRadius: '30px', 
+        padding: '10px'
     },
     text: {
-        marginTop: theme.spacing(1),
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
     },
     hidden:{
 		visibility: "hidden",
     },
     shown:{
 		visibility: "visible",
-	},
+    },
+    box:{
+        backgroundColor: 'white',
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        marginTop: theme.spacing(4),
+        marginBottom: theme.spacing(4),
+        width: '300px'
+    },
 }));
 
 export default function BasicTextFields(props) {
@@ -50,48 +62,49 @@ export default function BasicTextFields(props) {
   return (
     <form noValidate autoComplete="off" onSubmit={handleSubmit}>
 
-        <Grid container spacing={1} justify="center" align="center">
+        <Grid container spacing={1} justify="center" align="center" style={{backgroundColor: '#fbfcff'}}>
             <Grid item xs={10} md={8} style={{textAlign:'center'}}>
-                <TextField 
-                    fullWidth
-                    label="Title"
+            <Typography component="h5" style={{fontWeight: 'bold'}}>
+                Add a title *
+            </Typography>
+            <Box className={classes.box} borderRadius={50} flexGrow={1}>
+                <InputBase 
                     id="list-title" 
-                    color="secondary"
                     name="title" 
-                    placeholder="Enter list title" 
-                    variant="standard" 
+                    placeholder="Enter list title"  
                     onChange={(e) => onChange(e)}
                     className={classes.text}
                     inputProps={{ maxLength: 20 }}
-                    helperText="max length 20 charaters"
                     required
                     />
-                <TextField 
-                    fullWidth
-                    label="Image Url"
+            </Box>
+            <Typography component="h5" style={{fontWeight: 'bold'}} >
+                Add a cover
+            </Typography>
+            <Box className={classes.box} borderRadius={50} flexGrow={1}>
+                <InputBase 
                     id="list-image" 
-                    color="secondary"
                     name="imageurl" 
                     placeholder="Paste list cover image url" 
-                    variant="standard"
                     onChange={(e) => onChange(e)} 
                     className={classes.text}
                     required
                     />
-                <TextField 
-                    fullWidth
-                    multiline
-                    label="List Description"
-                    name="listdescription"
-                    id="list-description" 
-                    color="secondary" 
-                    placeholder="My shopping list" 
-                    variant="standard" 
-                    onChange={(e) => onChange(e)}
-                    className={classes.text}
-                    inputProps={{ maxLength: 200 }}
-                    helperText="max length 200 charaters. Default: My shopping list"
-                    />
+                </Box>
+                <Typography component="h5" style={{fontWeight: 'bold'}} >
+                    Add a description
+                </Typography>
+                <Box className={classes.box} borderRadius={50} flexGrow={1}>
+                    <InputBase 
+                        multiline
+                        name="listdescription"
+                        id="list-description" 
+                        placeholder="My shopping list" 
+                        onChange={(e) => onChange(e)}
+                        className={classes.text}
+                        inputProps={{ maxLength: 200 }}
+                        />
+                </Box>
             <Typography 
                 color="error" 
                 align="center" 

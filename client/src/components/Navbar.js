@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PhotoUpload from './PhotoUpload.js';
-import { Toolbar, AppBar, Box, Typography, Link, IconButton, Button } from '@material-ui/core';
+import { Toolbar, AppBar, Box, Typography, Link, IconButton, Menu, MenuItem, Avatar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -11,7 +11,9 @@ import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
-		borderBottom: `1px solid ${theme.palette.divider}`
+		backgroundColor: 'white',
+		position: 'sticky',
+		color: theme.palette.primary.main
 	},
 	toolbar: {
 		flexWrap: 'wrap'
@@ -34,6 +36,15 @@ const Navbar = () => {
 	const classes = useStyles();
 	const authContext = useContext(AuthContext);
 	const shListsContext = useContext(ShListsContext);
+	const [anchorEl, setAnchorEl] = useState(null);
+
+	const handleMenuClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+	
+	const handleMenuClose = () => {
+		setAnchorEl(null);
+	};
 
 	useEffect(() => {
 		if (authContext.isAuthenticated && needsFetchingLists) {
@@ -48,7 +59,7 @@ const Navbar = () => {
 	});
 
 	return (
-		<AppBar position="static" color="default" elevation={0} className={classes.appBar}>
+		<AppBar color="primary" elevation={0} className={classes.appBar}>
 			<Toolbar className={classes.toolbar}>
 				<IconButton
 					component={RouterLink}
@@ -66,10 +77,6 @@ const Navbar = () => {
 				</Typography>
 				{authContext.isAuthenticated ? (
 					<>
-						<Typography variant="body1" color="inherit">
-							Welcome! {authContext.name}
-						</Typography>
-						<PhotoUpload />
 						<Link
 							variant="button"
 							component={RouterLink}
@@ -89,18 +96,36 @@ const Navbar = () => {
 						>
 							Notifications
 						</Link>
-						<Button
-							onClick={() => {
-								authContext.handleLogout({});
-								needsFetchingLists = true;
-								needsCleanList = true;
-							}}
-							color="primary"
-							variant="outlined"
-							className={classes.link}
-						>
-							Logout
-						</Button>
+						<IconButton 
+							aria-controls="profile-menu" 
+							aria-haspopup="true" 
+							onClick={handleMenuClick}>
+							<Avatar src={authContext.profile_picture}>
+								{authContext.name.substring(0, 1)}
+							</Avatar>
+						</IconButton>
+						<Menu
+        					id="simple-menu"
+        					anchorEl={anchorEl}
+        					keepMounted
+        					open={Boolean(anchorEl)}
+        					onClose={handleMenuClose}
+      					>
+							<MenuItem className={classes.link}>
+								<Typography variant="body1" color="inherit">
+									{authContext.name}
+								</Typography>
+							</MenuItem>
+							<MenuItem><PhotoUpload /></MenuItem>
+							<MenuItem className={classes.link} style={{color: '#DF1B1B'}} onClick={() => {
+									authContext.handleLogout({});
+									needsFetchingLists = true;
+									needsCleanList = true;
+									handleMenuClose();
+									}}>
+								LOGOUT
+							</MenuItem>
+      					</Menu>
 					</>
 				) : null}
 			</Toolbar>

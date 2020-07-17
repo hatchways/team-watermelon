@@ -1,5 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import Dialog from '@material-ui/core/Dialog';
@@ -21,17 +25,17 @@ const style = {
 		alignItems: 'center'
 	},
 	appBar: {
-		marginBottom: '30px'
+		/*marginBottom: '30px'*/
 	},
 	formStyle: {
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		marginBottom: '30px',
+		marginBottom: '40px',
 		width: '100%'
 	},
 	hidden: {
-		visibility: 'hidden'
+		display: 'none'
 	},
 	textField: {
 		width: '70%'
@@ -44,6 +48,7 @@ export default function LoginRegisterModal(props) {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [asyncStart, setAsyncStart] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
 	const [value, setValue] = useState(0);
 	const handleChange = (event, newValue) => {
@@ -57,6 +62,9 @@ export default function LoginRegisterModal(props) {
 	});
 	const { name, email, password } = formData;
 	const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+	const handleClickShowPassword = () => setShowPassword(!showPassword);
+	const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
 	const onSubmitForm = async (e) => {
 		e.preventDefault();
@@ -109,8 +117,8 @@ export default function LoginRegisterModal(props) {
 			{authContext.isAuthenticated ? (
 				''
 			) : (
-				<Button onClick={() => setDialogOpen(true)} {...props}>
-					Login / Register
+				<Button style={{borderRadius: '30px', padding: '10px'}} onClick={() => setDialogOpen(true)} {...props}>
+					Get Started
 				</Button>
 			)}
 			<Dialog style={style.dialog} open={dialogOpen}>
@@ -147,18 +155,31 @@ export default function LoginRegisterModal(props) {
 					<TextField
 						style={style.textField}
 						id="standard-password-input"
-						type="password"
+						type={showPassword ? "text" : "password"}
 						label="Password"
 						name="password"
 						value={password}
 						onChange={(e) => onChange(e)}
+						InputProps={{
+							endAdornment: (
+							  <InputAdornment position="end">
+								<IconButton
+								  aria-label="toggle password visibility"
+								  onClick={handleClickShowPassword}
+								  onMouseDown={handleMouseDownPassword}
+								>
+								  {showPassword ? <Visibility /> : <VisibilityOff />}
+								</IconButton>
+							  </InputAdornment>
+							)
+						}}
 					/>
 				</form>
 				<DialogActions>
-					<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
+					<Button style={{borderRadius: '30px', padding: '10px'}} fullWidth onClick={onSubmitForm} variant="contained" color="primary">
 						{loginActive ? 'Login' : 'Register'}
 					</Button>
-					<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
+					<Button style={{borderRadius: '30px', padding: '10px'}} fullWidth onClick={() => setDialogOpen(false)} color="primary">
 						Cancel
 					</Button>
 				</DialogActions>
