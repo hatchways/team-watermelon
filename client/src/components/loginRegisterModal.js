@@ -92,10 +92,8 @@ export default function LoginRegisterModal(props) {
 	useEffect(() => {
 		if (asyncStart) {
 			loginRegister(name, email, password, loginActive).then((res) => {
-
 				if (res) {
 					authContext.handleLogin(res.data);
-
 				} else {
 					console.log('error: fetching user data failed.');
 				}
@@ -109,7 +107,7 @@ export default function LoginRegisterModal(props) {
 			{authContext.isAuthenticated ? (
 				''
 			) : (
-				<Button onClick={() => setDialogOpen(true)} {...props}>
+				<Button id="login_button" onClick={() => setDialogOpen(true)} {...props}>
 					Login / Register
 				</Button>
 			)}
@@ -155,7 +153,13 @@ export default function LoginRegisterModal(props) {
 					/>
 				</form>
 				<DialogActions>
-					<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
+					<Button
+						id="login_submit_button"
+						sfullWidth
+						onClick={onSubmitForm}
+						variant="contained"
+						color="primary"
+					>
 						{loginActive ? 'Login' : 'Register'}
 					</Button>
 					<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
