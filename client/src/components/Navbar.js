@@ -44,14 +44,15 @@ const Navbar = ()=>{
     const [notification, setNotification] = useState({messages:[]});
     const [newMsg, setNewMsg] = useState(null);
     const [socket, setSocket] = useState({socket:null});
-    const [anchorEl, setAnchorEl] = useState(null);
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [anchorMenu, setAnchorMenu] = useState(null);
 
 	const handleMenuClick = (event) => {
-		setAnchorEl(event.currentTarget);
+		setAnchorMenu(event.currentTarget);
 	};
 	
 	const handleMenuClose = () => {
-		setAnchorEl(null);
+		setAnchorMenu(null);
 	};
 
     useEffect(() => {
@@ -89,8 +90,6 @@ const Navbar = ()=>{
         needsSetSocket = true;
     }
 
-        
-    const [anchorEl, setAnchorEl] = useState(null);
     const handleClickOnNotification = (event) => {
         if(notification.messages.length > 0){
             setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -159,9 +158,9 @@ const Navbar = ()=>{
 						</IconButton>
 						<Menu
         					id="simple-menu"
-        					anchorEl={anchorEl}
+        					anchorEl={anchorMenu}
         					keepMounted
-        					open={Boolean(anchorEl)}
+        					open={Boolean(anchorMenu)}
         					onClose={handleMenuClose}
       					>
 							<MenuItem className={classes.link}>
