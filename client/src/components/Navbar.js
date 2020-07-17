@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PhotoUpload from './PhotoUpload.js';
-import { Toolbar, AppBar, Box, Typography, Link, IconButton, Menu, MenuItem, Avatar } from '@material-ui/core';
+import {Toolbar, AppBar, Box, Typography, Link, IconButton, Menu, MenuItem, Avatar, Badge, Popper} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -8,6 +8,9 @@ import AuthContext from '../state_management/AuthContext';
 import { fetchShLists } from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
 import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
+import socketIOClient from "socket.io-client";
+import Notifications from "./Notifications";
+
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
@@ -30,13 +33,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 let needsFetchingLists = true;
-let needsCleanList = false;
+let msgHasBeenRead = false;
+let needsSetSocket = true;
 
-const Navbar = () => {
-	const classes = useStyles();
-	const authContext = useContext(AuthContext);
-	const shListsContext = useContext(ShListsContext);
-	const [anchorEl, setAnchorEl] = useState(null);
+
+const Navbar = ()=>{
+    const classes = useStyles();
+    const authContext = useContext(AuthContext);
+    const shListsContext = useContext(ShListsContext);
+    const [notification, setNotification] = useState({messages:[]});
+    const [newMsg, setNewMsg] = useState(null);
+    const [socket, setSocket] = useState({socket:null});
+    const [anchorEl, setAnchorEl] = useState(null);
 
 	const handleMenuClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -46,17 +54,57 @@ const Navbar = () => {
 		setAnchorEl(null);
 	};
 
-	useEffect(() => {
-		if (authContext.isAuthenticated && needsFetchingLists) {
-			//protects, because private route is uncommented for developing
-			fetchShLists(shListsContext.dispatchShLists, shListsContext.handleShListsFailure);
-			needsFetchingLists = false;
-		}
-		if (needsCleanList) {
-			shListsContext.handleShListsFailure({ response: null });
-			needsCleanList = false;
-		}
-	});
+    useEffect(() => {
+        if(authContext.isAuthenticated && needsFetchingLists){ 
+            fetchShLists(shListsContext.dispatchShLists,shListsContext.handleShListsFailure);
+            needsFetchingLists = false;
+        }
+        if(authContext.isAuthenticated && needsSetSocket){
+            const socket = socketIOClient();
+            needsSetSocket = false;
+
+            socket.on('price_notification', data => {
+                setNewMsg(data.message);
+                msgHasBeenRead = false;
+            });
+            socket.emit('join_room', {
+                userId: authContext.id,
+            });
+            setSocket({socket:socket});
+        }
+        if(newMsg){
+            setNotification({ messages:[...notification.messages,newMsg] });
+            setNewMsg(null);
+        }
+    },[authContext.isAuthenticated, authContext.id, newMsg, shListsContext.dispatchShLists, shListsContext.handleShListsFailure, notification.messages]);
+
+    const leaveSocketRoom=()=>{
+        if(socket.socket){
+            socket.socket.emit('leave_room', {
+                userId: authContext.id,
+            });
+        }
+        socket.socket.close();
+        setNotification({ messages:[] });
+        needsSetSocket = true;
+    }
+
+        
+    const [anchorEl, setAnchorEl] = useState(null);
+    const handleClickOnNotification = (event) => {
+        if(notification.messages.length > 0){
+            setAnchorEl(anchorEl ? null : event.currentTarget);
+        }
+        if(msgHasBeenRead===true){
+            setNotification({ messages:[] });      
+        }else{
+            msgHasBeenRead = true;
+        }
+        
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popper' : undefined;
 
 	return (
 		<AppBar color="primary" elevation={0} className={classes.appBar}>
@@ -87,15 +135,20 @@ const Navbar = () => {
 							Shopping Lists
 						</Link>
 						<FindNewFriendsModal />
-						<Link
-							component={RouterLink}
-							to="#"
-							variant="button"
-							color="textPrimary"
-							className={classes.link}
-						>
-							Notifications
-						</Link>
+                        <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
+						<Link 
+                            aria-describedby={id}
+                            type="button"
+                            onClick={handleClickOnNotification}
+                            variant="button" 
+                            color="textPrimary" 
+                            className={classes.link}>
+                            Notifications
+                            </Link>
+                            <Popper id={id} open={open} anchorEl={anchorEl} >
+                                <Notifications messages={notification.messages}/>
+                            </Popper>
+                        </Badge>
 						<IconButton 
 							aria-controls="profile-menu" 
 							aria-haspopup="true" 
@@ -119,8 +172,9 @@ const Navbar = () => {
 							<MenuItem><PhotoUpload /></MenuItem>
 							<MenuItem className={classes.link} style={{color: '#DF1B1B'}} onClick={() => {
 									authContext.handleLogout({});
-									needsFetchingLists = true;
-									needsCleanList = true;
+									shListsContext.handleShListsFailure({response:null});
+                                    leaveSocketRoom();
+                                    needsFetchingLists = true;
 									handleMenuClose();
 									}}>
 								LOGOUT
@@ -132,6 +186,5 @@ const Navbar = () => {
 		</AppBar>
 	);
 };
-
 
 export default Navbar;

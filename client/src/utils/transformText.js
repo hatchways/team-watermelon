@@ -10,7 +10,7 @@ export const cutContentLength = (str, limit,defaultStrin)=>{
     return str
 }
 
-export const covertNumberDecimal=(numberDecimal)=>{
+export const convertNumberDecimal=(numberDecimal)=>{
     const strArr = JSON.stringify(numberDecimal).split('"')
     if(strArr.length >= 4){
         return strArr[3];

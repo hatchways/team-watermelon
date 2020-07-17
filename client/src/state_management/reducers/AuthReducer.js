@@ -26,6 +26,7 @@ export const AuthReducer = (state, action) => {
 		case ACTION_TYPES.LOGIN_FAILURE:
 			return {
 				...state,
+        id:'',
 				name: '',
 				email: '',
 				my_lists: [],
@@ -49,5 +50,5 @@ export const AuthReducer = (state, action) => {
 			};
 		default:
 			return state;
-	}
+	};
 };

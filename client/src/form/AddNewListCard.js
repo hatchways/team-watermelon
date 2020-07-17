@@ -1,11 +1,9 @@
-import React,{useContext,useState} from 'react';
+import React,{useState} from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import AuthContext from '../state_management/AuthContext';
-import ShListsContext from '../state_management/ShListsContext';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import AddNewListBar from './AddNewListBar';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
@@ -32,8 +30,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ListCard = ()=>{
     const classes = useStyles();
-    const authContext = useContext(AuthContext);
-    const shListsContext = useContext(ShListsContext);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     return (
