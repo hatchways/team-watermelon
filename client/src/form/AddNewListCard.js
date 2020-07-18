@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     },
     cardContent: {
       flexGrow: 1,
-      paddingTop:"30%",
-      paddingBottom:"30%",
+      marginTop:"50%",
+      marginBottom:"50%",
     },
   }));
 

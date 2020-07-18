@@ -20,6 +20,8 @@ export const ADD_SH_LIST = 'ADD_SHOPPING_LIST';
 
 export const DELETE_SH_LIST = 'DELETE_SHOPPING_LIST';
 
+export const UPDATE_SH_LIST = 'UPDATE_SHOPPING_LIST';
+
 //dispatching products
 export const PRODUCTS_LOADING = 'PRODUCTS_LOADING';
 

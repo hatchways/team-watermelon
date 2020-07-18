@@ -10,6 +10,7 @@ import ShListsContext from '../state_management/ShListsContext';
 import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
 import socketIOClient from "socket.io-client";
 import Notifications from "./Notifications";
+import {ENDPOINT} from '../utils/baseUrl';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +50,7 @@ const Navbar = ()=>{
             needsFetchingLists = false;
         }
         if(authContext.isAuthenticated && needsSetSocket){
-            const socket = socketIOClient();
+            const socket = socketIOClient(ENDPOINT);
             needsSetSocket = false;
 
             socket.on('price_notification', data => {
@@ -127,6 +128,7 @@ const Navbar = ()=>{
                 <FindNewFriendsModal />
                 <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
                     <Link 
+                    component="button"
                     aria-describedby={id}
                     type="button"
                     onClick={handleClickOnNotification}

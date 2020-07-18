@@ -28,7 +28,7 @@ export const ShListsReducer = (state, action) => {
         case ACTION_TYPES.ADD_SH_LIST:
             return {
                 ...state,
-                lists:[action.payload.list,...state.lists],
+                lists:[...state.lists,action.payload.list],
                 isLoading:false,
                 errMess: null,
             };
@@ -36,6 +36,13 @@ export const ShListsReducer = (state, action) => {
             return {
                 ...state,
                 lists:state.lists.filter(list=> list._id !== action.payload._id),
+                isLoading:false,
+                errMess: null,
+            };
+        case ACTION_TYPES.UPDATE_SH_LIST:
+            return {
+                ...state,
+                lists:state.lists.filter(list=> list._id !== action.payload._id).push(action.payload),
                 isLoading:false,
                 errMess: null,
             };

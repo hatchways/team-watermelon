@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductsList(props) {
     const classes = useStyles();
     const shListsContext = useContext(ShListsContext);
+    const currentList = shListsContext.lists.find(list => list._id === props.listId);
     
 
     return (
@@ -33,12 +34,15 @@ export default function ProductsList(props) {
                 <AddNewItemBar listId={props.listId}/>
             </Container>
             <Container maxWidth="md" component="main">
-                <Typography variant="h5"  color="textSecondary" component="p">
-                Lists Name:
+                <Typography variant="h5"  color="textPrimary" component="p" align="center">
+                {currentList.title}
+                </Typography>
+                <Typography variant="body1"  color="textSecondary" align="center">
+                {shListsContext.products.length} items
                 </Typography>
                 <br/>
                 <Grid container spacing={1} alignItems="center">
-                    {shListsContext.products.map((product) => (
+                    {shListsContext.products.slice().reverse().map((product) => (
                         <Grid item key={product._id} xs = {12} md = {12} lg={12}>
                         <ProductCard 
                             product={product} 
