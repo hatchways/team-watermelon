@@ -9,6 +9,17 @@ export const theme = createMuiTheme({
     }
   },
   palette: {
-    primary: { main: "#DF1B1B" }
-  }
+    primary: { main: "#DF1B1B" },
+    background: {
+      default: "#fbfcff"
+    }
+  },
+  overrides: { 
+    MuiButton: { 
+      root: { 
+        borderRadius: '30px', 
+        padding: '10px'
+      }, 
+    }, 
+  },
 });
