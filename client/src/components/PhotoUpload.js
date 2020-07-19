@@ -121,7 +121,7 @@ export default function PhotoUpload(props) {
 	};
 	return (
 		<div>
-			<Button onClick={() => setDialogOpen(true)} {...props}>
+			<Button style={{background: 'none', padding: '0'}} onClick={() => setDialogOpen(true)} {...props}>
 				Profile Photo Upload
 			</Button>
 			<Dialog style={style.dialog} open={dialogOpen}>
@@ -145,10 +145,10 @@ export default function PhotoUpload(props) {
 						<input onChange={onChange} name="image" type="file" />
 					</form>
 					<DialogActions>
-						<Button style={{borderRadius: '30px', padding: '10px'}} fullWidth onClick={onSubmitForm} variant="contained" color="primary">
+						<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
 							Upload
 						</Button>
-						<Button style={{borderRadius: '30px', padding: '10px'}} fullWidth onClick={() => setDialogOpen(false)} color="primary">
+						<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
 							Cancel
 						</Button>
 					</DialogActions>
@@ -158,7 +158,7 @@ export default function PhotoUpload(props) {
 						color="primary"
 						fullWidth
 						variant="contained"
-						style={{borderRadius: '30px', padding: '10px', marginBottom: '10px'}}
+						style={{marginBottom: '10px'}}
 					>
 						Save Profile Picture
 					</Button>

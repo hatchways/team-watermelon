@@ -13,5 +13,13 @@ export const theme = createMuiTheme({
     background: {
       default: "#fbfcff"
     }
-  }
+  },
+  overrides: { 
+    MuiButton: { 
+      root: { 
+        borderRadius: '30px', 
+        padding: '10px'
+      }, 
+    }, 
+  },
 });

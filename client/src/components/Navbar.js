@@ -168,7 +168,7 @@ const Navbar = ()=>{
 									{authContext.name}
 								</Typography>
 							</MenuItem>
-							<MenuItem><PhotoUpload /></MenuItem>
+							<MenuItem className={classes.link}><PhotoUpload /></MenuItem>
 							<MenuItem className={classes.link} style={{color: '#DF1B1B'}} onClick={() => {
 									authContext.handleLogout({});
 									shListsContext.handleShListsFailure({response:null});

@@ -118,7 +118,7 @@ export default function LoginRegisterModal(props) {
 			{authContext.isAuthenticated ? (
 				''
 			) : (
-				<Button style={{borderRadius: '30px', padding: '10px'}} onClick={() => setDialogOpen(true)} {...props}>
+				<Button onClick={() => setDialogOpen(true)} {...props}>
 					Get Started
 				</Button>
 			)}
@@ -177,10 +177,10 @@ export default function LoginRegisterModal(props) {
 					/>
 				</form>
 				<DialogActions>
-					<Button style={{borderRadius: '30px', padding: '10px'}} fullWidth onClick={onSubmitForm} variant="contained" color="primary">
+					<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
 						{loginActive ? 'Login' : 'Register'}
 					</Button>
-					<Button style={{borderRadius: '30px', padding: '10px'}} fullWidth onClick={() => setDialogOpen(false)} color="primary">
+					<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
 						Cancel
 					</Button>
 				</DialogActions>
