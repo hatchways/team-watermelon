@@ -1,4 +1,4 @@
-import React,{useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {Grid} from '@material-ui/core';
@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     },
     TopContent: {
         padding: theme.spacing(8, 0, 10),
+    },
+    typoHeading: {
+        fontWeight: 'bold',
+        marginBottom: theme.spacing(4)
     }
 }));
 
@@ -24,16 +28,20 @@ const ShoppingLists = ()=>{
     const classes = useStyles();
     const shListsContext = useContext(ShListsContext);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return(
         <section className={classes.root}>
-            <Container maxWidth="sm" component="main" className={classes.TopContent}>
-                <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
-                Add New Item:
+            <Container maxWidth="md" component="main" className={classes.TopContent}>
+                <Typography component="h1" variant="h4" align="center" color="textPrimary" className={classes.typoHeading} gutterBottom>
+                Add new item:
                 </Typography>
                 <DropDownListBar/>    
             </Container>
             <Container maxWidth="md" component="main">
-                <Typography variant="h5" align="left" color="textSecondary" component="p">
+                <Typography variant="h5" align="left" color="textPrimary" component="p"  style={{fontWeight: 'bold'}}>
                 My Shopping Lists:
                 </Typography>
                 <br/>
