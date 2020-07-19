@@ -1,8 +1,21 @@
 import React, { useState, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {Button, Typography, Grid, TextField, InputBase, Box} from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import {Button, Typography, Grid, TextField, Box} from '@material-ui/core';
+import ImageIcon from '@material-ui/icons/Image';
 import {addNewList} from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
+
+const addimage = "assets/images/addimage.png";
+
+const CustomTextField = withStyles({
+    root: {
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          border: '0',
+        },
+      },
+    },
+  })(TextField);
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -26,9 +39,18 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
         marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(4),
-        width: '300px'
+        marginBottom: theme.spacing(4)
     },
+    addImg: {
+		border: '1px transparent',
+		width: '220px',
+		height: '220px',
+        marginTop: '10px',
+        marginBottom: '10px'
+    },
+    input: {
+        display: 'none',
+    }
 }));
 
 export default function BasicTextFields(props) {
@@ -68,10 +90,11 @@ export default function BasicTextFields(props) {
                 Add a title *
             </Typography>
             <Box className={classes.box} borderRadius={50} flexGrow={1}>
-                <InputBase 
+                <CustomTextField 
                     id="list-title" 
                     name="title" 
-                    placeholder="Enter list title"  
+                    placeholder="Enter list title"
+                    variant="outlined"  
                     onChange={(e) => onChange(e)}
                     className={classes.text}
                     inputProps={{ maxLength: 20 }}
@@ -82,29 +105,37 @@ export default function BasicTextFields(props) {
                 Add a cover
             </Typography>
             <Box className={classes.box} borderRadius={50} flexGrow={1}>
-                <InputBase 
-                    id="list-image" 
-                    name="imageurl" 
-                    placeholder="Paste list cover image url" 
-                    onChange={(e) => onChange(e)} 
+            <img
+                src={addimage}
+                className={classes.addImg}
+            />
+            <input
+                accept="image/*"
+                className={classes.input}
+                id="contained-button-file"
+                type="file"
+            />
+            <label htmlFor="contained-button-file">
+            <Button variant="contained" disableElevation color="primary" component="span" className={classes.button}>
+                Upload
+            </Button>
+            </label>
+            </Box>
+            <Typography component="h5" style={{fontWeight: 'bold'}} >
+                Add a description
+            </Typography>
+            <Box className={classes.box} borderRadius={50} flexGrow={1}>
+                <CustomTextField
+                    multiline
+                    name="listdescription"
+                    id="list-description" 
+                    variant="outlined"
+                    placeholder="My shopping list" 
+                    onChange={(e) => onChange(e)}
                     className={classes.text}
-                    required
+                    inputProps={{ maxLength: 200 }}
                     />
-                </Box>
-                <Typography component="h5" style={{fontWeight: 'bold'}} >
-                    Add a description
-                </Typography>
-                <Box className={classes.box} borderRadius={50} flexGrow={1}>
-                    <InputBase 
-                        multiline
-                        name="listdescription"
-                        id="list-description" 
-                        placeholder="My shopping list" 
-                        onChange={(e) => onChange(e)}
-                        className={classes.text}
-                        inputProps={{ maxLength: 200 }}
-                        />
-                </Box>
+            </Box>
             <Typography 
                 color="error" 
                 align="center" 

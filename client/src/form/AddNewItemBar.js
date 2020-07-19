@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
   TextField,
   Grid,
@@ -10,6 +10,16 @@ import {
 } from '@material-ui/core';
 import ShListsContext from '../state_management/ShListsContext';
 import {addNewProduct} from "../state_management/actionCreators/productActs";
+
+const CustomTextField = withStyles({
+  root: {
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        border: '0',
+      },
+    },
+  },
+})(TextField);
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -74,17 +84,17 @@ export default function BasicTextFields(props) {
         <Container align="center" maxWidth="md" >
             <Box width="sm" height="sm" className={classes.box} borderRadius={50} flexGrow={1}>
                 <Container>
-            <Grid container spacing={1} direction="row" alignItems="flex-end" align="center" className={classes.bar}>
+            <Grid container spacing={1} direction="row" alignItems="center" align="center" className={classes.bar}>
             
                 <Grid item xs={12} md={8}>
-                <TextField 
+                <CustomTextField 
                     fullWidth
                     type="url"
                     name="url"
                     id="outlined-basic" 
                     color="secondary" 
                     placeholder="Paste your link here" 
-                    variant="standard" 
+                    variant="outlined" 
                     className={classes.text}
                     onChange={e => setProductUrl(e.target.value)}/>
                 </Grid>

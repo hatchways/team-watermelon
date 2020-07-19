@@ -12,6 +12,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AuthContext from '../state_management/AuthContext';
+import { Redirect } from 'react-router-dom';
 
 const style = {
 	error: {
@@ -103,7 +104,7 @@ export default function LoginRegisterModal(props) {
 
 				if (res) {
 					authContext.handleLogin(res.data);
-
+					
 				} else {
 					console.log('error: fetching user data failed.');
 				}

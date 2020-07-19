@@ -1,5 +1,5 @@
 import React,{useState, useContext, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
     TextField,
     Grid,
@@ -15,6 +15,15 @@ import ShListsContext from '../state_management/ShListsContext';
 import Snackbar from '@material-ui/core/Snackbar';
 import {addNewProduct} from "../state_management/actionCreators/productActs";
 
+const CustomTextField = withStyles({
+    root: {
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          border: '0',
+        },
+      },
+    },
+  })(TextField);
 
 const useStyles = makeStyles((theme) => ({
     btn: {
@@ -24,10 +33,13 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: '20px'
     },
     text: {
-        width: '400px',
+        width: '400px'
     },
     select: {
         width:"250px",
+        '& .MuiOutlinedInput-notchedOutline': {
+            border: '0',
+        }
     },
     box:{
         backgroundColor: 'white',
@@ -102,17 +114,17 @@ export default function BasicTextFields() {
             <Container align="center" maxWidth="md" >
             <Box width="sm" height="sm" className={classes.box} borderRadius={50} flexGrow={1}>
                 <Container>
-            <Grid container spacing={1} direction="row" alignItems="flex-end" align="center" className={classes.bar}>
+            <Grid container spacing={1} direction="row" alignItems="center" align="center" className={classes.bar}>
             
                 <Grid item xs={12} md={6}>
-                <TextField 
+                <CustomTextField 
                     fullWidth
                     type="url"
                     name="url"
                     id="outlined-basic" 
                     value={itemData.url}
-                    variant="standard"
-                    label="Paste your link here" 
+                    variant="outlined"
+                    placeholder="Paste your link here" 
                     className={classes.text}
                     onChange={onChange}/>
                 </Grid>
@@ -123,13 +135,13 @@ export default function BasicTextFields() {
                     name="listId"
                     value={itemData.listId}
                     onChange={onChange}
-                    variant="standard" 
+                    variant="outlined" 
                     displayEmpty
                     required
                     className={classes.select}
                 >
-                    <MenuItem value="" disabled>
-                        <em>list</em>
+                    <MenuItem value="" disabled color="secondary">
+                        Select list
                     </MenuItem>
                     {shListsContext.lists.map(
                         l=>(<MenuItem value={l._id} key={l._id}>{l.title}</MenuItem>)
