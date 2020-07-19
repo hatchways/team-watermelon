@@ -25,6 +25,13 @@ router.get("/lists/:id", verifyToken, function(req, res) {
 			res.status(400).send({response: "error: List not found."});
 		} else {
 			res.status(200).send({list: foundList});
+
+			//emiting msg to FE socket, for demo only
+			if(foundList && foundList.products.length > 0){
+				req.app.io.to(foundList.user.id).emit('price_notification', { 
+					message: foundList.products[0],
+				}); 
+			}
 		}
 	});
 });

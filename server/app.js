@@ -13,7 +13,7 @@ const listRouter = require('./routes/lists');
 const usersRouter = require('./routes/users');
 const productRouter = require('./routes/products');
 const uploadRouter = require('./routes/imageUpload');
-const dotenv = require('dotenv').config();
+const notificationRouter = require('./routes/notifications');
 
 const { json } = express;
 
@@ -42,6 +42,7 @@ app.use('/upload', uploadRouter);
 app.use('/users', usersRouter);
 app.use(listRouter);
 app.use(productRouter);
+app.use(notificationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
