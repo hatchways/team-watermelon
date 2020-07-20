@@ -5,25 +5,34 @@ const notificationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-	title: String,
-	image: String,
-    description: String,
-    url: String,
-    isRead: {
+    receiver: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        require:true
+    },
+    content:{
+        name: String, //notification title
+        image: String, 
+        description: String,
+        url: String,
+        isRead: {
+            type: Boolean,
+            default: false
+        },
+        product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product"
+        },
+        lastprice: mongoose.Types.Decimal128,
+        currentprice: mongoose.Types.Decimal128,
+        follower_id:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
+        }
+    },
+    isEmitted:{
         type: Boolean,
         default: false
-    },
-	user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-	},
-	product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product"
-    },
-    list:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'List'
     }
 }, {
     timestamps: true
