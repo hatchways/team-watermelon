@@ -80,6 +80,7 @@ const ListCard = (prop)=>{
     };
 
     return (
+        <>
         <Card className={classes.card}>
             <CardActionArea component={RouterLink} onClick={getProductList} to={`/productslist/${list._id}`}>
                 <CardMedia
@@ -143,17 +144,19 @@ const ListCard = (prop)=>{
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Dialog
-                open={openUpdateDialog}
-                onClose={handleUpdateDialogClose}
-                aria-describedby="update-dialog"
-            >
-                <DialogTitle id="update-dialog-title" align="center">Update List</DialogTitle>
-                <DialogContent id="update-dialog-content">
-                    <AddNewListBar/>
-                </DialogContent>
-            </Dialog>
         </Card>
+        <Dialog
+        open={openUpdateDialog}
+        onClose={handleUpdateDialogClose}
+        aria-describedby="update-dialog"
+        fullWidth
+    >
+        <DialogTitle id="update-dialog-title" align="center">Update List</DialogTitle>
+        <DialogContent id="update-dialog-content">
+            <AddNewListBar isUpdate={true}/>
+        </DialogContent>
+        </Dialog>
+        </>
     )
 }
 

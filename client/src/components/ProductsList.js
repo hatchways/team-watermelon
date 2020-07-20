@@ -42,7 +42,7 @@ export default function ProductsList(props) {
                 <AddNewItemBar listId={props.listId}/>
             </Container>
             <Container maxWidth="md" component="main">
-                <Typography variant="h5"  color="textPrimary" component="p" align="center">
+                <Typography variant="h5"  color="textPrimary" component="p" style={{fontWeight: 'bold'}} align="center">
                 {currentList.title}
                 </Typography>
                 <Typography variant="body1"  color="textSecondary" align="center">

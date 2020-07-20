@@ -85,7 +85,7 @@ export default function BasicTextFields(props) {
     <form noValidate autoComplete="off" onSubmit={handleSubmit}>
 
         <Grid container spacing={1} justify="center" align="center" style={{backgroundColor: '#fbfcff'}}>
-            <Grid item xs={10} md={8} style={{textAlign:'center'}}>
+            <Grid item xs={10} md={8} >
             <Typography component="h5" style={{fontWeight: 'bold'}}>
                 Add a title *
             </Typography>
@@ -97,7 +97,7 @@ export default function BasicTextFields(props) {
                     variant="outlined"  
                     onChange={(e) => onChange(e)}
                     className={classes.text}
-                    inputProps={{ maxLength: 20 }}
+                    inputProps={{ maxLength: 20,style:{textAlign:'center'}}}
                     required
                     />
             </Box>
@@ -105,6 +105,8 @@ export default function BasicTextFields(props) {
                 Add a cover
             </Typography>
             <Box className={classes.box} borderRadius={50} flexGrow={1}>
+                <Grid container direction='column'>
+                    <Grid item>
             <img
                 src={addimage}
                 className={classes.addImg}
@@ -115,11 +117,15 @@ export default function BasicTextFields(props) {
                 id="contained-button-file"
                 type="file"
             />
+                    </Grid>
+                    <Grid item>
             <label htmlFor="contained-button-file">
             <Button variant="contained" disableElevation color="primary" component="span" className={classes.button}>
                 Upload
             </Button>
             </label>
+                    </Grid>
+                </Grid>
             </Box>
             <Typography component="h5" style={{fontWeight: 'bold'}} >
                 Add a description
@@ -133,7 +139,7 @@ export default function BasicTextFields(props) {
                     placeholder="My shopping list" 
                     onChange={(e) => onChange(e)}
                     className={classes.text}
-                    inputProps={{ maxLength: 200 }}
+                    inputProps={{ maxLength: 200,style: { textAlign: 'center' }}}
                     />
             </Box>
             <Typography 
@@ -143,7 +149,7 @@ export default function BasicTextFields(props) {
                 {listData.errMsg}
             </Typography>
                 <Button type="submit" size="large" variant="contained" color="primary" className={classes.button}>
-                    Create List
+                    {props.isUpdate?"Update":"Create List"}
                 </Button>
             </Grid>
         </Grid>
