@@ -71,12 +71,12 @@ export default function NotificationsPopper(props) {
                         <ListItem component="a" href={m.content.url} target="_blank" rel="noreferrer">
                             <ListItemAvatar>
                             <Avatar src={m.content.image} variant="square" type="image">
-                                {cutProductName(m.content.name)}
+                                {cutProductName(m.content.title)}
                             </Avatar>
                             </ListItemAvatar>
                             <ListItemText>
                                 <Typography className={classes.title} color="textPrimary" variant="subtitle2">
-                                    {cutContentLength(m.content.name,30,"no product name")}
+                                    {cutContentLength(m.content.title,30,"no product title")}
                                 </Typography>
                                 <Typography variant="caption" color="textSecondary">
                                     {cutContentLength(m.content.url,30,"no link")}

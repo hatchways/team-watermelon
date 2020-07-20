@@ -11,7 +11,7 @@ const notificationSchema = new mongoose.Schema({
         require:true
     },
     content:{
-        name: String, //notification title
+        title: String, 
         image: String, 
         description: String,
         url: String,

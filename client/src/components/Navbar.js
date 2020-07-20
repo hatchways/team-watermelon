@@ -98,12 +98,12 @@ const Navbar = (props)=>{
     }
 
     const handleClickOnNotification = (event) => {
-        setAnchorEl(anchorEl ? null : event.currentTarget);
-        if(msgHasBeenRead===true){
+		if(msgHasBeenRead===true){
             setNotification({ messages:[] });      
         }else{
             msgHasBeenRead = true;
 		}
+        setAnchorEl(anchorEl ? null : event.currentTarget);
     };
 
     const open = Boolean(anchorEl);

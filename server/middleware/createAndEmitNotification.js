@@ -7,7 +7,7 @@ module.exports = createAndEmitNotification = async (socketIo,type,receiver,title
         noti_type: type,
         receiver: receiver,
         content:{
-            name: title, 
+            title: title, 
             image: image, 
             description: description 
         }
