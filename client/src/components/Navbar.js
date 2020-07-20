@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PhotoUpload from './PhotoUpload.js';
-import {Toolbar, AppBar, Box, Typography, Link, IconButton, Menu, MenuItem, Avatar, Badge, Popper} from '@material-ui/core';
+import {Toolbar, AppBar, Box, Typography, Button, IconButton, Menu, MenuItem, Avatar, Badge, Popper} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -10,6 +10,7 @@ import ShListsContext from '../state_management/ShListsContext';
 import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
 import socketIOClient from "socket.io-client";
 import Notifications from "./Notifications";
+import {ENDPOINT} from '../utils/baseUrl';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	margin: {
 		margin: theme.spacing(1)
+	},
+	popper:{
+		zIndex:1200
 	}
 }));
 
@@ -37,7 +41,7 @@ let msgHasBeenRead = false;
 let needsSetSocket = true;
 
 
-const Navbar = ()=>{
+const Navbar = (props)=>{
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
@@ -58,14 +62,15 @@ const Navbar = ()=>{
     useEffect(() => {
         if(authContext.isAuthenticated && needsFetchingLists){ 
             fetchShLists(shListsContext.dispatchShLists,shListsContext.handleShListsFailure);
-            needsFetchingLists = false;
+			needsFetchingLists = false;
+			props.history.push("/main");
         }
         if(authContext.isAuthenticated && needsSetSocket){
-            const socket = socketIOClient();
+            const socket = socketIOClient(ENDPOINT);
             needsSetSocket = false;
 
-            socket.on('price_notification', data => {
-                setNewMsg(data.message);
+            socket.on('show_notification', data => {
+                setNewMsg(data);
                 msgHasBeenRead = false;
             });
             socket.emit('join_room', {
@@ -74,9 +79,11 @@ const Navbar = ()=>{
             setSocket({socket:socket});
         }
         if(newMsg){
-            setNotification({ messages:[...notification.messages,newMsg] });
+			const tmp = [...notification.messages,newMsg].slice(-5);
+            setNotification({ messages:tmp });
             setNewMsg(null);
-        }
+		}
+		// eslint-disable-next-line
     },[authContext.isAuthenticated, authContext.id, newMsg, shListsContext.dispatchShLists, shListsContext.handleShListsFailure, notification.messages]);
 
     const leaveSocketRoom=()=>{
@@ -91,15 +98,12 @@ const Navbar = ()=>{
     }
 
     const handleClickOnNotification = (event) => {
-        if(notification.messages.length > 0){
-            setAnchorEl(anchorEl ? null : event.currentTarget);
-        }
-        if(msgHasBeenRead===true){
+		if(msgHasBeenRead===true){
             setNotification({ messages:[] });      
         }else{
             msgHasBeenRead = true;
-        }
-        
+		}
+        setAnchorEl(anchorEl ? null : event.currentTarget);
     };
 
     const open = Boolean(anchorEl);
@@ -124,27 +128,22 @@ const Navbar = ()=>{
 				</Typography>
 				{authContext.isAuthenticated ? (
 					<>
-						<Link
-							variant="button"
+						<Button
 							component={RouterLink}
 							to="/main"
-							color="textPrimary"
 							className={classes.link}
 						>
 							Shopping Lists
-						</Link>
+						</Button>
 						<FindNewFriendsModal />
                         <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
-						<Link 
+						<Button 
                             aria-describedby={id}
-                            type="button"
                             onClick={handleClickOnNotification}
-                            variant="button" 
-                            color="textPrimary" 
                             className={classes.link}>
                             Notifications
-                            </Link>
-                            <Popper id={id} open={open} anchorEl={anchorEl} >
+                            </Button>
+                            <Popper id={id} open={open} anchorEl={anchorEl} className={classes.popper}>
                                 <Notifications messages={notification.messages}/>
                             </Popper>
                         </Badge>

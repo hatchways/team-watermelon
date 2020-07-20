@@ -6,6 +6,7 @@ const List = require("../models/List");
 const Product = require("../models/Product");
 
 const verifyToken = require("../middleware/verify");
+const createAndEmitNotification = require('../middleware/createAndEmitNotification');
 
 // GET all lists of user
 router.get("/lists", verifyToken, function (req, res) {
@@ -25,6 +26,27 @@ router.get("/lists/:id", verifyToken, function(req, res) {
 			res.status(400).send({response: "error: List not found."});
 		} else {
 			res.status(200).send({list: foundList});
+
+			//testing emiting msg to FE socket
+			let startTesting = false;
+			if(startTesting && foundList && foundList.products.length > 0){
+				p = foundList.products[0]
+				createAndEmitNotification(
+					req.app.io,
+					"new_price",//notification type
+					req.user.id, // receiver id
+					p.name,// the title on the notification
+					p.image,// the image on the notification
+					p.description, // the content on the notification
+					p.url,// the link user can link to
+					product={
+						id:p._id,
+						lastprice: p.lastprice,
+						currentprice: p.currentprice
+					},
+					follower=null // follower's userId 
+					);
+			}
 		}
 	});
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Grid, Box,Container} from '@material-ui/core';
+import {Typography, Grid, Box,Container,Link} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
@@ -9,6 +9,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import {cutContentLength, convertNumberDecimal} from '../utils/transformText';
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     link: {
@@ -18,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#ffffff",
     },
     listItem:{
+        minWidth:"200px",
+        align:'center',
         padding: '6px',
     },
     line:{
@@ -60,33 +63,33 @@ export default function NotificationsPopper(props) {
             </Container>
             <Divider variant='fullWidth' component="li" className={classes.line} />
             <List className={classes.list}>
-                {props.messages.map((product) => (
-                    <div key={product._id} className={classes.listItem} >
+                {props.messages.reverse().map((m) => (
+                    <div key={m.id} className={classes.listItem} >
                         <Typography color="textPrimary" variant="subtitle2">
-                            New price!
+                            {m.type}
                         </Typography>
-                        <ListItem component="a" href={product.url} target="_blank" rel="noreferrer">
+                        <ListItem component="a" href={m.content.url} target="_blank" rel="noreferrer">
                             <ListItemAvatar>
-                            <Avatar src={product.image} variant="square" type="image">
-                                {cutProductName(product.name)}
+                            <Avatar src={m.content.image} variant="square" type="image">
+                                {cutProductName(m.content.title)}
                             </Avatar>
                             </ListItemAvatar>
                             <ListItemText>
                                 <Typography className={classes.title} color="textPrimary" variant="subtitle2">
-                                    {cutContentLength(product.name,30,"no product name")}
+                                    {cutContentLength(m.content.title,30,"no product title")}
                                 </Typography>
                                 <Typography variant="caption" color="textSecondary">
-                                    {cutContentLength(product.url,30,"no link")}
+                                    {cutContentLength(m.content.url,30,"no link")}
                                 </Typography >
                                 <Grid container alignItems='baseline'>
                                     <Grid item xs={6}>
                                         <Typography color="textSecondary" style={linethrough} variant="body2">
-                                            ${convertNumberDecimal(product.lastprice)}
+                                            ${convertNumberDecimal(m.content.lastprice)}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Typography variant="button" color="primary">
-                                            ${convertNumberDecimal(product.currentprice)}
+                                            ${convertNumberDecimal(m.content.currentprice)}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -95,6 +98,13 @@ export default function NotificationsPopper(props) {
                         <Divider variant="inset" component="li" />
                     </div>
                 ))}
+                <div className={classes.listItem}>
+                    <Box textAlign="center" align="center">
+                        <Link component={RouterLink} to="/main" color="textPrimary" variant="subtitle1" >
+                            see all
+                        </Link>
+                    </Box>
+                </div>
             </List>
         </div>
     );

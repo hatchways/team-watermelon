@@ -33,12 +33,11 @@ const Routes = ()=> {
     return(
         
         <Router history={history}>
-            <Navbar/>
+            <Navbar history={history}/>
             <Switch>
                 <Route 
                     path='/home' 
                     component={()=><LandingPage/>} />
-                {/* <Route exact path='/main' component={()=><MainPage/>}/> */}
                 <PrivateRoute 
                     exact path='/main' 
                     component={()=><MainPage/>} />
