@@ -63,7 +63,7 @@ const Navbar = (props)=>{
         if(authContext.isAuthenticated && needsFetchingLists){ 
             fetchShLists(shListsContext.dispatchShLists,shListsContext.handleShListsFailure);
 			needsFetchingLists = false;
-			props.history.pushhistory.push("/first");
+			props.history.push("/main");
         }
         if(authContext.isAuthenticated && needsSetSocket){
             const socket = socketIOClient(ENDPOINT);
@@ -82,7 +82,8 @@ const Navbar = (props)=>{
 			const tmp = [...notification.messages,newMsg].slice(-5);
             setNotification({ messages:tmp });
             setNewMsg(null);
-        }
+		}
+		// eslint-disable-next-line
     },[authContext.isAuthenticated, authContext.id, newMsg, shListsContext.dispatchShLists, shListsContext.handleShListsFailure, notification.messages]);
 
     const leaveSocketRoom=()=>{
