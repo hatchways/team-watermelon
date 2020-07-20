@@ -49,7 +49,8 @@ const style = {
 		borderRadius: '50%'
 	},
 	header: {
-		margin: '10px'
+		margin: '10px',
+		fontWeight: 'bold'
 	}
 };
 
@@ -120,7 +121,7 @@ export default function PhotoUpload(props) {
 	};
 	return (
 		<div>
-			<Button onClick={() => setDialogOpen(true)} {...props}>
+			<Button style={{background: 'none', padding: '0'}} onClick={() => setDialogOpen(true)} {...props}>
 				Profile Photo Upload
 			</Button>
 			<Dialog style={style.dialog} open={dialogOpen}>
@@ -157,6 +158,7 @@ export default function PhotoUpload(props) {
 						color="primary"
 						fullWidth
 						variant="contained"
+						style={{marginBottom: '10px'}}
 					>
 						Save Profile Picture
 					</Button>

@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
       marginTop:"50%",
       marginBottom:"50%",
     },
+    paper: { 
+        minWidth: "500px" 
+    },
   }));
 
 const ListCard = ()=>{
@@ -41,8 +44,8 @@ const ListCard = ()=>{
                 </CardContent>
             </CardActionArea>
         </Card>
-        <Dialog open={dialogOpen} onClose={()=>setDialogOpen(false)}>
-            <DialogTitle id="form-dialog-title" align="center">Add New List</DialogTitle>
+        <Dialog classes={{ paper: classes.paper}} open={dialogOpen} onClose={()=>setDialogOpen(false)}>
+            <DialogTitle id="form-dialog-title" align="center">Create new list</DialogTitle>
             <DialogContent>
                 <AddNewListBar/>
             </DialogContent>

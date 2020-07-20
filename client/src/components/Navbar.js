@@ -1,6 +1,6 @@
-import React,{useContext, useEffect, useState} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PhotoUpload from './PhotoUpload.js';
-import {Toolbar, AppBar, Box, Typography, Link, IconButton, Button,Badge, Popper} from '@material-ui/core';
+import {Toolbar, AppBar, Box, Typography, Link, IconButton, Menu, MenuItem, Avatar, Badge, Popper} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
@@ -15,7 +15,9 @@ import {ENDPOINT} from '../utils/baseUrl';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
-		borderBottom: `1px solid ${theme.palette.divider}`
+		backgroundColor: 'white',
+		position: 'sticky',
+		color: theme.palette.primary.main
 	},
 	toolbar: {
 		flexWrap: 'wrap'
@@ -42,7 +44,17 @@ const Navbar = ()=>{
     const shListsContext = useContext(ShListsContext);
     const [notification, setNotification] = useState({messages:[]});
     const [newMsg, setNewMsg] = useState(null);
-    const [socket, setSocket] = useState({socket:null})
+    const [socket, setSocket] = useState({socket:null});
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [anchorMenu, setAnchorMenu] = useState(null);
+
+	const handleMenuClick = (event) => {
+		setAnchorMenu(event.currentTarget);
+	};
+	
+	const handleMenuClose = () => {
+		setAnchorMenu(null);
+	};
 
     useEffect(() => {
         if(authContext.isAuthenticated && needsFetchingLists){ 
@@ -79,8 +91,6 @@ const Navbar = ()=>{
         needsSetSocket = true;
     }
 
-    
-    const [anchorEl, setAnchorEl] = useState(null);
     const handleClickOnNotification = (event) => {
         if(notification.messages.length > 0){
             setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -96,71 +106,85 @@ const Navbar = ()=>{
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popper' : undefined;
 
-
-    return(
-        <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
-            <Toolbar className={classes.toolbar}>
-            <IconButton component={RouterLink}
-                to="/home" 
-                color="primary" 
-                aria-label="home" 
-                className={classes.margin}>
-                <LocalMallIcon fontSize="large"/>
-            </IconButton>
-            <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-                <Box letterSpacing={4} m={1}>
-                    BigDeal 
-                </Box>
-            </Typography>
-            {authContext.isAuthenticated?
-            <>
-                <Typography variant="body1" color="inherit">
-                Welcome! {authContext.name}
-                </Typography>
-                <PhotoUpload />
-                <Link variant="button" 
-                    component={RouterLink} 
-                    to="/main"
-                    color="textPrimary" 
-                    className={classes.link}>
-                    Shopping Lists
-                </Link>
-                <FindNewFriendsModal />
-                <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
-                    <Link 
-                    component="button"
-                    aria-describedby={id}
-                    type="button"
-                    onClick={handleClickOnNotification}
-                    variant="button" 
-                    color="textPrimary" 
-                    className={classes.link}>
-                    Notifications
-                    </Link>
-                    <Popper id={id} open={open} anchorEl={anchorEl} >
-                        <Notifications messages={notification.messages}/>
-                    </Popper>
-                </Badge>
-                <Button 
-                    onClick={()=>{
-                        authContext.handleLogout({});
-                        shListsContext.handleShListsFailure({response:null});
-                        leaveSocketRoom();
-                        needsFetchingLists = true;
-                    }} 
-                    color="primary" 
-                    variant="outlined" 
-                    className={classes.link}
-                    >
-                    Logout
-                </Button>
-            </>:null
-            }  
-            </Toolbar>
-        </AppBar>
+	return (
+		<AppBar color="primary" elevation={0} className={classes.appBar}>
+			<Toolbar className={classes.toolbar}>
+				<IconButton
+					component={RouterLink}
+					to="/home"
+					color="primary"
+					aria-label="home"
+					className={classes.margin}
+				>
+					<LocalMallIcon fontSize="large" />
+				</IconButton>
+				<Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
+					<Box letterSpacing={4} m={1}>
+						BigDeal
+					</Box>
+				</Typography>
+				{authContext.isAuthenticated ? (
+					<>
+						<Link
+							variant="button"
+							component={RouterLink}
+							to="/main"
+							color="textPrimary"
+							className={classes.link}
+						>
+							Shopping Lists
+						</Link>
+						<FindNewFriendsModal />
+                        <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
+						<Link 
+                            aria-describedby={id}
+                            type="button"
+                            onClick={handleClickOnNotification}
+                            variant="button" 
+                            color="textPrimary" 
+                            className={classes.link}>
+                            Notifications
+                            </Link>
+                            <Popper id={id} open={open} anchorEl={anchorEl} >
+                                <Notifications messages={notification.messages}/>
+                            </Popper>
+                        </Badge>
+						<IconButton 
+							aria-controls="profile-menu" 
+							aria-haspopup="true" 
+							onClick={handleMenuClick}>
+							<Avatar src={authContext.profile_picture}>
+								{authContext.name.substring(0, 1)}
+							</Avatar>
+						</IconButton>
+						<Menu
+        					id="simple-menu"
+        					anchorEl={anchorMenu}
+        					keepMounted
+        					open={Boolean(anchorMenu)}
+        					onClose={handleMenuClose}
+      					>
+							<MenuItem className={classes.link}>
+								<Typography variant="body1" color="inherit">
+									{authContext.name}
+								</Typography>
+							</MenuItem>
+							<MenuItem className={classes.link}><PhotoUpload /></MenuItem>
+							<MenuItem className={classes.link} style={{color: '#DF1B1B'}} onClick={() => {
+									authContext.handleLogout({});
+									shListsContext.handleShListsFailure({response:null});
+                                    leaveSocketRoom();
+                                    needsFetchingLists = true;
+									handleMenuClose();
+									}}>
+								LOGOUT
+							</MenuItem>
+      					</Menu>
+					</>
+				) : null}
+			</Toolbar>
+		</AppBar>
 	);
 };
-
-
 
 export default Navbar;

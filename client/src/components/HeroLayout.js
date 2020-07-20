@@ -47,7 +47,9 @@ const styles = (theme) => ({
   light: {
     position: 'absolute',
     display: 'flex',
-    opacity: 0.5
+    opacity: 0.5,
+    top: '20px',
+    left: '418px'
   },
 });
 
@@ -61,8 +63,8 @@ function HeroLayout(props) {
             className={classes.light}
             src="assets/images/light.png"
             alt="light"
-            width="300"
-            height="160"
+            width="580"
+            height="400"
         />
         {children}
         <div className={classes.backdrop} />

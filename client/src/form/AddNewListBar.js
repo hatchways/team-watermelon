@@ -1,22 +1,56 @@
 import React, { useState, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {Button, Typography, Grid, TextField} from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import {Button, Typography, Grid, TextField, Box} from '@material-ui/core';
+import ImageIcon from '@material-ui/icons/Image';
 import {addNewList} from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
 
+const addimage = "assets/images/addimage.png";
+
+const CustomTextField = withStyles({
+    root: {
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          border: '0',
+        },
+      },
+    },
+  })(TextField);
+
 const useStyles = makeStyles((theme) => ({
     button: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(4),
+        marginBottom: theme.spacing(4),
+        borderRadius: '30px', 
+        padding: '10px'
     },
     text: {
-        marginTop: theme.spacing(1),
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
     },
     hidden:{
 		visibility: "hidden",
     },
     shown:{
 		visibility: "visible",
-	},
+    },
+    box:{
+        backgroundColor: 'white',
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        marginTop: theme.spacing(4),
+        marginBottom: theme.spacing(4)
+    },
+    addImg: {
+		border: '1px transparent',
+		width: '220px',
+		height: '220px',
+        marginTop: '10px',
+        marginBottom: '10px'
+    },
+    input: {
+        display: 'none',
+    }
 }));
 
 export default function BasicTextFields(props) {
@@ -50,48 +84,58 @@ export default function BasicTextFields(props) {
   return (
     <form noValidate autoComplete="off" onSubmit={handleSubmit}>
 
-        <Grid container spacing={1} justify="center" align="center">
+        <Grid container spacing={1} justify="center" align="center" style={{backgroundColor: '#fbfcff'}}>
             <Grid item xs={10} md={8} style={{textAlign:'center'}}>
-                <TextField 
-                    fullWidth
-                    label="Title"
+            <Typography component="h5" style={{fontWeight: 'bold'}}>
+                Add a title *
+            </Typography>
+            <Box className={classes.box} borderRadius={50} flexGrow={1}>
+                <CustomTextField 
                     id="list-title" 
-                    color="secondary"
                     name="title" 
-                    placeholder="Enter list title" 
-                    variant="standard" 
+                    placeholder="Enter list title"
+                    variant="outlined"  
                     onChange={(e) => onChange(e)}
                     className={classes.text}
                     inputProps={{ maxLength: 20 }}
-                    helperText="max length 20 charaters"
                     required
                     />
-                <TextField 
-                    fullWidth
-                    label="Image Url"
-                    id="list-image" 
-                    color="secondary"
-                    name="imageurl" 
-                    placeholder="Paste list cover image url" 
-                    variant="standard"
-                    onChange={(e) => onChange(e)} 
-                    className={classes.text}
-                    required
-                    />
-                <TextField 
-                    fullWidth
+            </Box>
+            <Typography component="h5" style={{fontWeight: 'bold'}} >
+                Add a cover
+            </Typography>
+            <Box className={classes.box} borderRadius={50} flexGrow={1}>
+            <img
+                src={addimage}
+                className={classes.addImg}
+            />
+            <input
+                accept="image/*"
+                className={classes.input}
+                id="contained-button-file"
+                type="file"
+            />
+            <label htmlFor="contained-button-file">
+            <Button variant="contained" disableElevation color="primary" component="span" className={classes.button}>
+                Upload
+            </Button>
+            </label>
+            </Box>
+            <Typography component="h5" style={{fontWeight: 'bold'}} >
+                Add a description
+            </Typography>
+            <Box className={classes.box} borderRadius={50} flexGrow={1}>
+                <CustomTextField
                     multiline
-                    label="List Description"
                     name="listdescription"
                     id="list-description" 
-                    color="secondary" 
+                    variant="outlined"
                     placeholder="My shopping list" 
-                    variant="standard" 
                     onChange={(e) => onChange(e)}
                     className={classes.text}
                     inputProps={{ maxLength: 200 }}
-                    helperText="max length 200 charaters. Default: My shopping list"
                     />
+            </Box>
             <Typography 
                 color="error" 
                 align="center" 

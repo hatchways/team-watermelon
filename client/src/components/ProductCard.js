@@ -47,7 +47,6 @@ export default function ProductCard(props) {
     const addDefaultImg=(ev)=>{
         ev.target.src = assetsUrl+'images/no_image_available.png';
     }
-    
 
     const handleRevome = () => {
 
@@ -95,18 +94,30 @@ export default function ProductCard(props) {
                         <Typography variant="subtitle2" paragraph className={classes.description}>
                             {cutContentLength(product.description,100,"no description")}
                         </Typography>
-                        <Grid container>
-                            <Grid item xs={12} md={6} lg={6}>
-                            <Typography color="textSecondary" style={linethrough}>
-                                Price: $ {convertNumberDecimal(product.lastprice)}
-                            </Typography>
-                            </Grid>
-                            <Grid item xs={12} md={6} lg={6}>
-                            <Typography color="primary">
-                                New Price: $ {convertNumberDecimal(product.currentprice)}
-                            </Typography>
-                            </Grid>
-                        </Grid>
+                                {convertNumberDecimal(product.lastprice)!=='0' ? (
+                                    <Grid container>
+                                    <Grid item xs={12} md={6} lg={6}>
+                                        <Typography color="textSecondary" style={linethrough}>
+                                        Price: $ {convertNumberDecimal(product.lastprice)}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={6} lg={6}>
+                                        <Typography color="primary">
+                                        New Price: $ {convertNumberDecimal(product.currentprice)}
+                                        </Typography>
+                                    </Grid>
+                                    </Grid>
+                                ) : (
+                                    <Grid container>
+                                    <Grid item xs={12} md={6} lg={6}>
+                                    </Grid>
+                                    <Grid item xs={12} md={6} lg={6}>
+                                        <Typography color="primary">
+                                        Price: $ {convertNumberDecimal(product.currentprice)}
+                                        </Typography>
+                                    </Grid>
+                                    </Grid>
+                                ) }
                     </CardContent>
                 </CardActionArea>
                 <CardActions >
