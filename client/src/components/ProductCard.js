@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import ShListsContext from '../state_management/ShListsContext';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -40,7 +40,8 @@ const useStyles = makeStyles((theme)=>({
 
 export default function ProductCard(props) {
     const shListsContext = useContext(ShListsContext);
-    const product = props.product
+    const product = props.product;
+    const [hiddenProduct, setHiddenProduct] = useState(props.hidden);
     const deleteProductUrl = `/lists/${props.listId}/products/${props.product._id}`; 
     const classes = useStyles();
     const addDefaultImg=(ev)=>{
@@ -120,16 +121,20 @@ export default function ProductCard(props) {
                                 ) }
                     </CardContent>
                 </CardActionArea>
-                <CardActions >
+                {hiddenProduct ? (
+                    null
+                ) : (
+                    <CardActions>
                     <Button 
                         variant="outlined" 
                         color="primary" 
                         size="small"
                         startIcon={<DeleteForeverIcon />}
                         onClick={handleRevome}
-                >remove
-                </Button>
-                </CardActions>
+                    >remove
+                    </Button>
+                    </CardActions>
+                )}
                 </Card>
         
 

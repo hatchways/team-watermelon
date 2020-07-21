@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User.js');
+const List = require('../models/List');
 const verifyToken = require('../middleware/verify.js');
 
 router.get('/allUsers', async (req, res) => {
@@ -63,11 +64,22 @@ router.post('/updateProfilePicture', verifyToken, async (req, res) => {
 
 router.get('/:name', async function (req, res) {
 	try {
-		const user = await User.find({ name: req.params.name}).exec();
+		const user = await User.find({ name: req.params.name }).populate("my_lists").exec();
 		res.status(200).send(user);
 	} catch (err) {
-		console.error('User not found');
+		console.error(err);
 		res.status(500);
 	}
 });
+
+router.get('/:name/productslist/:id', async function (req, res) {
+	try {
+		const products =  await List.findById(req.params.id).populate("products").exec();
+		res.status(200).send(products);
+	} catch (err) {
+		console.error(err);
+		res.status(500);
+	}
+});
+
 module.exports = router;

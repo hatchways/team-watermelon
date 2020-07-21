@@ -27,27 +27,29 @@ const useStyles = makeStyles((theme) => ({
 const ShoppingLists = (props)=>{
     const classes = useStyles();
     const shListsContext = useContext(ShListsContext);
-    const [userList, setUserList] = useState(null);
+    const [userLists, setUserLists] = useState(null);
 
-    console.log(shListsContext);
-
-    const getUserList = async () => {
+    const getUserLists = async () => {
 		try {
 			const res = await axios.get('/users/'+props.userName);
-            await setUserList(res.data[0].my_lists);
+            await setUserLists(res.data[0].my_lists);
 		} catch (error) {
-			console.log('Error getting users');
+			console.log('Error getting user');
 		}
 	};
 
     useEffect(() => {
-        getUserList();
+        if(props.userName !== undefined) {
+            getUserLists();
+        } else {
+            setUserLists(null);
+        }
         window.scrollTo(0, 0);
     }, []);
 
     return(
         <section className={classes.root}>
-            {userList ? (
+            {userLists ? (
                 null    
             ) : (
                 <Container maxWidth="md" component="main" className={classes.TopContent}>
@@ -59,15 +61,21 @@ const ShoppingLists = (props)=>{
             )}
             
             <Container maxWidth="md" component="main">
-                <Typography variant="h5" align="left" color="textPrimary" component="p"  style={{fontWeight: 'bold'}}>
-                {props.userName}'s Shopping Lists:
-                </Typography>
+                {userLists ? (
+                    <Typography variant="h5" align="left" color="textPrimary" component="p"  style={{fontWeight: 'bold'}}>
+                    {props.userName}'s Shopping Lists:
+                    </Typography>
+                ) : (
+                    <Typography variant="h5" align="left" color="textPrimary" component="p"  style={{fontWeight: 'bold'}}>
+                    My Shopping Lists:
+                    </Typography>
+                )}
                 <br/>
-                {userList ? (
+                {userLists ? (
                     <Grid container spacing={5}>
-                    {userList.map((list) => (
+                    {userLists.map((list) => (
                         <Grid item key={list._id} xs={12} sm={6} md={4}>
-                            {/*<ListCard list={list}/>*/}
+                            <ListCard list={list} userName={props.userName} hidden={true}/>
                         </Grid>
                     ))}
                     </Grid>

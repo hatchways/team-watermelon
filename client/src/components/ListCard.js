@@ -4,7 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import React,{useContext} from 'react';
+import React,{useContext, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -33,10 +33,12 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const ListCard = (prop)=>{
-    const list =prop.list
+    const list =prop.list;
+    const userName = prop.userName;
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
+    const [hiddenList, setHiddenList] = useState(prop.hidden);
     const url = `/lists/${list._id}`;
 
     const getProductList=()=>{
@@ -45,6 +47,7 @@ const ListCard = (prop)=>{
             fetchProducts(url,shListsContext.dispatchProducts,shListsContext.handleProductsFailure);
         }
     }
+
     return (
         <Card className={classes.card}>
             <CardActionArea>
@@ -65,21 +68,35 @@ const ListCard = (prop)=>{
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button 
-                    fullWidth 
-                    component={RouterLink} 
-                    onClick={getProductList}
-                    to={`/productslist/${list._id}`} 
-                    color="primary" 
-                    variant="outlined" 
-                    className={classes.link}>
-                    View
-                </Button>
-                <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
-                    Edit
-                </Button>                           
-            </CardActions>
+            {hiddenList ? (
+                    <CardActions>
+                        <Button 
+                            fullWidth 
+                            component={RouterLink} 
+                            to={`/users/${userName}/productslist/${list._id}`} 
+                            color="primary" 
+                            variant="outlined" 
+                            className={classes.link}>
+                            View
+                        </Button>
+                    </CardActions>
+                    ) : (
+                    <CardActions>
+                        <Button 
+                            fullWidth 
+                            component={RouterLink} 
+                            onClick={getProductList}
+                            to={`/productslist/${list._id}`} 
+                            color="primary" 
+                            variant="outlined" 
+                            className={classes.link}>
+                            View
+                        </Button>
+                        <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
+                            Edit
+                        </Button>                           
+                    </CardActions>
+                    )}
         </Card>
     )
 }
