@@ -50,6 +50,7 @@ const Navbar = (props)=>{
     const [socket, setSocket] = useState({socket:null});
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [anchorMenu, setAnchorMenu] = useState(null);
+	const [profilePage, setProfilePage] = useState(false);
 
 	const handleMenuClick = (event) => {
 		setAnchorMenu(event.currentTarget);
@@ -83,8 +84,12 @@ const Navbar = (props)=>{
             setNotification({ messages:tmp });
             setNewMsg(null);
 		}
+		if(profilePage) {
+			setProfilePage(false);
+			props.history.push("/profile");
+		}
 		// eslint-disable-next-line
-    },[authContext.isAuthenticated, authContext.id, newMsg, shListsContext.dispatchShLists, shListsContext.handleShListsFailure, notification.messages]);
+    },[authContext.isAuthenticated, authContext.id, newMsg, shListsContext.dispatchShLists, shListsContext.handleShListsFailure, notification.messages, profilePage]);
 
     const leaveSocketRoom=()=>{
         if(socket.socket){
@@ -162,7 +167,10 @@ const Navbar = (props)=>{
         					open={Boolean(anchorMenu)}
         					onClose={handleMenuClose}
       					>
-							<MenuItem className={classes.link}>
+							<MenuItem className={classes.link} onClick={() => {
+								setProfilePage(true);
+								handleMenuClose();
+							}}>
 								<Typography variant="body1" color="inherit">
 									{authContext.name}
 								</Typography>

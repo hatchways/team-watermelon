@@ -60,4 +60,28 @@ router.post('/updateProfilePicture', verifyToken, async (req, res) => {
 		res.status(500);
 	}
 });
+
+router.get('/:id', verifyToken, async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
+		res.status(200).send(user);
+	} catch (err) {
+		console.error('User not found');
+		res.status(500);
+	}
+});
+
+router.put('/:id/edit', verifyToken, async (req, res) => {
+	try {
+		const user = await User.findById(req.user.id);
+		user.name = req.body.name;
+		user.password = req.body.password;
+		await user.save();
+		// send email to user - password changed with timestamp
+		res.status(200).send(user);
+	} catch (err) {
+		console.error('	');
+		res.status(500);
+	}
+});
 module.exports = router;

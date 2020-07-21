@@ -2,6 +2,7 @@ import React,{useContext} from "react";
 import { Switch, Route, Redirect, Router } from 'react-router-dom';
 import LandingPage from "../pages/Landingpage";
 import MainPage from "../pages/MainPage";
+import ProfilePage from "../pages/ProfilePage";
 import { createBrowserHistory } from 'history'
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -52,6 +53,9 @@ const Routes = ()=> {
                     path='/friendslist' 
                     component={()=><FriendsList friends={placeholderFriends}/>}
                     />
+                <PrivateRoute 
+                    exact path='/profile' 
+                    component={()=><ProfilePage/>} />
 
                 <Redirect to="/home" />
             </Switch>
