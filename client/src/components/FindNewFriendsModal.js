@@ -33,7 +33,7 @@ const style = {
 		width: '70%'
 	},
 	xButton: {
-		width: '30%'
+		width: '20%'
 	},
 	buttonContainer: {
 		display: 'flex',

@@ -82,7 +82,7 @@ export default function FriendCard(props) {
 							{authContext.friends_list.includes(props.id) ? (
 								<Button
 									onClick={() => unfollowUser(props.id)}
-									variant="contained"
+									variant="outlined"
 									color="primary"
 									href="#"
 									size="small"
@@ -92,7 +92,7 @@ export default function FriendCard(props) {
 							) : (
 								<Button
 									onClick={() => followUser(props.id)}
-									variant="contained"
+									variant="outlined"
 									color="primary"
 									href="#"
 									size="small"
