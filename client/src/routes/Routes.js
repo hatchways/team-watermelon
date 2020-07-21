@@ -11,6 +11,7 @@ import FriendsList from '../components/FriendsList';
 import {placeholderPL, placeholderFriends} from '../components/PlaceHolder';
 import ShListsContext from '../state_management/ShListsContext';
 import PrivateRoute from './privateRoute';
+import ShoppingLists from "../components/ShoppingLists";
 
 
 
@@ -52,6 +53,11 @@ const Routes = ()=> {
                     path='/friendslist' 
                     component={()=><FriendsList friends={placeholderFriends}/>}
                     />
+                <Route 
+                    exact path='/users/:name' 
+                    component={({match})=>{
+                        return <ShoppingLists userName={match.params.name}/>
+                    }} />
 
                 <Redirect to="/home" />
             </Switch>

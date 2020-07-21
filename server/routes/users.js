@@ -60,4 +60,14 @@ router.post('/updateProfilePicture', verifyToken, async (req, res) => {
 		res.status(500);
 	}
 });
+
+router.get('/:name', async function (req, res) {
+	try {
+		const user = await User.find({ name: req.params.name}).exec();
+		res.status(200).send(user);
+	} catch (err) {
+		console.error('User not found');
+		res.status(500);
+	}
+});
 module.exports = router;
