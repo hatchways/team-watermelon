@@ -90,8 +90,14 @@ router.put("/lists/:id", verifyToken, function(req, res) {
 		if(err){
 			res.status(400).send({response: "error: List not found."});
 		} else {
-			console.log("success: List updated.");
-			res.status(200).send({list: updatedList});
+			List.findById(req.params.id, function(err,doc){
+				if(err){
+					res.status(400).send({response: "error: List can not be update."});
+				} else{
+					console.log("success: List updated.");
+					res.status(200).send({list: doc});
+				}
+			});
 		}
 	});
 });
@@ -109,15 +115,18 @@ router.delete("/lists/:id", verifyToken, function(req, res) {
 					if(err){
 						res.status(400).send({response: "error: List not found."});
 					} else { // remove associated products with list too
-						foundList.products.forEach(function(product) {
-							Product.findByIdAndRemove(product, function(err) {
-								if(err){
-									res.status(400).send({response: "error: Product not found."});
-								}else{
-									res.status(200).send({});
-								}
+						if(foundList.products.length>0){
+							foundList.products.forEach(function(product) {
+								Product.findByIdAndRemove(product, function(err) {
+									if(err){
+										res.status(400).send({response: "error: Product not found."});
+									}
+								});
 							});
-						});
+							res.status(200).send({});
+						}else{
+							res.status(200).send({});
+						}
 					}
 				});
 				

@@ -28,7 +28,7 @@ function AuthContextState() {
 					handleShListsFailure: (payload) => shListsDispatch(ACTIONS.shoppingLists_loading_failed(payload)),
 					dispatchNewShList: (payload) => shListsDispatch(ACTIONS.add_shoppingList(payload)),
 					handleShListDeletion: (payload) => shListsDispatch(ACTIONS.delete_shoppingList(payload)),
-					handleShListUpdate:(payload) => shListsDispatch(ACTIONS.delete_shoppingList(payload)),
+					handleShListUpdate:(payload) => shListsDispatch(ACTIONS.update_shoppingList(payload)),
 					dispatchNewProduct: (listId, productId) => shListsDispatch(ACTIONS.add_product(listId, productId)),
 					handleProductDeletion: (listId, productId) =>
 						shListsDispatch(ACTIONS.delete_product(listId, productId)),

@@ -40,9 +40,17 @@ export const ShListsReducer = (state, action) => {
                 errMess: null,
             };
         case ACTION_TYPES.UPDATE_SH_LIST:
+            let tmp_array = [];
+            state.lists.forEach(list => {
+                if(list._id === action.payload.list._id){
+                    tmp_array.push(action.payload.list)
+                }else{
+                    tmp_array.push(list)
+                }
+            })
             return {
                 ...state,
-                lists:state.lists.filter(list=> list._id !== action.payload._id).push(action.payload),
+                lists:tmp_array,
                 isLoading:false,
                 errMess: null,
             };

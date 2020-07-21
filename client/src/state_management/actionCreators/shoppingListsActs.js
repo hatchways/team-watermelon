@@ -23,10 +23,13 @@ export const fetchShLists = (dispatch,handleErr) => {
 }
 
 
-export const addNewList = (dispatch,list) => {
-
-    return fetch(baseUrl + "/lists/new", {
-        method: "POST",
+export const addNewList = (dispatch,list,method,url) => {
+    if(!method){
+        method = "POST";
+        url = "/lists/new";
+    }
+    return fetch(baseUrl + url, {
+        method: method,
         body: JSON.stringify(list),
         headers: {
           "Content-Type": "application/json"

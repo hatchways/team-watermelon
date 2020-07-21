@@ -93,7 +93,7 @@ const ListCard = (prop)=>{
                         {list.title}
                     </Typography>
                     <Typography gutterBottom component="h5">
-                        {cutContentLength(list.subtitle,30,"my list")}
+                        {cutContentLength(list.subtitle,30,"no description")}
                     </Typography>
                     <Typography>
                         {list.products.length} items
@@ -153,7 +153,7 @@ const ListCard = (prop)=>{
     >
         <DialogTitle id="update-dialog-title" align="center">Update List</DialogTitle>
         <DialogContent id="update-dialog-content">
-            <AddNewListBar isUpdate={true}/>
+            <AddNewListBar isUpdate={true} list={list}/>
         </DialogContent>
         </Dialog>
         </>

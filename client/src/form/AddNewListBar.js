@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import {Button, Typography, Grid, TextField, Box} from '@material-ui/core';
-import ImageIcon from '@material-ui/icons/Image';
+import {Button, Typography, Grid, TextField, Box,CircularProgress} from '@material-ui/core';
+// import ImageIcon from '@material-ui/icons/Image';
 import {addNewList} from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
+import axios from 'axios';
 
 const addimage = "assets/images/addimage.png";
 
@@ -56,12 +57,41 @@ const useStyles = makeStyles((theme) => ({
 export default function BasicTextFields(props) {
     const shListsContext = useContext(ShListsContext);
     const classes = useStyles();
-    const [listData, setListData] = useState({
-        title: "",
-        imageurl: '',
-        listdescription: 'My shopping list',
-        errMsg:'None',
-    });
+    const initialListData = {
+            title: "",
+            imageurl: null,
+            listdescription: '',
+            errMsg:'None',
+    }
+    if(props.list){
+        initialListData.title = props.list.title;
+        initialListData.imageurl = props.list.image;
+        initialListData.listdescription = props.list.subtitle;
+    }
+    const [listData, setListData] = useState(initialListData);
+
+    
+    const [uploading, setUploading] = useState(false);
+
+    const onImageDrop = async () => {
+        setUploading(true);
+        var formData = new FormData();
+        if(document.getElementById("contained-button-file").files){
+            formData.append('image', document.getElementById("contained-button-file").files[0]);
+            try {
+                const res = await axios.post(`/upload/image-upload`, formData, {
+                    headers: {
+                        'Content-Type': `multipart/form-data`
+                    }
+                });
+                setListData({ ...listData, imageurl:res.data.imageUrl});
+            } catch (err) {
+                setListData({ ...listData, errMsg:'Error: uploading file failed'});
+            }
+            setUploading(false);
+        }
+    };
+
     const onChange = (e) => setListData({ ...listData, [e.target.name]: e.target.value });
 
     const handleSubmit = (e) => {
@@ -74,11 +104,13 @@ export default function BasicTextFields(props) {
             setListData({ ...listData, errMsg: "Image is required."})
             return
         };
-        setListData({ ...listData, errMsg: 'None'})
-        if(listData.listdescription.length < 1)
-            setListData({ ...listData, listdescription: "My shopping list"});
-        addNewList(shListsContext.dispatchNewShList,listData);
         
+        if(props.isUpdate){
+            addNewList(shListsContext.handleShListUpdate,listData,"PUT",`/lists/${props.list._id}`);
+        }else{
+            addNewList(shListsContext.dispatchNewShList,listData);
+        }
+        setListData({ ...listData, errMsg: 'None'})
     }
 
   return (
@@ -99,6 +131,7 @@ export default function BasicTextFields(props) {
                     className={classes.text}
                     inputProps={{ maxLength: 20,style:{textAlign:'center'}}}
                     required
+                    value={listData.title}
                     />
             </Box>
             <Typography component="h5" style={{fontWeight: 'bold'}} >
@@ -108,20 +141,25 @@ export default function BasicTextFields(props) {
                 <Grid container direction='column'>
                     <Grid item>
             <img
-                src={addimage}
+                src={listData.imageurl?listData.imageurl:addimage}
                 className={classes.addImg}
-            />
-            <input
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                type="file"
+                alt="img upload"
             />
                     </Grid>
                     <Grid item>
             <label htmlFor="contained-button-file">
-            <Button variant="contained" disableElevation color="primary" component="span" className={classes.button}>
+            <Button variant="contained" disableElevation color="primary" component="span" className={classes.button} disabled={uploading}>
                 Upload
+                <input
+                    value={listData.image}
+                    onChange={onImageDrop}
+                    accept="image/*"
+                    name="image"
+                    className={classes.input}
+                    id="contained-button-file"
+                    type="file"
+                />
+                {uploading && <CircularProgress size={48} className={classes.buttonProgress} />}
             </Button>
             </label>
                     </Grid>
@@ -132,6 +170,7 @@ export default function BasicTextFields(props) {
             </Typography>
             <Box className={classes.box} borderRadius={50} flexGrow={1}>
                 <CustomTextField
+                    value={listData.listdescription}
                     multiline
                     name="listdescription"
                     id="list-description" 
