@@ -11,6 +11,7 @@ import FriendsList from '../components/FriendsList';
 import {placeholderPL, placeholderFriends} from '../components/PlaceHolder';
 import ShListsContext from '../state_management/ShListsContext';
 import PrivateRoute from './privateRoute';
+import NotificationsList from '../components/NotificationsList';
 
 
 
@@ -52,6 +53,10 @@ const Routes = ()=> {
                     path='/friendslist' 
                     component={()=><FriendsList friends={placeholderFriends}/>}
                     />
+                <PrivateRoute 
+                    path='/notificationslist' 
+                    component={()=><NotificationsList/>}
+                />
 
                 <Redirect to="/home" />
             </Switch>

@@ -28,12 +28,12 @@ router.get("/lists/:id", verifyToken, function(req, res) {
 			res.status(200).send({list: foundList});
 
 			//testing emiting msg to FE socket
-			let startTesting = false;
+			let startTesting = true;
 			if(startTesting && foundList && foundList.products.length > 0){
 				p = foundList.products[0]
 				createAndEmitNotification(
 					req.app.io,
-					"new_price",//notification type
+					"new price",//notification type
 					req.user.id, // receiver id
 					p.name,// the title on the notification
 					p.image,// the image on the notification

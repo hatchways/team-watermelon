@@ -9,7 +9,7 @@ const verifyToken = require("../middleware/verify");
 // GET all notifications for user
 // private
 router.get("/notifications", verifyToken, function (req, res) {
-	Notification.find({user:req.user.id}).exec(function(err, docs) {
+	Notification.find({receiver:req.user.id}).exec(function(err, docs) {
 		if(err){
             console.log(err);
 			res.status(400).send({response: "error: Notification not found."});
@@ -24,7 +24,7 @@ router.get("/notifications", verifyToken, function (req, res) {
 // private
 router.put("/notifications/updateAllRead", verifyToken, async (req, res)=>{
     try{
-        const promise = await Notification.updateMany({ user: req.user.id, content:{isRead:false} }, { content:{isRead: true}});
+        const promise = await Notification.updateMany({ receiver: req.user.id, content:{isRead:false} }, { content:{isRead: true}});
         console.log(promise.nModified+" notifications are modified.");
         res.status(200).send({response:promise.nModified+" notifications are updated."});
     }catch(err){

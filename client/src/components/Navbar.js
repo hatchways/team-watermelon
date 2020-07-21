@@ -106,8 +106,8 @@ const Navbar = (props)=>{
         setAnchorEl(anchorEl ? null : event.currentTarget);
     };
 
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popper' : undefined;
+    // const open = Boolean(anchorEl);
+    // const id = open ? 'simple-popper' : undefined;
 
 	return (
 		<AppBar color="primary" elevation={0} className={classes.appBar}>
@@ -138,12 +138,16 @@ const Navbar = (props)=>{
 						<FindNewFriendsModal />
                         <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
 						<Button 
-                            aria-describedby={id}
+                            aria-describedby='simple-popper'
                             onClick={handleClickOnNotification}
                             className={classes.link}>
                             Notifications
                             </Button>
-                            <Popper id={id} open={open} anchorEl={anchorEl} className={classes.popper}>
+							<Popper 
+								id='simple-popper' 
+								open={Boolean(anchorEl)} 
+								anchorEl={anchorEl} 
+								className={classes.popper}>
                                 <Notifications messages={notification.messages}/>
                             </Popper>
                         </Badge>

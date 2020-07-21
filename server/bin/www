@@ -46,6 +46,8 @@ io.on('connection', function (socket) {
 });
 
 app.io = io;
+global.io = io;
+
 /**
  * Listen on provided port, on all network interfaces.
  */

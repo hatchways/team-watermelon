@@ -66,7 +66,7 @@ export default function NotificationsPopper(props) {
                 {props.messages.reverse().map((m) => (
                     <div key={m.id} className={classes.listItem} >
                         <Typography color="textPrimary" variant="subtitle2">
-                            {m.type}
+                            {m.type}{'!'}
                         </Typography>
                         <ListItem component="a" href={m.content.url} target="_blank" rel="noreferrer">
                             <ListItemAvatar>
@@ -100,7 +100,7 @@ export default function NotificationsPopper(props) {
                 ))}
                 <div className={classes.listItem}>
                     <Box textAlign="center" align="center">
-                        <Link component={RouterLink} to="/main" color="textPrimary" variant="subtitle1" >
+                        <Link component={RouterLink} to="/notificationslist" color="textPrimary" variant="subtitle1" >
                             see all
                         </Link>
                     </Box>
