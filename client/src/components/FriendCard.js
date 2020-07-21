@@ -42,6 +42,7 @@ export default function FriendCard(props) {
 		try {
 			const res = await axios.post(`/users/follow/${id}`);
 			authContext.handleFollow(id);
+			// props.newFollowerNotification();
 			return res;
 		} catch (error) {
 			console.log('error following user');
