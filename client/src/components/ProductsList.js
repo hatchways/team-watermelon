@@ -30,6 +30,8 @@ export default function ProductsList(props) {
     const shListsContext = useContext(ShListsContext);
     const [userProducts, setUserProducts] = useState(null);
 
+    const currentList = shListsContext.lists.find(list => list._id === props.listId);
+
     const getUserProducts = async () => {
 		try {
 			const res = await axios.get('/users/'+props.userName+'/productslist/'+props.listId);
@@ -38,9 +40,6 @@ export default function ProductsList(props) {
 			console.log('Error getting user');
 		}
 	};
-
-
-    const currentList = shListsContext.lists.find(list => list._id === props.listId);
     
     useEffect(() => {
         if(props.userName !== undefined) {
@@ -84,7 +83,7 @@ export default function ProductsList(props) {
                 ) : (
                 <Container maxWidth="md" component="main">
                     <Typography variant="h5"  color="textPrimary" component="p" style={{fontWeight: 'bold'}} align="center">
-                    {currentList.title}
+                    {currentList ? currentList.title : ''}
                     </Typography>
                     <Typography variant="body1"  color="textSecondary" align="center">
                     {shListsContext.products.length} items

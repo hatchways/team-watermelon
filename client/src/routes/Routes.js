@@ -63,7 +63,7 @@ const Routes = ()=> {
                     exact path='/users/:name/productslist/:listId' 
                     component={({match})=>{
                         if(match.params.name !== undefined)
-                            return <ProductsList userName={match.params.name} listId={match.params.listId} products={placeholderPL}/>
+                            return <ProductsList userName={match.params.name} listId={match.params.listId}/>
                         return <Redirect to={{pathname:'/home'}} />}} 
                     />
 
