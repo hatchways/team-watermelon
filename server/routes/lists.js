@@ -89,31 +89,50 @@ router.put("/lists/:id", verifyToken, function(req, res) {
 	List.findByIdAndUpdate(req.params.id, updateList, function(err, updatedList) {
 		if(err){
 			res.status(400).send({response: "error: List not found."});
-			res.redirect("/lists");
 		} else {
-			console.log("success: List updated.");
-			res.redirect("/lists/" + req.params.id);
+			List.findById(req.params.id, function(err,doc){
+				if(err){
+					res.status(400).send({response: "error: List can not be update."});
+				} else{
+					console.log("success: List updated.");
+					res.status(200).send({list: doc});
+				}
+			});
 		}
 	});
 });
 
 // DELETE list for user
 router.delete("/lists/:id", verifyToken, function(req, res) {
-	List.findByIdAndRemove(req.params.id, function(err, foundList) {
+	User.findById(req.user.id, function(err, foundUser) {
 		if(err){
-			res.status(400).send({response: "error: List not found."});
-			res.redirect("/lists");
-		} else { // remove associated products with list too
-			foundList.products.forEach(function(product) {
-				Product.findByIdAndRemove(product, function(err) {
+			res.status(400).send({response: "error: User not found."});
+		} else {
+			if(foundUser.my_lists.includes(req.params.id)){
+				foundUser.my_lists.pull(req.params.id);
+				foundUser.save();
+				List.findByIdAndRemove(req.params.id, function(err, foundList) {
 					if(err){
-						res.status(400).send({response: "error: Product not found."});
-						res.redirect("/lists");
+						res.status(400).send({response: "error: List not found."});
+					} else { // remove associated products with list too
+						if(foundList.products.length>0){
+							foundList.products.forEach(function(product) {
+								Product.findByIdAndRemove(product, function(err) {
+									if(err){
+										res.status(400).send({response: "error: Product not found."});
+									}
+								});
+							});
+							res.status(200).send({});
+						}else{
+							res.status(200).send({});
+						}
 					}
 				});
-			});
-			console.log("error: List deleted.");
-			res.redirect("/lists");
+				
+			}else{
+				res.status(400).send({response: "error: list not found."});
+			}
 		}
 	});
 });

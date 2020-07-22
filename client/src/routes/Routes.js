@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 import AuthContext from '../state_management/AuthContext';
 import ProductsList from '../components/ProductsList';
 import FriendsList from '../components/FriendsList';
-import {placeholderPL, placeholderFriends} from '../components/PlaceHolder';
+import {placeholderFriends} from '../components/PlaceHolder';
 import ShListsContext from '../state_management/ShListsContext';
 import PrivateRoute from './privateRoute';
 import NotificationsList from '../components/NotificationsList';
@@ -25,7 +25,6 @@ const Routes = ()=> {
         return(
             <ProductsList 
                 listId={(shListsContext.lists.filter(list=>list._id === props.listId))? props.listId:null}
-                products={placeholderPL} 
             />
         );
     };
