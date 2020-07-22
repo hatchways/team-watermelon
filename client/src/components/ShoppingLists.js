@@ -53,13 +53,12 @@ const ShoppingLists = (props)=>{
                 null    
             ) : (
                 <Container maxWidth="md" component="main" className={classes.TopContent}>
-                    <Typography component="h1" variant="h4" align="center" color="textPrimary" className={classes.typoHeading} gutterBottom>
+                    <Typography variant="h4" align="center" color="textPrimary" className={classes.typoHeading} gutterBottom>
                     Add new item:
                     </Typography>
                     <DropDownListBar/>    
                 </Container>
             )}
-            
             <Container maxWidth="md" component="main">
                 {userLists ? (
                     <Typography variant="h5" align="left" color="textPrimary" component="p"  style={{fontWeight: 'bold'}}>
@@ -88,17 +87,14 @@ const ShoppingLists = (props)=>{
                             <ListCard list={list}/>
                         </Grid>
                     ))}
-                        <Grid item xs={12} sm={6} md={4}>
-                            <AddNewListCard/>
-                        </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <AddNewListCard/>
+                    </Grid>
                     </Grid>
                 )}
             </Container>
-            
-                
         </section>
-    )
-}
-
+    );
+};
 
 export default ShoppingLists;

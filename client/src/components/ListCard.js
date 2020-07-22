@@ -1,18 +1,26 @@
-
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import React,{useContext, useState} from 'react';
-import Typography from '@material-ui/core/Typography';
+import React,{useContext,useState} from 'react';
+import {
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardActionArea,
+    CardMedia,
+    Typography,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import { Link as RouterLink } from 'react-router-dom';
 import AuthContext from '../state_management/AuthContext';
 import ShListsContext from '../state_management/ShListsContext';
 import {fetchProducts} from '../state_management/actionCreators/productActs';
 import {cutContentLength} from '../utils/transformText';
+import {deleteList} from '../state_management/actionCreators/shoppingListsActs';
+import AddNewListBar from '../form/AddNewListBar';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -39,6 +47,8 @@ const ListCard = (prop)=>{
     const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
     const [hiddenList, setHiddenList] = useState(prop.hidden);
+    const [openDeleteDialog, setDeleteDialogOpen] = useState(false);
+    const [openUpdateDialog, setUpdateDialogOpen] = useState(false);
     const url = `/lists/${list._id}`;
 
     const getProductList=()=>{
@@ -48,9 +58,55 @@ const ListCard = (prop)=>{
         }
     }
 
+    const handleRevome = () => {
+        deleteList(url,list._id,shListsContext.handleShListDeletion);
+        handleDeleteDialogClose();
+    };
+
+    const handleDeleteDialogClickOpen = () => {
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteDialogClose = () => {
+        setDeleteDialogOpen(false);
+    };
+
+
+    const handleUpdateDialogOpen = () => {
+        setUpdateDialogOpen(true);
+    };
+
+    const handleUpdateDialogClose = () => {
+        setUpdateDialogOpen(false);
+    };
+
     return (
-        <Card className={classes.card}>
-            <CardActionArea>
+        <>
+        {hiddenList ? (
+            <Card className={classes.card}>
+                <CardActionArea component={RouterLink} to={`/users/${userName}/productslist/${list._id}`}>
+                    <CardMedia
+                    className={classes.cardMedia}
+                    image={list.image}
+                    title={list.title}
+                    />
+                    <CardContent className={classes.cardContent}>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {list.title}
+                        </Typography>
+                        <Typography gutterBottom component="h5">
+                            {cutContentLength(list.subtitle,30,"no description")}
+                        </Typography>
+                        <Typography>
+                            {list.products.length} items
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+
+            ) : (
+            <Card className={classes.card}>
+            <CardActionArea component={RouterLink} onClick={getProductList} to={`/productslist/${list._id}`}>
                 <CardMedia
                 className={classes.cardMedia}
                 image={list.image}
@@ -61,43 +117,71 @@ const ListCard = (prop)=>{
                         {list.title}
                     </Typography>
                     <Typography gutterBottom component="h5">
-                        {cutContentLength(list.subtitle,30,"my list")}
+                        {cutContentLength(list.subtitle,30,"no description")}
                     </Typography>
                     <Typography>
                         {list.products.length} items
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            {hiddenList ? (
-                    <CardActions>
-                        <Button 
-                            fullWidth 
-                            component={RouterLink} 
-                            to={`/users/${userName}/productslist/${list._id}`} 
-                            color="primary" 
-                            variant="outlined" 
-                            className={classes.link}>
-                            View
-                        </Button>
-                    </CardActions>
-                    ) : (
-                    <CardActions>
-                        <Button 
-                            fullWidth 
-                            component={RouterLink} 
-                            onClick={getProductList}
-                            to={`/productslist/${list._id}`} 
-                            color="primary" 
-                            variant="outlined" 
-                            className={classes.link}>
-                            View
-                        </Button>
-                        <Button fullWidth href="#" color="primary" variant="outlined" className={classes.link}>
-                            Edit
-                        </Button>                           
-                    </CardActions>
-                    )}
+            <CardActions>
+                <Button 
+                    fullWidth 
+                    onClick={handleUpdateDialogOpen}
+                    color="primary" 
+                    variant="outlined" 
+                    className={classes.link}>
+                    Edit
+                </Button>
+                <Button 
+                    fullWidth 
+                    onClick={handleDeleteDialogClickOpen} 
+                    color="primary" 
+                    variant="outlined" 
+                    className={classes.link}>
+                    Remove
+                </Button>                           
+            </CardActions>
+            <Dialog
+                open={openDeleteDialog}
+                onClose={handleDeleteDialogClose}
+                aria-describedby="delete-dialog-description"
+            >
+                <DialogContent>
+                <DialogContentText id="delete-dialog-description">
+                    All products on the list will be removed. Are you sure you want to remove {list.title}?
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button 
+                        onClick={handleRevome} 
+                        color="primary"
+                    >
+                        Remove all
+                    </Button>
+                    <Button 
+                        onClick={handleDeleteDialogClose} 
+                        color="primary" 
+                        autoFocus
+                    >
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Card>
+        )}
+        <Dialog
+        open={openUpdateDialog}
+        onClose={handleUpdateDialogClose}
+        aria-describedby="update-dialog"
+        fullWidth
+    >
+        <DialogTitle id="update-dialog-title" align="center">Update List</DialogTitle>
+        <DialogContent id="update-dialog-content">
+            <AddNewListBar isUpdate={true} list={list}/>
+        </DialogContent>
+        </Dialog>
+        </>
     )
 }
 

@@ -101,10 +101,8 @@ export default function LoginRegisterModal(props) {
 	useEffect(() => {
 		if (asyncStart) {
 			loginRegister(name, email, password, loginActive).then((res) => {
-
 				if (res) {
 					authContext.handleLogin(res.data);
-					
 				} else {
 					console.log('error: fetching user data failed.');
 				}
@@ -118,7 +116,7 @@ export default function LoginRegisterModal(props) {
 			{authContext.isAuthenticated ? (
 				''
 			) : (
-				<Button onClick={() => setDialogOpen(true)} {...props}>
+				<Button id="login_button" onClick={() => setDialogOpen(true)} {...props}>
 					Get Started
 				</Button>
 			)}
@@ -156,28 +154,34 @@ export default function LoginRegisterModal(props) {
 					<TextField
 						style={style.textField}
 						id="standard-password-input"
-						type={showPassword ? "text" : "password"}
+						type={showPassword ? 'text' : 'password'}
 						label="Password"
 						name="password"
 						value={password}
 						onChange={(e) => onChange(e)}
 						InputProps={{
 							endAdornment: (
-							  <InputAdornment position="end">
-								<IconButton
-								  aria-label="toggle password visibility"
-								  onClick={handleClickShowPassword}
-								  onMouseDown={handleMouseDownPassword}
-								>
-								  {showPassword ? <Visibility /> : <VisibilityOff />}
-								</IconButton>
-							  </InputAdornment>
+								<InputAdornment position="end">
+									<IconButton
+										aria-label="toggle password visibility"
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+									>
+										{showPassword ? <Visibility /> : <VisibilityOff />}
+									</IconButton>
+								</InputAdornment>
 							)
 						}}
 					/>
 				</form>
 				<DialogActions>
-					<Button fullWidth onClick={onSubmitForm} variant="contained" color="primary">
+					<Button
+						id="login_submit_button"
+						fullWidth
+						onClick={onSubmitForm}
+						variant="contained"
+						color="primary"
+					>
 						{loginActive ? 'Login' : 'Register'}
 					</Button>
 					<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">

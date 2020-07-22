@@ -40,6 +40,8 @@ export default function ProductsList(props) {
 	};
 
 
+    const currentList = shListsContext.lists.find(list => list._id === props.listId);
+    
     useEffect(() => {
         if(props.userName !== undefined) {
             getUserProducts();
@@ -61,42 +63,46 @@ export default function ProductsList(props) {
                     <AddNewItemBar listId={props.listId}/>
                 </Container>
             )}
+            {userProducts ? (
             <Container maxWidth="md" component="main">
-                {userProducts ? (
-                    <Typography variant="h5"  color="textPrimary" component="p" style={{fontWeight: 'bold'}}>
-                    {props.userName}'s Products:
-                    </Typography>
-                ) : (
-                    <Typography variant="h5"  color="textPrimary" component="p" style={{fontWeight: 'bold'}}>
-                    Lists Name:
-                    </Typography>
-                )}
+                <Typography variant="h5"  color="textPrimary" component="p" style={{fontWeight: 'bold'}}>
+                {props.userName}'s Products:
+                </Typography>
                 <br/>
-                {userProducts ? (
-                    <Grid container spacing={1} alignItems="center">
-                        {userProducts.map((product) => (
-                            <Grid item key={product._id} xs = {12} md = {12} lg={12}>
-                            <ProductCard 
-                                product={product} 
-                                listId={props.listId}
-                                hidden={true}
-                            />
-                            </Grid>
-                        ))}
+                <Grid container spacing={1} alignItems="center">
+                {userProducts.map((product) => (
+                    <Grid item key={product._id} xs = {12} md = {12} lg={12}>
+                    <ProductCard 
+                        product={product} 
+                        listId={props.listId}
+                        hidden={true}
+                    />
                     </Grid>
-                ) : (
-                    <Grid container spacing={1} alignItems="center">
-                        {shListsContext.products.map((product) => (
-                            <Grid item key={product._id} xs = {12} md = {12} lg={12}>
-                            <ProductCard 
-                                product={product} 
-                                listId={props.listId}
-                            />
-                            </Grid>
-                        ))}
-                    </Grid>
-                )}
+                ))}
+                </Grid>
             </Container>
+                ) : (
+                <Container maxWidth="md" component="main">
+                    <Typography variant="h5"  color="textPrimary" component="p" style={{fontWeight: 'bold'}} align="center">
+                    {currentList.title}
+                    </Typography>
+                    <Typography variant="body1"  color="textSecondary" align="center">
+                    {shListsContext.products.length} items
+                    </Typography>
+                    <br/>
+                    <Grid container spacing={1} alignItems="center">
+                        {shListsContext.products.slice().reverse().map((product) => (
+                            <Grid item key={product._id} xs = {12} md = {12} lg={12}>
+                            <ProductCard 
+                                product={product} 
+                                listId={props.listId}
+                            />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Container>
+                )}
+                
             <Grid container align="center" className={classes.TopContent}>
                 {userProducts ? (
                     <Grid item xs={12}>
