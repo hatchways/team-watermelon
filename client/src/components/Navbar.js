@@ -54,7 +54,7 @@ const Navbar = (props)=>{
 			props.history.push("/main");
         }
 
-    },[authContext.isAuthenticated, shListsContext.dispatchShLists, shListsContext.handleShListsFailure]);
+    },[authContext.isAuthenticated, shListsContext.dispatchShLists, shListsContext.handleShListsFailure,props.history]);
 
 
 	return (
@@ -84,7 +84,10 @@ const Navbar = (props)=>{
 							Shopping Lists
 						</Button>
 						<FindNewFriendsModal />
+					</>	):null}
                         <SocketContainer/>
+					{authContext.isAuthenticated ? (
+						<>
 						<IconButton 
 							aria-controls="profile-menu" 
 							aria-haspopup="true" 

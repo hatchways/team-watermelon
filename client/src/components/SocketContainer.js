@@ -25,7 +25,7 @@ const SocketContainer = ()=>{
     const authContext = useContext(AuthContext);
     const [notification, setNotification] = useState({messages:[]});
     const [newMsg, setNewMsg] = useState(null);
-    const [socket, setSocket] = useState({socket:null});
+    const [socket, setSocket] = useState(null);
 	const [anchorEl, setAnchorEl] = useState(null);
 
 
@@ -41,26 +41,27 @@ const SocketContainer = ()=>{
             socketIo.emit('join_room', {
                 userId: authContext.id,
             });
-            setSocket({socket:socketIo});
+            setSocket(socketIo);
         }
-        if(!authContext.isAuthenticated && socket.socket){
+        if(!authContext.isAuthenticated && socket){
             leaveSocketRoom();
+            setSocket(null);
         }
         if(newMsg){
-			const tmp = [...notification.messages,newMsg].slice(-5);
-            setNotification({ messages:tmp });
+			const onlyShowLastFiveMsg = [...notification.messages,newMsg].slice(-5);
+            setNotification({ messages:onlyShowLastFiveMsg});
             setNewMsg(null);
 		}
 		// eslint-disable-next-line
     },[authContext.isAuthenticated, authContext.id, newMsg, notification.messages]);
 
     const leaveSocketRoom=()=>{
-        if(socket.socket){
-            socket.socket.emit('leave_room', {
+        if(socket){
+            socket.emit('leave_room', {
                 userId: authContext.id,
             });
         }
-        socket.socket.close();
+        socket.close();
         setNotification({ messages:[] });
         needsSetSocket = true;
     }
@@ -76,6 +77,8 @@ const SocketContainer = ()=>{
 
 
 	return (
+        <>
+        {authContext.isAuthenticated ? (
         <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
         <Button 
             aria-describedby='simple-popper'
@@ -88,9 +91,10 @@ const SocketContainer = ()=>{
                 open={Boolean(anchorEl)} 
                 anchorEl={anchorEl} 
                 className={classes.popper}>
-                <Notifications messages={notification.messages}/>
+                <Notifications messages={notification.messages} handleClickOnNotification={handleClickOnNotification}/>
             </Popper>
-        </Badge>
+        </Badge>):null}
+        </>
 	);
 };
 

@@ -49,29 +49,20 @@ export const getTimeAgo = (createdTime)=> {
         let days = hours / 24;
         let years = days / 365;
 
-        const compose= function(){
-            if(seconds < 45)
-                return template('seconds', seconds)
-            else if (seconds < 90)
-                return template('minute', 1)
-            else if (minutes < 90) 
-                return template('hour', 1)
-            else if (hours < 24)
-                return template('hours', hours)
-            else if (hours < 42)
-                return template('day', 1)
-            else if (days < 30)
-                return template('days', days)
-            else if (days < 45)
-                return template('month', 1)
-            else if (days < 365)
-                return template('months', days / 30)
-            else if (years < 1.5)
-                return template('year', 1)
-            else
-                return template('years', years)
+        const compose = function() {
+            if (seconds < 45) return template("seconds", seconds);
+            else if (seconds < 90) return template("minute", 1);
+            else if (minutes < 45) return template("minutes", minutes);
+            else if (minutes < 90) return template("hour", 1);
+            else if (hours < 24) return template("hours", hours);
+            else if (hours < 42) return template("day", 1);
+            else if (days < 30) return template("days", days);
+            else if (days < 45) return template("month", 1);
+            else if (days < 365) return template("months", days / 30);
+            else if (years < 1.5) return template("year", 1);
+            else return template("years", years);
         }
-        return templates.prefix + compose() + templates.suffix;
+        return [templates.prefix + compose() + templates.suffix, hours];
     };
     
     return calculateDiff(createdTime)

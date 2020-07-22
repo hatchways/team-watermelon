@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import {cutContentLength, convertNumberDecimal,getTimeAgo} from '../utils/transformText';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import axios from 'axios';
 
 const linethrough= {
     "textDecoration": "line-through",
@@ -33,8 +34,8 @@ const useStyles = makeStyles((theme)=>({
         margin:'2px'
     },
     cardContent: {
-        paddingTop:'5px',
-        paddingBottom:'5px',
+        paddingTop:'2px',
+        paddingBottom:'2px',
     },
     forProduct:{
         display: 'flex',
@@ -43,14 +44,44 @@ const useStyles = makeStyles((theme)=>({
         display:'none'
     },
     badgeContainer:{
-        padding:'5px',
+        padding:'3px',
+        '& > *': {
+            margin: theme.spacing(0.5)
+          },
+    },
+    today:{
+        backgroundColor:"#4287f5",
+        color:'white'
     }
 }));
 
 
 export default function NotiCard(props) {
     const classes = useStyles();
-    const noti = props.notification;
+    const [noti, setNoti] = useState(props.notification);
+    const [someTimeAgo,hours] = getTimeAgo(noti.createdAt);
+
+
+    const setNotificationRead= async()=>{
+        if (!noti.content.isRead){
+            try {
+                await axios.put(`/notifications/read/${props.notification._id}`);
+                setNoti({...noti,content:{...noti.content,isRead:true}});
+            } catch (error) {
+                console.log('notification can not be updated');
+            }
+        }
+    }
+
+    useEffect(()=>{
+        if(!noti.content.isRead){
+            setTimeout(() => {
+                setNotificationRead();
+            }, 4000);
+        }
+        // eslint-disable-next-line
+    },[]);
+
 
     return (
 
@@ -63,6 +94,7 @@ export default function NotiCard(props) {
                     label={noti.notificationType}
                     color="secondary"
                 />
+                {hours < 24?<Chip label="Within 24 h!!" className={classes.today} size='small'/>:null}
                 {noti.content.isRead?<Chip label="Read" size='small'/>:<Chip label="New!" color="primary" size='small'/>}
                 </Container>
                 <Grid container>
@@ -75,7 +107,7 @@ export default function NotiCard(props) {
                     </Grid>
                     <Grid item sm={12} md={10}>
                         <CardContent className={classes.cardContent}>
-                            <Grid container description='row'>
+                            <Grid container>
                                 <Grid item sm={12} md={9}>
                                     <Typography variant="subtitle2">
                                         {cutContentLength(noti.content.title,40,"no title")}
@@ -83,7 +115,7 @@ export default function NotiCard(props) {
                                 </Grid>
                                 <Grid item sm={12} md={3} >
                                     <Typography color="textSecondary" variant="body2">
-                                        {getTimeAgo(noti.createdAt)}
+                                        {someTimeAgo}
                                     </Typography>
                                 </Grid>
                             </Grid>

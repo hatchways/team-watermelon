@@ -104,7 +104,8 @@ export default function NotificationsPopper(props) {
                         component={RouterLink} 
                         to="/notificationslist" 
                         color="textPrimary" 
-                        variant="subtitle1" >
+                        variant="subtitle1" 
+                        onClick={props.handleClickOnNotification}>
                             see all
                         </Link>
                     </Box>

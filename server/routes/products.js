@@ -34,11 +34,11 @@ const scrapePriceTag = async () => {
 								eachProduct.user, 
 								productDetails.title,
 								productDetails.image,
-								productDetails.descriptio, 
+								productDetails.description, 
 								eachProduct.url,
 								product={
 									id:eachProduct._id,
-									lastprice: eachProduct.currentprice,
+									lastprice: eachProduct.lastprice,
 									currentprice: newPrice
 								},
 								follower=null 
