@@ -100,7 +100,11 @@ export default function NotificationsPopper(props) {
                 ))}
                 <div className={classes.listItem}>
                     <Box textAlign="center" align="center">
-                        <Link component={RouterLink} to="/notificationslist" color="textPrimary" variant="subtitle1" >
+                        <Link 
+                        component={RouterLink} 
+                        to="/notificationslist" 
+                        color="textPrimary" 
+                        variant="subtitle1" >
                             see all
                         </Link>
                     </Box>

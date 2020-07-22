@@ -1,8 +1,7 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Typography, Grid, Container} from '@material-ui/core';
 import NotificationCard from './NotificationCard';
-import ShListsContext from '../state_management/ShListsContext';
 import axios from 'axios';
 
 

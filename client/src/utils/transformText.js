@@ -39,7 +39,7 @@ export const getTimeAgo = (createdTime)=> {
         return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
     };
 
-    const timer = function(time) {
+    const calculateDiff = function(time) {
         if (!time)
             return;
         
@@ -74,5 +74,5 @@ export const getTimeAgo = (createdTime)=> {
         return templates.prefix + compose() + templates.suffix;
     };
     
-    return timer(createdTime)
+    return calculateDiff(createdTime)
 }
