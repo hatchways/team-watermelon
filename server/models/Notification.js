@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema({
-    noti_type: {
+    notificationType: {
         type: String,
         required: true
     },
@@ -19,13 +19,13 @@ const notificationSchema = new mongoose.Schema({
             type: Boolean,
             default: false
         },
-        product_id: {
+        productId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product"
         },
         lastprice: mongoose.Types.Decimal128,
         currentprice: mongoose.Types.Decimal128,
-        follower_id:{
+        followerId:{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User"
         }

@@ -4,7 +4,7 @@ const emitNotification = require('./emitNotification');
 module.exports = createAndEmitNotification = async (socketIo,type,receiver,title,image,description,url,product,follower)=>{
     const newNotification =
     {
-        noti_type: type,
+        notificationType: type,
         receiver: receiver,
         content:{
             title: title, 
@@ -15,12 +15,12 @@ module.exports = createAndEmitNotification = async (socketIo,type,receiver,title
     if(url) 
         newNotification.content.url = url;
     if(product){
-        newNotification.content.product_id = product.id;
+        newNotification.content.productId = product.id;
         newNotification.content.lastprice = product.lastprice;
         newNotification.content.currentprice = product.currentprice;
     }
     if(follower)
-        newNotification.content.follower
+        newNotification.content.followerId = follower;
     Notification.create(newNotification, function(err, doc){
         if(err){
             console.log(err);

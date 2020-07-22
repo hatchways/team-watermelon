@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Grid, Container, Button} from '@material-ui/core';
-import NotiCard from './NotiCard';
+import {Typography, Grid, Container} from '@material-ui/core';
+import NotificationCard from './NotificationCard';
 import ShListsContext from '../state_management/ShListsContext';
 import axios from 'axios';
 
@@ -23,11 +23,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NotificationsList() {
     const classes = useStyles();
-    const shListsContext = useContext(ShListsContext);
     const [notiData, setNotiData] = useState({notifications:[]});
 
     const getNotifications = async () => {
-        console.log("get n");
 		try {
             const promise = await axios.get('/notifications');
             setNotiData({notifications:promise.data.notifications});
@@ -51,7 +49,7 @@ export default function NotificationsList() {
                 <Grid container spacing={1} alignItems="center">
                     {notiData.notifications.map((n) => (
                         <Grid item key={n._id} sm={12}>
-                        <NotiCard 
+                        <NotificationCard 
                             notification={n} 
                         />
                         </Grid>

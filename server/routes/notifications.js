@@ -14,7 +14,7 @@ router.get("/notifications", verifyToken, function (req, res) {
             console.log(err);
 			res.status(400).send({response: "error: Notification not found."});
 		} else {
-			res.status(200).send({notifications: docs});
+			res.status(200).send({notifications: docs.reverse()});
 		}
 	});
 });

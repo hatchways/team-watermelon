@@ -4,7 +4,7 @@ module.exports = EmitNotification = async (socketio,channel,notification)=>{
     if(socketio.sockets.adapter.rooms[notification.receiver]){ // if user is online
         socketio.to(notification.receiver).emit(channel, {
             id:notification._id,
-            type:notification.noti_type, 
+            type:notification.notificationType, 
             content: notification.content,
             createdTime:notification.createdAt
         }); 
