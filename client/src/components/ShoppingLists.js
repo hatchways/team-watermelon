@@ -35,7 +35,7 @@ const ShoppingLists = ()=>{
     return(
         <section className={classes.root}>
             <Container maxWidth="md" component="main" className={classes.TopContent}>
-                <Typography component="h1" variant="h4" align="center" color="textPrimary" className={classes.typoHeading} gutterBottom>
+                <Typography variant="h4" align="center" color="textPrimary" className={classes.typoHeading} gutterBottom>
                 Add new item:
                 </Typography>
                 <DropDownListBar/>    
@@ -46,7 +46,7 @@ const ShoppingLists = ()=>{
                 </Typography>
                 <br/>
                 <Grid container spacing={5}>
-                {shListsContext.lists.map((list) => (
+                {shListsContext.lists.slice().reverse().map((list) => (
                     <Grid item key={list._id} xs={12} sm={6} md={4}>
                         <ListCard list={list}/>
                     </Grid>
@@ -56,11 +56,8 @@ const ShoppingLists = ()=>{
                     </Grid>
                 </Grid>
             </Container>
-            
-                
         </section>
-    )
-}
-
+    );
+};
 
 export default ShoppingLists;
