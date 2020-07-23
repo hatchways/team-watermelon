@@ -86,7 +86,6 @@ export default function FindNewFriendsModal(props) {
 										id={friend._id}
 										name={friend.name}
 										profile_picture={friend.profile_picture}
-										newFollowerNotification={props.newFollowerNotification}
 									/>
 								))}
 						</Grid>

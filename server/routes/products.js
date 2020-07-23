@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const cron = require('node-cron');
 const scrapingFunction = require('../utils/scrapingFunction.js');
+const createAndEmitNotification = require('../middleware/createAndEmitNotification');
 
 const List = require('../models/List');
 const Product = require('../models/Product');
+const User = require('../models/User.js');
 
 const verifyToken = require('../middleware/verify');
 
@@ -38,9 +40,10 @@ const scrapePriceTag = async () => {
 // Cron job runs every 10 minutes (time increased as no. of products increased)
 const scrapingTime = cron.schedule('*/10 * * * *', scrapePriceTag);
 
-
 // ADD new product
 router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
+	const currentUser = await User.findById(req.user.id);
+
 	List.findById(req.params.id, async function (err, foundList) {
 		if (err) {
 			res.status(400).send({ response: 'error: List not found.' });
@@ -51,17 +54,17 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 			console.log(product);
 			let price = parseFloat(product.price.trim().substring(1).replace(/,/g, ''));
 			let description = '';
-			if(typeof product.description === "string") {
+			if (typeof product.description === 'string') {
 				description = product.description;
 			} else {
 				description = product.description[0];
 			}
-			let newProduct = { 
-				name: product.title, 
-				image: product.image, 
-				description: description, 
-				url: url, 
-				lastprice: 0.0, 
+			let newProduct = {
+				name: product.title,
+				image: product.image,
+				description: description,
+				url: url,
+				lastprice: 0.0,
 				currentprice: price
 			};
 			Product.create(newProduct, function (err, product) {
@@ -72,6 +75,23 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 					foundList.products.push(product);
 					foundList.save();
 					console.log('success: Product added to list.');
+					currentUser.followers_list.map((follower) =>
+						createAndEmitNotification(
+							req.app.io,
+							`New Product!`, //notification type
+							follower, // receiver id
+							`${currentUser.name} added a new product`, // title
+							product.image, // image
+							product.description, // description
+							product.url, // url
+							(product = {
+								id: product._id,
+								lastprice: product.lastprice,
+								currentprice: product.currentprice
+							}),
+							(follower = null)
+						)
+					);
 					res.status(200).send({ newProduct: product });
 				}
 			});

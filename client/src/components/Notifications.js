@@ -52,7 +52,7 @@ export default function NotificationsPopper(props) {
 			return 'P';
 		}
 	};
-
+	console.log(props.messages);
 	return (
 		<div>
 			<Container align="center">
@@ -77,21 +77,25 @@ export default function NotificationsPopper(props) {
 								<Typography className={classes.title} color="textPrimary" variant="subtitle2">
 									{cutContentLength(msg.content.title, 30, 'no product title')}
 								</Typography>
-								<Typography variant="caption" color="textSecondary">
-									{cutContentLength(msg.content.url, 30, 'no link')}
-								</Typography>
-								<Grid container alignItems="baseline">
-									<Grid item xs={6}>
-										<Typography color="textSecondary" style={linethrough} variant="body2">
-											${convertNumberDecimal(msg.content.lastprice)}
-										</Typography>
+								{msg.content.url ? (
+									<Typography variant="caption" color="textSecondary">
+										{cutContentLength(msg.content.url, 30, 'no link')}
+									</Typography>
+								) : null}
+								{msg.content.lastprice && msg.content.currentprice ? (
+									<Grid container alignItems="baseline">
+										<Grid item xs={6}>
+											<Typography color="textSecondary" style={linethrough} variant="body2">
+												${convertNumberDecimal(msg.content.lastprice)}
+											</Typography>
+										</Grid>
+										<Grid item xs={6}>
+											<Typography variant="button" color="primary">
+												${convertNumberDecimal(msg.content.currentprice)}
+											</Typography>
+										</Grid>
 									</Grid>
-									<Grid item xs={6}>
-										<Typography variant="button" color="primary">
-											${convertNumberDecimal(msg.content.currentprice)}
-										</Typography>
-									</Grid>
-								</Grid>
+								) : null}
 							</ListItemText>
 						</ListItem>
 						<Divider variant="inset" component="li" />

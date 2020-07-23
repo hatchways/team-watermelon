@@ -114,12 +114,6 @@ const Navbar = (props) => {
 		setNotification({ messages: [] });
 		needsSetSocket = true;
 	};
-	const newFollowerNotification = () => {
-		socket.on('show_notification', (data) => {
-			setNewMsg(data);
-			msgHasBeenRead = false;
-		});
-	};
 	const handleClickOnNotification = (event) => {
 		if (msgHasBeenRead === true) {
 			setNotification({ messages: [] });
@@ -154,7 +148,7 @@ const Navbar = (props) => {
 						<Button component={RouterLink} to="/main" className={classes.link}>
 							Shopping Lists
 						</Button>
-						<FindNewFriendsModal newFollowerNotification={newFollowerNotification} />
+						<FindNewFriendsModal />
 						<Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
 							<Button aria-describedby={id} onClick={handleClickOnNotification} className={classes.link}>
 								Notifications

@@ -28,7 +28,6 @@ module.exports = createAndEmitNotification = async (
 		newNotification.content.currentprice = product.currentprice;
 	}
 	if (follower) newNotification.content.follower;
-
 	Notification.create(newNotification, function (err, doc) {
 		if (err) {
 			console.log(err);
