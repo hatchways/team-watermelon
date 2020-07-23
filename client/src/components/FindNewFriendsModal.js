@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { Dialog, Button, Grid, Tabs, Tab, AppBar, CircularProgress, Typography } from '@material-ui/core';
-import FriendCard from './FriendCard.js';
+import { Dialog, Button, Grid, Tabs, Tab, AppBar, CircularProgress, Typography, Container } from '@material-ui/core';
 import AuthContext from '../state_management/AuthContext';
+import SuggestedFriends from './SuggestedFriends.js';
+import Following from './Following.js';
 
 const style = {
 	error: {
@@ -30,6 +31,14 @@ const style = {
 	},
 	textField: {
 		width: '70%'
+	},
+	xButton: {
+		width: '20%'
+	},
+	buttonContainer: {
+		display: 'flex',
+		justifyContent: 'center',
+		padding: '10px 0px'
 	}
 };
 
@@ -58,9 +67,7 @@ export default function FindNewFriendsModal(props) {
 
 	return (
 		<div>
-			<Button onClick={() => setDialogOpen(true)} {...props}>
-				Friends
-			</Button>
+			<Button onClick={() => setDialogOpen(true)}>Friends</Button>
 			<Dialog style={style.dialog} open={dialogOpen}>
 				<AppBar style={style.appBar} position="static" color="default">
 					<Tabs
@@ -77,45 +84,28 @@ export default function FindNewFriendsModal(props) {
 				{suggestedActive ? (
 					usersData ? (
 						<Grid container spacing={1} alignItems="center">
-							{usersData
-								.filter(
-									(friend) =>
-										friend._id !== authContext.id && !authContext.friends_list.includes(friend._id)
-								)
-								.map((friend) => (
-									<FriendCard
-										key={friend._id}
-										id={friend._id}
-										name={friend.name}
-										profile_picture={friend.profile_picture}
-									/>
-								))}
+							<SuggestedFriends usersData={usersData} />
 						</Grid>
 					) : (
 						<CircularProgress />
 					)
 				) : usersData && authContext.friends_list.length > 0 ? (
 					<Grid container spacing={1} alignItems="center">
-						{usersData
-							.filter(
-								(friend) =>
-									friend._id !== authContext.id && authContext.friends_list.includes(friend._id)
-							)
-							.map((friend) => (
-								<FriendCard
-									key={friend._id}
-									id={friend._id}
-									name={friend.name}
-									profile_picture={friend.profile_picture}
-								/>
-							))}
+						<Following usersData={usersData} />
 					</Grid>
 				) : (
 					<Typography>You are not Following anyone yet</Typography>
 				)}
-				<Button fullWidth onClick={() => setDialogOpen(false)} color="primary">
-					X
-				</Button>
+				<Container style={style.buttonContainer}>
+					<Button
+						style={style.xButton}
+						onClick={() => setDialogOpen(false)}
+						color="primary"
+						variant="contained"
+					>
+						Close X
+					</Button>
+				</Container>
 			</Dialog>
 		</div>
 	);

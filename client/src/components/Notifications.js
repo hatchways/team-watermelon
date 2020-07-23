@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Grid, Box,Container,Link} from '@material-ui/core';
+import { Typography, Grid, Box, Container, Link } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
@@ -8,43 +8,42 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
-import {cutContentLength, convertNumberDecimal} from '../utils/transformText';
+import { cutContentLength, convertNumberDecimal } from '../utils/transformText';
 import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
-    link: {
-        margin: theme.spacing(1, 1.5),
-    },
-    list:{
-        backgroundColor: "#ffffff",
-    },
-    listItem:{
-        minWidth:"200px",
-        align:'center',
-        padding: '6px',
-    },
-    line:{
-        height: "2px",
-        borderBottom: "solid black",
-        zIndex:3,
-    },
-    arrow:{
-        position: "absolute",
-        zIndex:2,
-        color:"#000000",
-    },
-    box:{
-        height:"15px",
-    }
-
+	link: {
+		margin: theme.spacing(1, 1.5)
+	},
+	list: {
+		backgroundColor: '#ffffff'
+	},
+	listItem: {
+		minWidth: '200px',
+		align: 'center',
+		padding: '6px'
+	},
+	line: {
+		height: '2px',
+		borderBottom: 'solid black',
+		zIndex: 3
+	},
+	arrow: {
+		position: 'absolute',
+		zIndex: 2,
+		color: '#000000'
+	},
+	box: {
+		height: '15px'
+	}
 }));
 
-const linethrough= {
-    "textDecoration": "line-through",
-}
+const linethrough = {
+	textDecoration: 'line-through'
+};
 
 export default function NotificationsPopper(props) {
-    const classes = useStyles();
+	const classes = useStyles();
 
     const cutProductName=(name)=>{
         try{

@@ -1,4 +1,3 @@
-
 import React,{useContext,useState} from 'react';
 import {
     Button,
@@ -42,10 +41,12 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const ListCard = (prop)=>{
-    const list =prop.list
+    const list =prop.list;
+    const userName = prop.userName;
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
+    const [hiddenList, setHiddenList] = useState(prop.hidden);
     const [openDeleteDialog, setDeleteDialogOpen] = useState(false);
     const [openUpdateDialog, setUpdateDialogOpen] = useState(false);
     const url = `/lists/${list._id}`;
@@ -81,7 +82,30 @@ const ListCard = (prop)=>{
 
     return (
         <>
-        <Card className={classes.card}>
+        {hiddenList ? (
+            <Card className={classes.card}>
+                <CardActionArea component={RouterLink} to={`/users/${userName}/productslist/${list._id}`}>
+                    <CardMedia
+                    className={classes.cardMedia}
+                    image={list.image}
+                    title={list.title}
+                    />
+                    <CardContent className={classes.cardContent}>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {list.title}
+                        </Typography>
+                        <Typography gutterBottom component="h5">
+                            {cutContentLength(list.subtitle,30,"no description")}
+                        </Typography>
+                        <Typography>
+                            {list.products.length} items
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+
+            ) : (
+            <Card className={classes.card}>
             <CardActionArea component={RouterLink} onClick={getProductList} to={`/productslist/${list._id}`}>
                 <CardMedia
                 className={classes.cardMedia}
@@ -145,6 +169,7 @@ const ListCard = (prop)=>{
                 </DialogActions>
             </Dialog>
         </Card>
+        )}
         <Dialog
         open={openUpdateDialog}
         onClose={handleUpdateDialogClose}
