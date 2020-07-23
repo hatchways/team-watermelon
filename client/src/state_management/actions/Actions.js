@@ -67,6 +67,13 @@ export const delete_shoppingList = (list) => {
 	};
 };
 
+export const update_shoppingList = (list) => {
+	return {
+		type: ACTION_TYPES.UPDATE_SH_LIST,
+		payload: list
+	};
+}
+
 // dispatching products
 
 export const products_loading = (products) => {

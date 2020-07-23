@@ -20,9 +20,10 @@ import AuthContext from '../state_management/AuthContext';
 import { fetchShLists } from '../state_management/actionCreators/shoppingListsActs';
 import ShListsContext from '../state_management/ShListsContext';
 import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
-import socketIOClient from 'socket.io-client';
-import Notifications from './Notifications';
-import { ENDPOINT } from '../utils/baseUrl';
+import socketIOClient from "socket.io-client";
+import Notifications from "./Notifications";
+import {ENDPOINT} from '../utils/baseUrl';
+import SearchBar from './SearchBar';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
@@ -143,10 +144,15 @@ const Navbar = (props) => {
 						BigDeal
 					</Box>
 				</Typography>
+				<SearchBar/>
 				{authContext.isAuthenticated ? (
 					<>
-						<Button component={RouterLink} to="/main" className={classes.link}>
-							Shopping Lists
+						<Button
+							component={RouterLink}
+							to="/main"
+							className={classes.link}
+						>
+							My Shopping Lists
 						</Button>
 						<FindNewFriendsModal />
 						<Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">

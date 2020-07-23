@@ -1,4 +1,3 @@
-
 import React, { useState, useContext } from 'react';
 import FormData from 'form-data';
 import axios from 'axios';
@@ -55,7 +54,6 @@ const style = {
 };
 
 export default function PhotoUpload(props) {
-
 	const authContext = useContext(AuthContext);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
@@ -80,7 +78,6 @@ export default function PhotoUpload(props) {
 					'Content-Type': `multipart/form-data`
 				}
 			});
-
 			await setUploadedImageUrl(res.data.imageUrl);
 			await setImageIsLoading(false);
 			await setNewImgLoaded(true);
@@ -110,7 +107,6 @@ export default function PhotoUpload(props) {
 			await setNewImgLoaded(false);
 			await authContext.handleNewProfilePicture(url);
 			await setUploadedImageUrl(null);
-			console.log(res);
 			return res;
 		} catch (err) {
 			setErrorMsg('Error Setting New Profile Img');
@@ -121,7 +117,7 @@ export default function PhotoUpload(props) {
 	};
 	return (
 		<div>
-			<Button style={{background: 'none', padding: '0'}} onClick={() => setDialogOpen(true)} {...props}>
+			<Button style={{ background: 'none', padding: '0' }} onClick={() => setDialogOpen(true)} {...props}>
 				Profile Photo Upload
 			</Button>
 			<Dialog style={style.dialog} open={dialogOpen}>
@@ -158,7 +154,7 @@ export default function PhotoUpload(props) {
 						color="primary"
 						fullWidth
 						variant="contained"
-						style={{marginBottom: '10px'}}
+						style={{ marginBottom: '10px' }}
 					>
 						Save Profile Picture
 					</Button>
