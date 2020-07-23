@@ -43,13 +43,14 @@ export default function ProductsList(props) {
 	};
     
     useEffect(() => {
-        if(userName) {
+        if(props.userName !== undefined) {
             getUserProducts();
         } else {
             setUserProducts(null);
+            setUserName(null);
         }
         window.scrollTo(0, 0);
-    }, [userName]);
+    }, [props.userName]);
 
     if(userName) {
         if(userProducts) {

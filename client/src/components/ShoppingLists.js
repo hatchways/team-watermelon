@@ -40,15 +40,14 @@ const ShoppingLists = (props)=>{
 	};
 
     useEffect(() => {
-        // this logs after we refresh the page or come back from productslist
-        console.log(userName); 
-        if(userName) {
+        if(props.userName !== undefined) {
             getUserLists();
         } else {
             setUserLists(null);
+            setUserName(null);
         }
         window.scrollTo(0, 0);
-    }, [userName]);
+    }, [props.userName]);
 
     if(userName) {
         if(userLists) {
