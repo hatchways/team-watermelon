@@ -11,6 +11,7 @@ import FindNewFriendsModal from '../components/FindNewFriendsModal.js';
 import socketIOClient from "socket.io-client";
 import Notifications from "./Notifications";
 import {ENDPOINT} from '../utils/baseUrl';
+import SearchBar from './SearchBar';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -126,6 +127,7 @@ const Navbar = (props)=>{
 						BigDeal
 					</Box>
 				</Typography>
+				<SearchBar/>
 				{authContext.isAuthenticated ? (
 					<>
 						<Button
@@ -133,7 +135,7 @@ const Navbar = (props)=>{
 							to="/main"
 							className={classes.link}
 						>
-							Shopping Lists
+							My Shopping Lists
 						</Button>
 						<FindNewFriendsModal />
                         <Badge badgeContent={notification.messages.length} color="secondary" overlap="circle">
