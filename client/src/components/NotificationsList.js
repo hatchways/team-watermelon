@@ -26,7 +26,6 @@ export default function NotificationsList() {
                 setNotiData({notifications:[...notiData.notifications,...promise.data.notifications]});
                 const newPage = {pageNumber:page.pageNumber+1,stopFetching:(promise.data.stopFetching===true)};
                 setPage(newPage);
-                console.log("newpage",notiData.notifications.length);
                 setIsFetching(false);
             }
 		} catch (error) {
