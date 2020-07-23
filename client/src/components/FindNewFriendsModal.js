@@ -67,9 +67,7 @@ export default function FindNewFriendsModal(props) {
 
 	return (
 		<div>
-			<Button onClick={() => setDialogOpen(true)} {...props}>
-				Friends
-			</Button>
+			<Button onClick={() => setDialogOpen(true)}>Friends</Button>
 			<Dialog style={style.dialog} open={dialogOpen}>
 				<AppBar style={style.appBar} position="static" color="default">
 					<Tabs

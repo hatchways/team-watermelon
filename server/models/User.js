@@ -28,6 +28,12 @@ const UserSchema = new mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User'
 		}
+	],
+	followers_list: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User'
+		}
 	]
 });
 
