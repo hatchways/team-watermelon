@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {Button, Typography, Grid, TextField, Box} from '@material-ui/core';
 import AuthContext from '../state_management/AuthContext';
+import ShListsContext from '../state_management/ShListsContext';
 import axios from 'axios';
 
 const CustomTextField = withStyles({
@@ -17,12 +18,9 @@ const CustomTextField = withStyles({
 const useStyles = makeStyles((theme) => ({
     button: {
         marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(4),
-        borderRadius: '30px', 
-        padding: '10px'
+        marginBottom: theme.spacing(4)
     },
     title: {
-        marginLeft: theme.spacing(4),
         fontWeight: 'bold'
     },
     text: {
@@ -47,64 +45,66 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function BasicTextFields(props) {
+export default function BasicTextFields() {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
+    const shListsContext = useContext(ShListsContext);
+    const [errorMsg, setErrorMsg] = useState('');
     const [userProfile, setUserProfile] = useState({
         name: authContext.name,
         email: authContext.email,
-        password: '',
-        errMsg: 'None'
+        password: ''
     });
-
-    const getUserProfile = async () => {
-		try {
-            const res = await axios.get('/users/'+ authContext.id);
-            await setUserProfile({
-                name: res.data.name,
-                email: res.data.email,
-                password: res.data.password,
-                errMsg: 'None'
-            });
-		} catch (error) {
-			console.log('Error getting user');
-		}
-	};
 
     const onChange = (e) => setUserProfile({ ...userProfile, [e.target.name]: e.target.value });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if(userProfile.name.length < 1){
-            //check if name exists in DB.
-            setUserProfile({ ...userProfile, errMsg: "Name is required."})
-            return
+        if(userProfile.name.length < 1) {
+            setErrorMsg("Name is required.");
+            return null;
+        }
+        if(userProfile.password.length < 1) {
+            setErrorMsg("Password is required.");
+            return null;
+        } else if(userProfile.password.length < 6) {
+            setErrorMsg("Password should be 6 or more characters.");
+            return null;
+        }
+        
+        const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
         };
-        if(userProfile.password.length < 1){
-            //display password as string - currently displayed as hash
-            setUserProfile({ ...userProfile, errMsg: "Password is required."})
-            return
-        };
-        setUserProfile({ ...userProfile, errMsg: 'None'})
-        //axios put data - copy paste BE /auth/post register for password checks and all
+        try {
+            const newUserProfile = await axios.put(`/users/${authContext.id}/edit`, userProfile, config);
+            setUserProfile({
+                name: '',
+                email: '',
+                password: ''
+            });
+            setErrorMsg('');
+            authContext.handleLogout({});
+            shListsContext.handleShListsFailure({response:null});
+        } catch (err) {
+            const errors = err.response.data.errors;
+            setErrorMsg(errors[0].msg);
+		}
     }
-
-    useEffect(() => {
-        getUserProfile();
-    }, []);
 
   return (
     <form noValidate autoComplete="off" onSubmit={handleSubmit}>
 
         <Grid container spacing={1} justify="center" align="center" style={{backgroundColor: '#fbfcff'}}>
-            <Grid item xs={10} md={8} style={{textAlign:'left'}}>
+            <Grid item xs={10} md={8} style={{textAlign:'center'}}>
             <Typography component="h5" className={classes.title} >
                 User name *
             </Typography>
             <Box className={classes.box} borderRadius={50} flexGrow={1}>
                 <CustomTextField 
                     id="profile-name" 
-                    name="username" 
+                    name="name" 
                     value={userProfile.name}
                     variant="outlined"  
                     onChange={(e) => onChange(e)}
@@ -132,7 +132,7 @@ export default function BasicTextFields(props) {
                 <CustomTextField 
                     id="profile-password" 
                     name="password"
-                    type="text"
+                    placeholder="New password (6 chars)"
                     value={userProfile.password}
                     variant="outlined"
                     onChange={(e) => onChange(e)}
@@ -143,11 +143,11 @@ export default function BasicTextFields(props) {
             <Typography 
                 color="error" 
                 align="center" 
-                className={userProfile.errMsg==='None'?classes.hidden:classes.shown}>
-                {userProfile.errMsg}
+                className={errorMsg === '' ? classes.hidden : classes.shown}>
+                {errorMsg}
             </Typography>
                 <Button type="submit" size="large" variant="contained" color="primary" className={classes.button}>
-                    Update Profile
+                    Update Profile and Logout
                 </Button>
             </Grid>
         </Grid>

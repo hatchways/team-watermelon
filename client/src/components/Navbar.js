@@ -171,6 +171,7 @@ const Navbar = (props)=>{
       					>
 							<MenuItem className={classes.link} onClick={() => {
 								setProfilePage(true);
+								needsFetchingLists = true;
 								handleMenuClose();
 							}}>
 								<Typography variant="body1" color="inherit">

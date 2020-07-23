@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import {Grid} from '@material-ui/core';
+import {Grid, Container, Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AuthContext from '../state_management/AuthContext';
 import PhotoUpload from './PhotoUpload';
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 		height: '220px',
         marginTop: '20px',
         marginBottom: '20px'
-	},
+    }
 }));
 
 
@@ -41,13 +40,14 @@ const Profile = ()=>{
                 My Profile
                 </Typography>
                 <Grid container spacing={1} direction="row" justify="center" alignItems="flex-start">
-                    <Grid item xs = {6} md = {6} lg={6}>
+                    <Grid item xs = {6} md = {6} lg={6} align="center">
                     <img
                         src={authContext.profile_picture}
                         className={classes.noProfileImg}
                         alt="profile picture"
                     />
-                    <PhotoUpload/>
+                    <br></br>
+                    <PhotoUpload style={{ backgroundColor: '#DF1B1B', color: 'white' }}/>
                     </Grid>
                     <Grid item xs = {6} md = {6} lg={6}>
                     <EditProfile/>

@@ -53,11 +53,9 @@ const Routes = ()=> {
                     path='/friendslist' 
                     component={()=><FriendsList friends={placeholderFriends}/>}
                     />
-<<<<<<< HEAD
                 <PrivateRoute 
                     exact path='/profile' 
                     component={()=><ProfilePage/>} />
-=======
                 <Route 
                     exact path='/users/:name' 
                     component={({match})=>{
@@ -72,7 +70,6 @@ const Routes = ()=> {
                             return <ProductsList userName={match.params.name} listId={match.params.listId}/>
                         return <Redirect to={{pathname:'/home'}} />}} 
                     />
->>>>>>> dev
 
                 <Redirect to="/home" />
             </Switch>

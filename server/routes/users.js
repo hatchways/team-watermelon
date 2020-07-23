@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require('../models/User.js');
 const List = require('../models/List');
 const verifyToken = require('../middleware/verify.js');
+const { check, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
 
 router.get('/allUsers', async (req, res) => {
 	try {
@@ -62,40 +64,16 @@ router.post('/updateProfilePicture', verifyToken, async (req, res) => {
 	}
 });
 
-<<<<<<< HEAD
-router.get('/:id', verifyToken, async (req, res) => {
-	try {
-		const user = await User.findById(req.params.id);
-		res.status(200).send(user);
-	} catch (err) {
-		console.error('User not found');
-=======
 router.get('/:name', async function (req, res) {
 	try {
 		const user = await User.find({ name: req.params.name }).populate("my_lists").exec();
 		res.status(200).send(user);
 	} catch (err) {
 		console.error(err);
->>>>>>> dev
 		res.status(500);
 	}
 });
 
-<<<<<<< HEAD
-router.put('/:id/edit', verifyToken, async (req, res) => {
-	try {
-		const user = await User.findById(req.user.id);
-		user.name = req.body.name;
-		user.password = req.body.password;
-		await user.save();
-		// send email to user - password changed with timestamp
-		res.status(200).send(user);
-	} catch (err) {
-		console.error('	');
-		res.status(500);
-	}
-});
-=======
 router.get('/:name/productslist/:id', async function (req, res) {
 	try {
 		const products =  await List.findById(req.params.id).populate("products").exec();
@@ -106,5 +84,43 @@ router.get('/:name/productslist/:id', async function (req, res) {
 	}
 });
 
->>>>>>> dev
+/*router.get('/:id', verifyToken, async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
+		res.status(200).send(user);
+	} catch (err) {
+		console.error('User not found');
+		res.status(500);
+	}
+});*/
+
+router.put('/:id/edit',
+[
+	check('name', 'Name is required').not().isEmpty(),
+	check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
+],
+verifyToken, 
+async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	}
+	const { name, password, email } = req.body;
+	try {
+		let checkUser = await User.findOne({ name });
+		if (checkUser) {
+			return res.status(400).json({ errors: [{ msg: 'Username already exists.' }] });
+		}
+		let user = await User.findOne({ email });
+		user.name = name;
+		const salt = await bcrypt.genSalt(10);
+		user.password = await bcrypt.hash(password, salt);
+		await user.save();
+		res.status(200).send(user);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server error');
+	}
+});
+
 module.exports = router;
