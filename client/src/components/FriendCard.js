@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Card, CardContent, Avatar, Box, Button, CardActions, CardActionArea } from '@material-ui/core';
+import { Typography, Card, CardContent, Avatar, Box, Button, CardActions, Container } from '@material-ui/core';
 import AuthContext from '../state_management/AuthContext';
 import axios from 'axios';
 
@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
 		zIndex: 0,
 		backgroundColor: '#FF7F50',
 		opacity: 0.4
+	},
+	container: {
+		padding: 0
 	}
 }));
 
@@ -57,7 +60,7 @@ export default function FriendCard(props) {
 		}
 	};
 	return (
-		<CardActionArea>
+		<Container className={classes.container} disableRipple="true" fullwidth>
 			<Box position="relative" left="0px">
 				<Card className={classes.card}>
 					<Box
@@ -101,6 +104,6 @@ export default function FriendCard(props) {
 					</div>
 				</Card>
 			</Box>
-		</CardActionArea>
+		</Container>
 	);
 }

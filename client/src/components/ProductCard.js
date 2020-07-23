@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import ShListsContext from '../state_management/ShListsContext';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,6 +15,7 @@ import {
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import {baseUrl} from '../utils/baseUrl';
 import {cutContentLength, convertNumberDecimal} from '../utils/transformText';
+import {assetsUrl} from '../utils/baseUrl';
 
 const linethrough= {
     "textDecoration": "line-through",
@@ -40,16 +41,15 @@ const useStyles = makeStyles((theme)=>({
 
 export default function ProductCard(props) {
     const shListsContext = useContext(ShListsContext);
-    const product = props.product
+    const product = props.product;
+    const [hiddenProduct, setHiddenProduct] = useState(props.hidden);
     const deleteProductUrl = `/lists/${props.listId}/products/${props.product._id}`; 
     const classes = useStyles();
     const addDefaultImg=(ev)=>{
-        ev.target.src = 'https://source.unsplash.com/8ca1no8JQ1w/640x426'
+        ev.target.src = assetsUrl+'images/no_image_available.png';
     }
 
     const handleRevome = () => {
-            shListsContext.hideProduct(props.product);
-            shListsContext.handleProductDeletion(props.listId,props.product._id)
 
         return fetch(baseUrl + deleteProductUrl, {
             method: "DELETE",
@@ -59,31 +59,32 @@ export default function ProductCard(props) {
         })
         .then(response => {
             if (response.ok) {
-              return response;
+                return response;
             } else {
-              var error = new Error('Error ' + response.status + ': ' + response.statusText);
-              error.response = response;
-              throw error;
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
             }
             },
             error => {
-                    var errmess = new Error(error.message);
-                    throw errmess;
+                var errmess = new Error(error.message);
+                throw errmess;
         })
         .then(response => response.json())
-        .then(res=>{shListsContext.hideProduct(props.product);
+        .then(res=>{
+            shListsContext.hideProduct(props.product);
             shListsContext.handleProductDeletion(props.listId,props.product._id);})
-        .catch(error =>console.log('product-deleting failed', error.message));
+        .catch(error =>alert('product-deletion failed', error.message));
     }
 
     return (
 
             <Card className={classes.card} >
-                <CardMedia 
+                <CardMedia
                     component="img"
                     className={classes.cardMedia} 
                     onError={addDefaultImg}
-                    src={product.image} 
+                    src={product.image?product.image:(assetsUrl+'images/no_image_available.png')}
                     title={product.name}
                     alt={product.name}/>
                 <CardActionArea component="a" href={product.url} target="_blank" rel="noreferrer">
@@ -120,16 +121,20 @@ export default function ProductCard(props) {
                                 ) }
                     </CardContent>
                 </CardActionArea>
-                <CardActions >
+                {hiddenProduct ? (
+                    null
+                ) : (
+                    <CardActions>
                     <Button 
                         variant="outlined" 
                         color="primary" 
                         size="small"
                         startIcon={<DeleteForeverIcon />}
                         onClick={handleRevome}
-                >remove
-                </Button>
-                </CardActions>
+                    >remove
+                    </Button>
+                    </CardActions>
+                )}
                 </Card>
         
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User.js');
+const List = require('../models/List');
 const verifyToken = require('../middleware/verify.js');
 
 router.get('/allUsers', async (req, res) => {
@@ -61,16 +62,26 @@ router.post('/updateProfilePicture', verifyToken, async (req, res) => {
 	}
 });
 
+<<<<<<< HEAD
 router.get('/:id', verifyToken, async (req, res) => {
 	try {
 		const user = await User.findById(req.params.id);
 		res.status(200).send(user);
 	} catch (err) {
 		console.error('User not found');
+=======
+router.get('/:name', async function (req, res) {
+	try {
+		const user = await User.find({ name: req.params.name }).populate("my_lists").exec();
+		res.status(200).send(user);
+	} catch (err) {
+		console.error(err);
+>>>>>>> dev
 		res.status(500);
 	}
 });
 
+<<<<<<< HEAD
 router.put('/:id/edit', verifyToken, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.id);
@@ -84,4 +95,16 @@ router.put('/:id/edit', verifyToken, async (req, res) => {
 		res.status(500);
 	}
 });
+=======
+router.get('/:name/productslist/:id', async function (req, res) {
+	try {
+		const products =  await List.findById(req.params.id).populate("products").exec();
+		res.status(200).send(products);
+	} catch (err) {
+		console.error(err);
+		res.status(500);
+	}
+});
+
+>>>>>>> dev
 module.exports = router;
