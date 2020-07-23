@@ -14,19 +14,6 @@ MongoDB    | Database (NoSQL)
 ExpressJS  | Back-end (Server)
 ReactJS    | Front-end (Client)
 NodeJS     | JavaScript Runtime Env
-### Routing
-Routes                                 | Use
-------                                 | ----
-GET /auth                              | Get all users
-POST /auth/register                    | Create a new user
-POST /auth/login                       | Login user
-GET /lists                             | Get all lists of one user
-POST /lists/new                        | Create a new list
-PUT /lists/:id                         | Edit that list
-DELETE /lists/:id                      | Delete that list
-GET /lists/:id                         | Get all products of one list
-POST /lists/:id/products/new           | Add a new product to that list
-DELETE /lists/:id/products/:product_id | Delete the product from that list
 
 ## How to Use
 - [ ] add the deployed url
@@ -38,5 +25,6 @@ DELETE /lists/:id/products/:product_id | Delete the product from that list
 * Track product price
 * Browse friends
 * Follow friends
+* Search users and view public lists
 
 ###### Copyright &copy; 2020 Team Watermelon

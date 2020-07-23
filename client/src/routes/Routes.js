@@ -8,9 +8,10 @@ import Footer from '../components/Footer';
 import AuthContext from '../state_management/AuthContext';
 import ProductsList from '../components/ProductsList';
 import FriendsList from '../components/FriendsList';
-import {placeholderPL, placeholderFriends} from '../components/PlaceHolder';
+import {placeholderFriends} from '../components/PlaceHolder';
 import ShListsContext from '../state_management/ShListsContext';
 import PrivateRoute from './privateRoute';
+import ShoppingLists from "../components/ShoppingLists";
 
 
 
@@ -24,7 +25,6 @@ const Routes = ()=> {
         return(
             <ProductsList 
                 listId={(shListsContext.lists.filter(list=>list._id === props.listId))? props.listId:null}
-                products={placeholderPL} 
             />
         );
     };
@@ -51,6 +51,20 @@ const Routes = ()=> {
                 <PrivateRoute 
                     path='/friendslist' 
                     component={()=><FriendsList friends={placeholderFriends}/>}
+                    />
+                <Route 
+                    exact path='/users/:name' 
+                    component={({match})=>{
+                        if(match.params.name !== undefined)
+                            return <ShoppingLists userName={match.params.name}/>
+                        return <Redirect to={{pathname:'/home'}} />}} 
+                    />
+                <Route 
+                    exact path='/users/:name/productslist/:listId' 
+                    component={({match})=>{
+                        if(match.params.name !== undefined)
+                            return <ProductsList userName={match.params.name} listId={match.params.listId}/>
+                        return <Redirect to={{pathname:'/home'}} />}} 
                     />
 
                 <Redirect to="/home" />
