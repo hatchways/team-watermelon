@@ -70,10 +70,8 @@ const Navbar = (props) => {
 	}, [
 		authContext.isAuthenticated,
 		authContext.id,
-		newMsg,
 		shListsContext.dispatchShLists,
-		shListsContext.handleShListsFailure,
-		notification.messages
+		shListsContext.handleShListsFailure
 	]);
 
 	return (

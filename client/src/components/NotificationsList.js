@@ -53,7 +53,8 @@ export default function NotificationsList() {
     }, [isFetching]);
     
     function handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) 
+        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || 
+            isFetching) 
             return;
         setIsFetching(true);
     }
@@ -76,6 +77,7 @@ export default function NotificationsList() {
                     ))}
                 </Grid>
                 {isFetching?<LinearProgress/>:null}
+                {page.stopFetching? "---------END--------":null}
             </Container>
         </section>
         );
