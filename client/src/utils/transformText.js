@@ -35,8 +35,8 @@ export const getTimeAgo = (createdTime)=> {
         year: "about a year",
         years: "%d years"
     };
-    const template = function(t, n) {
-        return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
+    const template = function(unit, number) {
+        return templates[unit] && templates[unit].replace(/%d/i, Math.abs(Math.round(number)));
     };
 
     const calculateDiff = function(time) {

@@ -10,13 +10,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         padding: theme.spacing(5),
         backgroundColor: theme.palette.background.default,
-    },
-    TopContent: {
-        padding: theme.spacing(8, 0, 10),
-    },
-    typoHeading: {
-        fontWeight: 'bold',
-        marginBottom: theme.spacing(4)
     }
 }));
 
