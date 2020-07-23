@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function BasicTextFields() {
+export default function EditProfile() {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
@@ -78,15 +78,15 @@ export default function BasicTextFields() {
 			}
         };
         try {
-            const newUserProfile = await axios.put(`/users/${authContext.id}/edit`, userProfile, config);
+            const newUserProfile = await axios.put(`/auth/${authContext.id}/edit`, userProfile, config);
             setUserProfile({
                 name: '',
                 email: '',
                 password: ''
             });
             setErrorMsg('');
-            authContext.handleLogout({});
             shListsContext.handleShListsFailure({response:null});
+            authContext.handleLogout({});
         } catch (err) {
             const errors = err.response.data.errors;
             setErrorMsg(errors[0].msg);

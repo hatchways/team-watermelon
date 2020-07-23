@@ -131,4 +131,35 @@ router.post('/logout', function (req, res) {
 	res.clearCookie('token');
 	res.status(200).send('Successfully Logged Out');
 });
+
+router.put('/:id/edit',
+[
+	check('name', 'Name is required').not().isEmpty(),
+	check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
+],
+verifyToken, 
+async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	}
+	const { name, password, email } = req.body;
+	try {
+		let checkUser = await User.findOne({ name });
+		if (checkUser) {
+			return res.status(400).json({ errors: [{ msg: 'Username already exists.' }] });
+		}
+		let user = await User.findOne({ email });
+		user.name = name;
+		const salt = await bcrypt.genSalt(10);
+		user.password = await bcrypt.hash(password, salt);
+		await user.save();
+		res.status(200).send(user);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server error');
+	}
+});
+
+
 module.exports = router;
