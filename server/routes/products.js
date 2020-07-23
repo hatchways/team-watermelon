@@ -42,8 +42,6 @@ const scrapingTime = cron.schedule('*/10 * * * *', scrapePriceTag);
 
 // ADD new product
 router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
-	const currentUser = await User.findById(req.user.id);
-
 	List.findById(req.params.id, async function (err, foundList) {
 		if (err) {
 			res.status(400).send({ response: 'error: List not found.' });
@@ -75,23 +73,6 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 					foundList.products.push(product);
 					foundList.save();
 					console.log('success: Product added to list.');
-					currentUser.followers_list.map((follower) =>
-						createAndEmitNotification(
-							req.app.io,
-							`New Product!`, //notification type
-							follower, // receiver id
-							`${currentUser.name} added a new product`, // title
-							product.image, // image
-							product.description, // description
-							product.url, // url
-							(product = {
-								id: product._id,
-								lastprice: product.lastprice,
-								currentprice: product.currentprice
-							}),
-							(follower = null)
-						)
-					);
 					res.status(200).send({ newProduct: product });
 				}
 			});
