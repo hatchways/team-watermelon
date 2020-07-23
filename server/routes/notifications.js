@@ -9,12 +9,19 @@ const verifyToken = require("../middleware/verify");
 // GET all notifications for user
 // private
 router.get("/notifications", verifyToken, function (req, res) {
-	Notification.find({receiver:req.user.id}).exec(function(err, docs) {
+	const batchSize = 10;//for test only, it should be larger size in production
+	const pageNumber = req.query.page?req.query.page:0
+	console.log(req.query.page,pageNumber);
+	Notification.find({receiver:req.user.id}).sort({createdAt:-1})
+	.skip(batchSize*pageNumber).limit(batchSize).exec(function(err, docs) {
 		if(err){
             console.log(err);
 			res.status(400).send({response: "error: Notification not found."});
 		} else {
-			res.status(200).send({notifications: docs.reverse()});
+			if(docs.length < batchSize)
+				res.status(200).send({notifications: docs,stopFetching:true});
+			else
+				res.status(200).send({notifications: docs});
 		}
 	});
 });

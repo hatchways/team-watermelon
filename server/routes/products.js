@@ -55,7 +55,7 @@ const scrapePriceTag = async () => {
 
 
 // Cron job runs every 10 minutes (time increased as no. of products increased)
-// const scrapingTime = cron.schedule('*/10 * * * *', scrapePriceTag);
+const scrapingTime = cron.schedule('*/10 * * * *', scrapePriceTag);
 
 
 // ADD new product

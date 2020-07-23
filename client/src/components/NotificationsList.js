@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Grid, Container} from '@material-ui/core';
+import {Typography, Grid, Container,LinearProgress} from '@material-ui/core';
 import NotificationCard from './NotificationCard';
 import axios from 'axios';
 
@@ -16,20 +16,48 @@ const useStyles = makeStyles((theme) => ({
 export default function NotificationsList() {
     const classes = useStyles();
     const [notiData, setNotiData] = useState({notifications:[]});
+    const [page, setPage] = useState({pageNumber:0,stopFetching:false});
+    const [isFetching, setIsFetching] = useState(false);
 
-    const getNotifications = async () => {
+    const getMoreNotifications = async () => {
 		try {
-            const promise = await axios.get('/notifications');
-            setNotiData({notifications:promise.data.notifications});
+            if(!page.stopFetching){
+                const promise = await axios.get('/notifications',{params:{page:page.pageNumber}});
+                setNotiData({notifications:[...notiData.notifications,...promise.data.notifications]});
+                const newPage = {pageNumber:page.pageNumber+1,stopFetching:(promise.data.stopFetching===true)};
+                setPage(newPage);
+                console.log("newpage",notiData.notifications.length);
+                setIsFetching(false);
+            }
 		} catch (error) {
-			alert('notification loading failed');
+            setPage({pageNumber:0,stopFetching:true});
+            alert('notification loading failed');
 		}
 	};
     
     useEffect(() => {
-        getNotifications();
+        getMoreNotifications();
         window.scrollTo(0, 0);
+        window.addEventListener('scroll', handleScroll);
+        
+        return () => window.removeEventListener('scroll', handleScroll);
+        // eslint-disable-next-line
     }, []);
+
+
+    useEffect(() => {
+        if (isFetching) {
+            getMoreNotifications();
+        }
+        // eslint-disable-next-line
+    }, [isFetching]);
+    
+    function handleScroll() {
+        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isFetching) 
+            return;
+        setIsFetching(true);
+    }
+
 
     return (
         <section className={classes.root}>
@@ -47,6 +75,7 @@ export default function NotificationsList() {
                         </Grid>
                     ))}
                 </Grid>
+                {isFetching?<LinearProgress/>:null}
             </Container>
         </section>
         );
