@@ -1,6 +1,6 @@
 import React, {useEffect, useState,useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Grid, Container,LinearProgress, Link} from '@material-ui/core';
+import {Typography, Grid, Container,LinearProgress, Button} from '@material-ui/core';
 import NotificationCard from './NotificationCard';
 import axios from 'axios';
 import AuthContext from '../state_management/AuthContext';
@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         padding: theme.spacing(5),
         backgroundColor: theme.palette.background.default,
+    },
+    button:{
+        margin:theme.spacing(2)
     }
 }));
 
@@ -87,9 +90,10 @@ export default function NotificationsList() {
                 <Typography variant="h5"  color="textPrimary" component="p" style={{fontWeight: 'bold'}}>
                 Notifications:
                 </Typography>
-                <Link onClick={updateNotifications}>
-                    update
-                </Link>
+                <span>
+                <Button onClick={updateNotifications} variant='contained' color='primary' className={classes.button}>
+                    refresh
+                </Button></span>
                 <br/>
                 <Grid container spacing={1} alignItems="center">
                     {notiData.notifications.map((n) => (

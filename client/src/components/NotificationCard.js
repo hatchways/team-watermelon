@@ -14,6 +14,8 @@ import {
 } from '@material-ui/core';
 import {cutContentLength, convertNumberDecimal,getTimeAgo} from '../utils/transformText';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import axios from 'axios';
 
 const linethrough= {
@@ -23,6 +25,7 @@ const linethrough= {
 const useStyles = makeStyles((theme)=>({
     card: {
         display: 'flex',
+        minWidth: '400px',
     },
     description: {
         display:"flex",
@@ -36,6 +39,7 @@ const useStyles = makeStyles((theme)=>({
     cardContent: {
         paddingTop:'2px',
         paddingBottom:'2px',
+        width:'100%'
     },
     forProduct:{
         display: 'flex',
@@ -51,6 +55,14 @@ const useStyles = makeStyles((theme)=>({
     },
     today:{
         backgroundColor:"#4287f5",
+        color:'white'
+    },
+    yellow:{
+        backgroundColor:'#ffc400',
+        color:'black'
+    },
+    green:{
+        backgroundColor:'#00a152',
         color:'white'
     }
 }));
@@ -82,18 +94,44 @@ export default function NotiCard(props) {
         // eslint-disable-next-line
     },[]);
 
-
-    return (
-
-        <Card className={classes.card} >
-            <CardActionArea component="a" href={noti.content.url} target="_blank" rel="noreferrer">
-                <Container className={classes.badgeContainer}>
+    const getBadgeByType=(type)=>{
+        switch(type){
+            case 'new price':
+            case 'new_price':
+            case 'New Price':
+                return(
                 <Chip
                     size='small'
                     icon={<LocalOfferIcon />}
-                    label={noti.notificationType}
+                    label={type}
                     color="secondary"
-                />
+                />)
+            case 'New Follower!':
+                return(
+                    <Chip
+                        size='small'
+                        icon={<FavoriteIcon style={{ color:'white' }}/>}
+                        label={type}
+                        className={classes.yellow}
+                    />)
+            default:
+                return(
+                    <Chip
+                        size='small'
+                        icon={<NewReleasesIcon style={{ color:'white' }}/>}
+                        label={type}
+                        className={classes.green}
+                    />)
+        }
+            
+    }
+
+    return (
+
+        <Card className={classes.card}>
+            <CardActionArea component="a" href={noti.content.url} target="_blank" rel="noreferrer">
+                <Container className={classes.badgeContainer}>
+                {getBadgeByType(noti.notificationType)}
                 {hours < 24?<Chip label="Within 24 h!!" className={classes.today} size='small'/>:null}
                 {noti.content.isRead?<Chip label="Read" size='small'/>:<Chip label="New!" color="primary" size='small'/>}
                 </Container>
@@ -122,7 +160,7 @@ export default function NotiCard(props) {
                             <Typography variant="body2" className={classes.description}>
                                 {noti.content.description?cutContentLength(noti.content.description,100,"no description"):null}
                             </Typography>
-                            {noti.content.lastprice&&noti.content.currentprice?
+                            {noti.content.lastprice && noti.content.currentprice?
                             <Grid 
                                 container 
                                 className={(noti.notificationType==='new price'||noti.notificationType==='new_price')?classes.forProduct:classes.notProduct}
