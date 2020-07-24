@@ -25,9 +25,9 @@ router.post(
 		const { name, password, email } = req.body;
 
 		try {
-			let user = await User.findOne({ email });
+			let user = await User.findOne({$or: [{ email }, { name }]});
 			if (user) {
-				return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+				return res.status(400).json({ errors: [{ msg: 'User/Username already exists.' }] });
 			}
 			user = new User({
 				name,
@@ -131,4 +131,47 @@ router.post('/logout', function (req, res) {
 	res.clearCookie('token');
 	res.status(200).send('Successfully Logged Out');
 });
+
+router.put('/:id/edit',
+[
+	check('name', 'Name is required').not().isEmpty(),
+	check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
+],
+verifyToken, 
+async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	}
+	const { name, password } = req.body;
+	try {
+		let user = await User.findById(req.user.id);
+		// check name update
+		if(name !== user.name) {
+			let checkUser = await User.findOne({ name });
+			// check if new name already exists
+			if (checkUser) {
+				return res.status(400).json({ errors: [{ msg: 'Username already exists.' }] });
+			} else {
+				// both name and password update
+				user.name = name;
+				const salt = await bcrypt.genSalt(10);
+				user.password = await bcrypt.hash(password, salt);
+				await user.save();
+				res.status(200).send(user);
+			}
+		} else {
+			// only password update
+			const salt = await bcrypt.genSalt(10);
+			user.password = await bcrypt.hash(password, salt);
+			await user.save();
+			res.status(200).send(user);
+		}
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send({ errors: [{ msg: 'Server error.' }] });
+	}
+});
+
+
 module.exports = router;

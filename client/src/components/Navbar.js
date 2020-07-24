@@ -51,6 +51,7 @@ const Navbar = (props) => {
 	const authContext = useContext(AuthContext);
 	const shListsContext = useContext(ShListsContext);
 	const [anchorMenu, setAnchorMenu] = useState(null);
+	const [profilePage, setProfilePage] = useState(false);
 
 	const handleMenuClick = (event) => {
 		setAnchorMenu(event.currentTarget);
@@ -66,12 +67,17 @@ const Navbar = (props) => {
 			needsFetchingLists = false;
 			props.history.push('/main');
 		}
-		// eslint-disable-next-line
+		
+		if(profilePage) {
+			setProfilePage(false);
+			props.history.push("/profile");
+		}
 	}, [
 		authContext.isAuthenticated,
 		authContext.id,
 		shListsContext.dispatchShLists,
-		shListsContext.handleShListsFailure
+		shListsContext.handleShListsFailure,
+		profilePage
 	]);
 
 	return (
@@ -111,13 +117,17 @@ const Navbar = (props) => {
 							<Avatar src={authContext.profile_picture}>{authContext.name.substring(0, 1)}</Avatar>
 						</IconButton>
 						<Menu
-							id="simple-menu"
-							anchorEl={anchorMenu}
-							keepMounted
-							open={Boolean(anchorMenu)}
-							onClose={handleMenuClose}
-						>
-							<MenuItem className={classes.link}>
+        					id="simple-menu"
+        					anchorEl={anchorMenu}
+        					keepMounted
+        					open={Boolean(anchorMenu)}
+        					onClose={handleMenuClose}
+      					>
+							<MenuItem className={classes.link} onClick={() => {
+								setProfilePage(true);
+								needsFetchingLists = true;
+								handleMenuClose();
+							}}>
 								<Typography variant="body1" color="inherit">
 									{authContext.name}
 								</Typography>

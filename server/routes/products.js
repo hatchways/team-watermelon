@@ -10,7 +10,7 @@ const User = require('../models/User.js');
 const verifyToken = require('../middleware/verify');
 
 const scrapePriceTag = async () => {
-	console.log('scraping every ten minutes');
+	console.log('price scraper started....');
 	Product.find({}).exec(async function (err, allProducts) {
 		if (err || !allProducts.length) {
 			console.log('error: No products for cron');
@@ -23,7 +23,13 @@ const scrapePriceTag = async () => {
 						eachProduct.lastprice = eachProduct.currentprice;
 						eachProduct.currentprice = newPrice;
 						eachProduct.name = productDetails.title;
-						eachProduct.description = productDetails.description;
+						let description = '';
+						if (typeof productDetails.description === 'string') {
+							description = productDetails.description;
+						} else {
+							description = productDetails.description[0];
+						}
+						eachProduct.description = description;
 						eachProduct.image = productDetails.image;
 						eachProduct.save();
 						console.log('success: Updated price ' + productDetails.price + ' of ' + productDetails.title);
@@ -54,9 +60,26 @@ const scrapePriceTag = async () => {
 	});
 };
 
+const scraperTime = async () => {
+	try {
+		let products = await Product.find({});
+		console.log(`Total ${products.length} products fetched from DB`);
+		let calculateScrapeTime = Math.ceil((products.length * 12) / 60);
+		return calculateScrapeTime;
+	}
+	catch (err) {
+		console.log('error: No products for cron');
+	}
+};
 
-// Cron job runs every 10 minutes (time increased as no. of products increased)
-const scrapingTime = cron.schedule('*/10 * * * *', scrapePriceTag);
+// Cron job runs every X minutes (time increased as no. of products increased) or default 10 minutes
+scraperTime().then((time) => {
+	console.log(`Calculated scraper time: every ${time} minutes`);
+	cron.schedule(`*/${time} * * * *`, scrapePriceTag);
+}).catch(() => {
+	console.log('Default scraper time: every 10 minutes');
+	cron.schedule('*/10 * * * *', scrapePriceTag);
+});
 
 // ADD new product
 router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
