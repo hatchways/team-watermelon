@@ -50,6 +50,7 @@ export default function EditProfile() {
     const authContext = useContext(AuthContext);
     const shListsContext = useContext(ShListsContext);
     const [errorMsg, setErrorMsg] = useState('');
+    const [profileUpdate, setProfileUpdate] = useState(false);
     const [userProfile, setUserProfile] = useState({
         name: authContext.name,
         email: authContext.email,
@@ -58,7 +59,7 @@ export default function EditProfile() {
 
     const onChange = (e) => setUserProfile({ ...userProfile, [e.target.name]: e.target.value });
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if(userProfile.name.length < 1) {
             setErrorMsg("Name is required.");
@@ -71,27 +72,50 @@ export default function EditProfile() {
             setErrorMsg("Password should be 6 or more characters.");
             return null;
         }
-        
+        setProfileUpdate(true);
+    }
+
+    const updateProfile = async() => {
         const config = {
-			headers: {
-				'Content-Type': 'application/json'
-			}
+            headers: {
+                'Content-Type': 'application/json'
+            }
         };
         try {
             const newUserProfile = await axios.put(`/auth/${authContext.id}/edit`, userProfile, config);
             setUserProfile({
-                name: '',
-                email: '',
+                name: newUserProfile.data.name,
+                email: newUserProfile.data.email,
                 password: ''
             });
-            setErrorMsg('');
-            shListsContext.handleShListsFailure({response:null});
-            authContext.handleLogout({});
+            setErrorMsg('Profile updated.');
+            setTimeout(() => {
+                setErrorMsg('');
+            }, 4000);
+            return newUserProfile;
         } catch (err) {
+            console.log(err);
             const errors = err.response.data.errors;
             setErrorMsg(errors[0].msg);
-		}
-    }
+        }
+    };
+
+    useEffect(() => {
+        let isUnmounted = false;
+        if(profileUpdate) {
+            updateProfile().then((newUserProfile) => {
+                if(!isUnmounted) {
+                    if(newUserProfile) {
+                        authContext.handleLogin(newUserProfile.data);
+                    }
+                }
+            });
+            setProfileUpdate(false);
+        }
+        return () => {
+            isUnmounted = true;
+        };
+    }, [profileUpdate]);
 
   return (
     <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -147,7 +171,7 @@ export default function EditProfile() {
                 {errorMsg}
             </Typography>
                 <Button type="submit" size="large" variant="contained" color="primary" className={classes.button}>
-                    Update Profile and Logout
+                    Update Profile
                 </Button>
             </Grid>
         </Grid>
