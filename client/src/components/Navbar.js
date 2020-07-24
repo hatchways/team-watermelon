@@ -100,14 +100,14 @@ const Navbar = (props) => {
 			setProfilePage(false);
 			props.history.push("/profile");
 		}
-		// eslint-disable-next-line
 	}, [
 		authContext.isAuthenticated,
 		authContext.id,
 		newMsg,
 		shListsContext.dispatchShLists,
 		shListsContext.handleShListsFailure,
-		notification.messages
+		notification.messages,
+		profilePage
 	]);
 
 	const leaveSocketRoom = () => {

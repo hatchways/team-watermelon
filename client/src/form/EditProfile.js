@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {Button, Typography, Grid, TextField, Box} from '@material-ui/core';
 import AuthContext from '../state_management/AuthContext';
-import ShListsContext from '../state_management/ShListsContext';
 import axios from 'axios';
 
 const CustomTextField = withStyles({
@@ -48,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 export default function EditProfile() {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
-    const shListsContext = useContext(ShListsContext);
     const [errorMsg, setErrorMsg] = useState('');
     const [profileUpdate, setProfileUpdate] = useState(false);
     const [userProfile, setUserProfile] = useState({
@@ -83,15 +81,7 @@ export default function EditProfile() {
         };
         try {
             const newUserProfile = await axios.put(`/auth/${authContext.id}/edit`, userProfile, config);
-            setUserProfile({
-                name: newUserProfile.data.name,
-                email: newUserProfile.data.email,
-                password: ''
-            });
-            setErrorMsg('Profile updated.');
-            setTimeout(() => {
-                setErrorMsg('');
-            }, 4000);
+            authContext.handleLogin(newUserProfile.data);
             return newUserProfile;
         } catch (err) {
             console.log(err);
@@ -101,20 +91,17 @@ export default function EditProfile() {
     };
 
     useEffect(() => {
-        let isUnmounted = false;
+        let isMounted = true;
         if(profileUpdate) {
-            updateProfile().then((newUserProfile) => {
-                if(!isUnmounted) {
-                    if(newUserProfile) {
-                        authContext.handleLogin(newUserProfile.data);
-                    }
+            updateProfile().then(() => {
+                if(isMounted) {
+                    setErrorMsg('Profile...');
                 }
             });
+            setErrorMsg('Profile updated.');
             setProfileUpdate(false);
         }
-        return () => {
-            isUnmounted = true;
-        };
+        return () => { isMounted = false };
     }, [profileUpdate]);
 
   return (

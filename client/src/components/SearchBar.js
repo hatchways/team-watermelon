@@ -79,6 +79,7 @@ export default function BasicTextFields(props) {
                 <Grid item xs={12} md={8}>
                 <Autocomplete
                     id="combo-box-demo"
+                    onOpen={getAllUsers}
                     options={allUsers}
                     getOptionLabel={(user) => user.name}
                     onChange={(event, value) => setSearchUser(value)}

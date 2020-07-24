@@ -143,21 +143,33 @@ async (req, res) => {
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
 	}
-	const { name, password, email } = req.body;
+	const { name, password } = req.body;
 	try {
-		let checkUser = await User.findOne({ name });
-		if (checkUser) {
-			return res.status(400).json({ errors: [{ msg: 'Username already exists.' }] });
+		let user = await User.findById(req.user.id);
+		// check name update
+		if(name !== user.name) {
+			let checkUser = await User.findOne({ name });
+			// check if new name already exists
+			if (checkUser) {
+				return res.status(400).json({ errors: [{ msg: 'Username already exists.' }] });
+			} else {
+				// both name and password update
+				user.name = name;
+				const salt = await bcrypt.genSalt(10);
+				user.password = await bcrypt.hash(password, salt);
+				await user.save();
+				res.status(200).send(user);
+			}
+		} else {
+			// only password update
+			const salt = await bcrypt.genSalt(10);
+			user.password = await bcrypt.hash(password, salt);
+			await user.save();
+			res.status(200).send(user);
 		}
-		let user = await User.findOne({ email });
-		user.name = name;
-		const salt = await bcrypt.genSalt(10);
-		user.password = await bcrypt.hash(password, salt);
-		await user.save();
-		res.status(200).send(user);
 	} catch (err) {
 		console.error(err.message);
-		res.status(500).send('Server error');
+		res.status(500).send({ errors: [{ msg: 'Server error.' }] });
 	}
 });
 
