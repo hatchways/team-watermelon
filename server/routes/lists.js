@@ -37,18 +37,18 @@ router.get('/lists/:id', verifyToken, function (req, res) {
 					p = foundList.products[0];
 					createAndEmitNotification(
 						req.app.io,
-						'new_price', //notification type
-						req.user.id, // receiver id
-						p.name, // the title on the notification
-						p.image, // the image on the notification
-						p.description, // the content on the notification
-						p.url, // the link user can link to
+						'new price', 
+						req.user.id, 
+						p.name, 
+						p.image, 
+						p.description, 
+						p.url, 
 						(product = {
 							id: p._id,
 							lastprice: p.lastprice,
 							currentprice: p.currentprice
 						}),
-						(follower = null) // follower's userId
+						(follower = null) 
 					);
 				}
 			}

@@ -45,70 +45,74 @@ const linethrough = {
 export default function NotificationsPopper(props) {
 	const classes = useStyles();
 
-	const cutProductName = (name) => {
-		try {
-			return name.slice(0, 1);
-		} catch {
-			return 'P';
-		}
-	};
-	console.log(props.messages);
-	return (
-		<div>
-			<Container align="center">
-				<Box className={classes.box}>
-					<ArrowDropUpRoundedIcon fontSize="large" className={classes.arrow} />
-				</Box>
-			</Container>
-			<Divider variant="fullWidth" component="li" className={classes.line} />
-			<List className={classes.list}>
-				{props.messages.reverse().map((msg) => (
-					<div key={msg.id} className={classes.listItem}>
-						<Typography color="textPrimary" variant="subtitle2">
-							{msg.type}
-						</Typography>
-						<ListItem component="a" href={msg.content.url} target="_blank" rel="noreferrer">
-							<ListItemAvatar>
-								<Avatar src={msg.content.image} variant="square" type="image">
-									{cutProductName(msg.content.title)}
-								</Avatar>
-							</ListItemAvatar>
-							<ListItemText>
-								<Typography className={classes.title} color="textPrimary" variant="subtitle2">
-									{cutContentLength(msg.content.title, 30, 'no product title')}
-								</Typography>
-								{msg.content.url ? (
-									<Typography variant="caption" color="textSecondary">
-										{cutContentLength(msg.content.url, 30, 'no link')}
-									</Typography>
-								) : null}
-								{msg.content.lastprice && msg.content.currentprice ? (
-									<Grid container alignItems="baseline">
-										<Grid item xs={6}>
-											<Typography color="textSecondary" style={linethrough} variant="body2">
-												${convertNumberDecimal(msg.content.lastprice)}
-											</Typography>
-										</Grid>
-										<Grid item xs={6}>
-											<Typography variant="button" color="primary">
-												${convertNumberDecimal(msg.content.currentprice)}
-											</Typography>
-										</Grid>
-									</Grid>
-								) : null}
-							</ListItemText>
-						</ListItem>
-						<Divider variant="inset" component="li" />
-					</div>
-				))}
-				<div className={classes.listItem}>
-					<Box textAlign="center" align="center">
-						<Link component={RouterLink} to="/main" color="textPrimary" variant="subtitle1">
-							see all
-						</Link>
-					</Box>
-				</div>
-			</List>
-		</div>
-	);
+    const cutProductName=(name)=>{
+        try{
+            return name.slice(0,1)
+        }catch{
+            return "P"
+        }
+    }
+  
+    return (
+        <div>
+            <Container align="center">
+                <Box  className={classes.box}>
+                    <ArrowDropUpRoundedIcon fontSize="large" className={classes.arrow}/>
+                </Box>
+            </Container>
+            <Divider variant='fullWidth' component="li" className={classes.line} />
+            <List className={classes.list}>
+                {props.messages.reverse().map((m) => (
+                    <div key={m.id} className={classes.listItem} >
+                        <Typography color="textPrimary" variant="subtitle2">
+                            {m.type}{'!'}
+                        </Typography>
+                        <ListItem component="a" href={m.content.url} target="_blank" rel="noreferrer">
+                            <ListItemAvatar>
+                            <Avatar src={m.content.image} variant="square" type="image">
+                                {cutProductName(m.content.title)}
+                            </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText>
+                                <Typography className={classes.title} color="textPrimary" variant="subtitle2">
+                                    {cutContentLength(m.content.title,30,"no product title")}
+                                </Typography>
+                                {m.content.url?
+                                <Typography variant="caption" color="textSecondary">
+                                    {cutContentLength(m.content.url,30,"no link")}
+                                </Typography >:null}
+                                {m.content.lastprice && m.content.currentprice?
+                                <Grid container alignItems='baseline'>
+                                    <Grid item xs={6}>
+                                        <Typography color="textSecondary" style={linethrough} variant="body2">
+                                            ${convertNumberDecimal(m.content.lastprice)}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Typography variant="button" color="primary">
+                                            ${convertNumberDecimal(m.content.currentprice)}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                                :null}
+                            </ListItemText>
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                    </div>
+                ))}
+                <div className={classes.listItem}>
+                    <Box textAlign="center" align="center">
+                        <Link 
+                        component={RouterLink} 
+                        to="/notificationslist" 
+                        color="textPrimary" 
+                        variant="subtitle1" 
+                        onClick={props.handleClickOnNotification}>
+                            see all
+                        </Link>
+                    </Box>
+                </div>
+            </List>
+        </div>
+    );
 }

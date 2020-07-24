@@ -13,7 +13,7 @@ module.exports = createAndEmitNotification = async (
 	follower
 ) => {
 	const newNotification = {
-		noti_type: type,
+		notificationType: type,
 		receiver: receiver,
 		content: {
 			title: title,
@@ -23,11 +23,11 @@ module.exports = createAndEmitNotification = async (
 	};
 	if (url) newNotification.content.url = url;
 	if (product) {
-		newNotification.content.product_id = product.id;
+		newNotification.content.productId = product.id;
 		newNotification.content.lastprice = product.lastprice;
 		newNotification.content.currentprice = product.currentprice;
 	}
-	if (follower) newNotification.content.follower;
+	if (follower) newNotification.content.followerId=follower;
 	Notification.create(newNotification, function (err, doc) {
 		if (err) {
 			console.log(err);
