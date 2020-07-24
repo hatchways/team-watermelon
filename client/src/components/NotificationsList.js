@@ -17,21 +17,31 @@ const useStyles = makeStyles((theme) => ({
 export default function NotificationsList() {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
-    const [notiData, setNotiData] = useState({notifications:[]});
-    const [page, setPage] = useState({pageNumber:0,stopFetching:false});
+    const [notiData, setNotiData] = useState({notifications:[],pageNumber:0,stopFetching:false});
+    // const [page, setPage] = useState({pageNumber:0,stopFetching:false});
     const [isFetching, setIsFetching] = useState(false);
 
     const getMoreNotifications = async () => {
 		try {
-            if(!page.stopFetching){
-                const promise = await axios.get('/notifications',{params:{page:page.pageNumber,receiver:authContext.id}});
-                setNotiData({notifications:[...notiData.notifications,...promise.data.notifications]});
-                const newPage = {pageNumber:page.pageNumber+1,stopFetching:(promise.data.stopFetching===true)};
-                setPage(newPage);
+            if(!notiData.stopFetching){
+                const promise = await axios.get('/notifications',
+                {params:{
+                    page:notiData.pageNumber,
+                    receiver:authContext.id
+                }});
+                setNotiData({
+                    notifications:[...notiData.notifications,...promise.data.notifications],
+                    pageNumber:notiData.pageNumber+1,
+                    stopFetching:(promise.data.stopFetching===true)});
+                // const newPage = {pageNumber:page.pageNumber+1,stopFetching:(promise.data.stopFetching===true)};
+                // setPage(newPage);
                 setIsFetching(false);
             }
 		} catch (error) {
-            setPage({pageNumber:0,stopFetching:true});
+            setNotiData({
+                notifications:[],
+                pageNumber:0,
+                stopFetching:false});
             alert('notification loading failed');
 		}
 	};
@@ -61,9 +71,12 @@ export default function NotificationsList() {
     }
 
     const updateNotifications = async()=>{
-        
-        await setPage({pageNumber:0,stopFetching:false});
-        await setNotiData({notifications:[]});
+
+        await setNotiData({
+            notifications:[],
+            pageNumber:0,
+            stopFetching:false
+        });
         await setIsFetching(false);
         await getMoreNotifications();
     }
@@ -88,7 +101,7 @@ export default function NotificationsList() {
                     ))}
                 </Grid>
                 {isFetching?<LinearProgress/>:null}
-                {page.stopFetching? "---------END--------":null}
+                {notiData.stopFetching? "---------END--------":null}
             </Container>
         </section>
         );
