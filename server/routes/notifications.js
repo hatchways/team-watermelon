@@ -9,12 +9,18 @@ const verifyToken = require("../middleware/verify");
 // GET all notifications for user
 // private
 router.get("/notifications", verifyToken, function (req, res) {
-	Notification.find({user:req.user.id}).exec(function(err, docs) {
+	const batchSize = 10;//for test only, it should be larger size in production
+	const pageNumber = req.query.page?req.query.page:0
+	Notification.find({receiver:req.query.receiver}).sort({createdAt:-1})
+	.skip(batchSize*pageNumber).limit(batchSize).exec(function(err, docs) {
 		if(err){
             console.log(err);
 			res.status(400).send({response: "error: Notification not found."});
 		} else {
-			res.status(200).send({notifications: docs});
+			if(docs.length < batchSize)
+				res.status(200).send({notifications: docs,stopFetching:true});
+			else
+				res.status(200).send({notifications: docs});
 		}
 	});
 });
@@ -24,7 +30,7 @@ router.get("/notifications", verifyToken, function (req, res) {
 // private
 router.put("/notifications/updateAllRead", verifyToken, async (req, res)=>{
     try{
-        const promise = await Notification.updateMany({ user: req.user.id, content:{isRead:false} }, { content:{isRead: true}});
+        const promise = await Notification.updateMany({ receiver: req.user.id, content:{isRead:false} }, { content:{isRead: true}});
         console.log(promise.nModified+" notifications are modified.");
         res.status(200).send({response:promise.nModified+" notifications are updated."});
     }catch(err){

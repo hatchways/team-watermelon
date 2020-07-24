@@ -3,7 +3,6 @@ const router = express.Router();
 const cron = require('node-cron');
 const scrapingFunction = require('../utils/scrapingFunction.js');
 const createAndEmitNotification = require('../middleware/createAndEmitNotification');
-
 const List = require('../models/List');
 const Product = require('../models/Product');
 const User = require('../models/User.js');
@@ -34,6 +33,24 @@ const scrapePriceTag = async () => {
 						eachProduct.image = productDetails.image;
 						eachProduct.save();
 						console.log('success: Updated price ' + productDetails.price + ' of ' + productDetails.title);
+
+						if(eachProduct.user){
+							createAndEmitNotification(
+								global.io,
+								"new price",
+								eachProduct.user, 
+								productDetails.title,
+								productDetails.image,
+								productDetails.description, 
+								eachProduct.url,
+								product={
+									id:eachProduct._id,
+									lastprice: eachProduct.lastprice,
+									currentprice: newPrice
+								},
+								follower=null 
+								);
+						}
 					} else {
 						console.log('error: Price did not change for ' + productDetails.title);
 					}
@@ -87,7 +104,8 @@ router.post('/lists/:id/products/new', verifyToken, async function (req, res) {
 				description: description,
 				url: url,
 				lastprice: 0.0,
-				currentprice: price
+				currentprice: price,
+				user:req.user.id
 			};
 			Product.create(newProduct, function (err, product) {
 				if (err) {

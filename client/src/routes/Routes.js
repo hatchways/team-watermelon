@@ -12,6 +12,7 @@ import FriendsList from '../components/FriendsList';
 import {placeholderFriends} from '../components/PlaceHolder';
 import ShListsContext from '../state_management/ShListsContext';
 import PrivateRoute from './privateRoute';
+import NotificationsList from '../components/NotificationsList';
 import ShoppingLists from "../components/ShoppingLists";
 
 
@@ -56,6 +57,10 @@ const Routes = ()=> {
                 <PrivateRoute 
                     exact path='/profile' 
                     component={()=><ProfilePage/>} />
+                <PrivateRoute 
+                    path='/notificationslist' 
+                    component={()=><NotificationsList/>}
+                />
                 <Route 
                     exact path='/users/:name' 
                     component={({match})=>{
