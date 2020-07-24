@@ -1,79 +1,83 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const User = require("../models/User");
-const List = require("../models/List");
-const Product = require("../models/Product");
+const User = require('../models/User');
+const List = require('../models/List');
+const Product = require('../models/Product');
 
-const verifyToken = require("../middleware/verify");
+const verifyToken = require('../middleware/verify');
 const createAndEmitNotification = require('../middleware/createAndEmitNotification');
 
 // GET all lists of user
-router.get("/lists", verifyToken, function (req, res) {
-	User.findById(req.user.id).populate("my_lists").exec(function(err, foundUser) {
-		if(err){
-			res.status(400).send({response: "error: User not found."});
-		} else {
-			res.status(200).send({lists: foundUser.my_lists});
-		}
-	});
+router.get('/lists', verifyToken, function (req, res) {
+	User.findById(req.user.id)
+		.populate('my_lists')
+		.exec(function (err, foundUser) {
+			if (err) {
+				res.status(400).send({ response: 'error: User not found.' });
+			} else {
+				res.status(200).send({ lists: foundUser.my_lists });
+			}
+		});
 });
 
 // GET one list of user
-router.get("/lists/:id", verifyToken, function(req, res) {
-	List.findById(req.params.id).populate("products").exec(function(err, foundList) {
-		if(err){
-			res.status(400).send({response: "error: List not found."});
-		} else {
-			res.status(200).send({list: foundList});
+router.get('/lists/:id', verifyToken, function (req, res) {
+	List.findById(req.params.id)
+		.populate('products')
+		.exec(function (err, foundList) {
+			if (err) {
+				res.status(400).send({ response: 'error: List not found.' });
+			} else {
+				res.status(200).send({ list: foundList });
 
-			//testing emiting msg to FE socket
-			let startTesting = false;
-			if(startTesting && foundList && foundList.products.length > 0){
-				p = foundList.products[0]
-				createAndEmitNotification(
-					req.app.io,
-					"new_price",//notification type
-					req.user.id, // receiver id
-					p.name,// the title on the notification
-					p.image,// the image on the notification
-					p.description, // the content on the notification
-					p.url,// the link user can link to
-					product={
-						id:p._id,
-						lastprice: p.lastprice,
-						currentprice: p.currentprice
-					},
-					follower=null // follower's userId 
+				//testing emiting msg to FE socket
+				let startTesting = false;
+				if (startTesting && foundList && foundList.products.length > 0) {
+					p = foundList.products[0];
+					createAndEmitNotification(
+						req.app.io,
+						'new_price', //notification type
+						req.user.id, // receiver id
+						p.name, // the title on the notification
+						p.image, // the image on the notification
+						p.description, // the content on the notification
+						p.url, // the link user can link to
+						(product = {
+							id: p._id,
+							lastprice: p.lastprice,
+							currentprice: p.currentprice
+						}),
+						(follower = null) // follower's userId
 					);
+				}
 			}
-		}
-	});
+		});
 });
 
 // CREATE list for user
-router.post("/lists/new", verifyToken, function(req, res) {
-    let title = req.body.title;
+router.post('/lists/new', verifyToken, function (req, res) {
+	let title = req.body.title;
 	let image = req.body.imageurl;
 	let subtitle = req.body.listdescription;
 	let user = {
 		id: req.user.id,
 		name: req.user.name
 	};
-	let newList = {title: title, image: image, subtitle: subtitle, user: user, products: []};
-	List.create(newList, function(err, createdList){
-		if(err){
+	let newList = { title: title, image: image, subtitle: subtitle, user: user, products: [] };
+	List.create(newList, function (err, createdList) {
+		if (err) {
 			console.log(err);
-			res.status(500).send({response: "error: Aw, Snap! Something went wrong."});
+			res.status(500).send({ response: 'error: Aw, Snap! Something went wrong.' });
 		} else {
-			console.log("success: List created.");
-			User.findById(req.user.id, function(err, foundUser) {
-				if(err){
-					res.status(400).send({response: "error: User not found."});
+			console.log('success: List created.');
+			User.findById(req.user.id, function (err, foundUser) {
+				if (err) {
+					res.status(400).send({ response: 'error: User not found.' });
 				} else {
 					foundUser.my_lists.push(createdList);
 					foundUser.save();
-					res.status(200).send({list: createdList});
+					res.status(200).send({ list: createdList });
 				}
 			});
 		}
@@ -81,7 +85,7 @@ router.post("/lists/new", verifyToken, function(req, res) {
 });
 
 // UPDATE PUT list for user
-router.put("/lists/:id", verifyToken, function(req, res) {
+router.put('/lists/:id', verifyToken, function (req, res) {
 	let title = req.body.title;
 	let image = req.body.imageurl;
 	let subtitle = req.body.listdescription;
