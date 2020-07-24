@@ -57,9 +57,7 @@ const SocketContainer = ()=>{
 
     const leaveSocketRoom=()=>{
         if(socket){
-            socket.emit('leave_room', {
-                userId: authContext.id,
-            });
+            socket.emit('leave_room');
         }
         socket.close();
         setNotification({ messages:[] });

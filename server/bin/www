@@ -33,11 +33,10 @@ var io = require('socket.io')(server, {
 io.on('connection', function (socket) {
 	socket.on('join_room', function (data) {
 		socket.join(data.userId);
-		console.log(`user:${data.userId} joined`);
+		console.log(`user:${data.userId} joined Room`);
 	});
 	socket.on('leave_room', function (data) {
-		console.log(`user: ${data.userId} left room`);
-		socket.leave(data.userId);
+		console.log(`a user left Room`);
 	});
 
 	socket.on('disconnect', () => {

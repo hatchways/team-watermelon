@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState,useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Grid, Container,LinearProgress} from '@material-ui/core';
+import {Typography, Grid, Container,LinearProgress, Link} from '@material-ui/core';
 import NotificationCard from './NotificationCard';
 import axios from 'axios';
+import AuthContext from '../state_management/AuthContext';
 
 
 
@@ -15,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NotificationsList() {
     const classes = useStyles();
+    const authContext = useContext(AuthContext);
     const [notiData, setNotiData] = useState({notifications:[]});
     const [page, setPage] = useState({pageNumber:0,stopFetching:false});
     const [isFetching, setIsFetching] = useState(false);
@@ -22,7 +24,7 @@ export default function NotificationsList() {
     const getMoreNotifications = async () => {
 		try {
             if(!page.stopFetching){
-                const promise = await axios.get('/notifications',{params:{page:page.pageNumber}});
+                const promise = await axios.get('/notifications',{params:{page:page.pageNumber,receiver:authContext.id}});
                 setNotiData({notifications:[...notiData.notifications,...promise.data.notifications]});
                 const newPage = {pageNumber:page.pageNumber+1,stopFetching:(promise.data.stopFetching===true)};
                 setPage(newPage);
@@ -58,6 +60,13 @@ export default function NotificationsList() {
         setIsFetching(true);
     }
 
+    const updateNotifications = async()=>{
+        
+        await setPage({pageNumber:0,stopFetching:false});
+        await setNotiData({notifications:[]});
+        await setIsFetching(false);
+        await getMoreNotifications();
+    }
 
     return (
         <section className={classes.root}>
@@ -65,6 +74,9 @@ export default function NotificationsList() {
                 <Typography variant="h5"  color="textPrimary" component="p" style={{fontWeight: 'bold'}}>
                 Notifications:
                 </Typography>
+                <Link onClick={updateNotifications}>
+                    update
+                </Link>
                 <br/>
                 <Grid container spacing={1} alignItems="center">
                     {notiData.notifications.map((n) => (

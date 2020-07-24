@@ -77,9 +77,11 @@ export default function NotificationsPopper(props) {
                                 <Typography className={classes.title} color="textPrimary" variant="subtitle2">
                                     {cutContentLength(m.content.title,30,"no product title")}
                                 </Typography>
+                                {m.content.url?
                                 <Typography variant="caption" color="textSecondary">
                                     {cutContentLength(m.content.url,30,"no link")}
-                                </Typography >
+                                </Typography >:null}
+                                {m.content.lastprice && m.content.currentprice?
                                 <Grid container alignItems='baseline'>
                                     <Grid item xs={6}>
                                         <Typography color="textSecondary" style={linethrough} variant="body2">
@@ -92,6 +94,7 @@ export default function NotificationsPopper(props) {
                                         </Typography>
                                     </Grid>
                                 </Grid>
+                                :null}
                             </ListItemText>
                         </ListItem>
                         <Divider variant="inset" component="li" />

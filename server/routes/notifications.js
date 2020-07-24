@@ -11,8 +11,7 @@ const verifyToken = require("../middleware/verify");
 router.get("/notifications", verifyToken, function (req, res) {
 	const batchSize = 10;//for test only, it should be larger size in production
 	const pageNumber = req.query.page?req.query.page:0
-	console.log(req.query.page,pageNumber);
-	Notification.find({receiver:req.user.id}).sort({createdAt:-1})
+	Notification.find({receiver:req.query.receiver}).sort({createdAt:-1})
 	.skip(batchSize*pageNumber).limit(batchSize).exec(function(err, docs) {
 		if(err){
             console.log(err);

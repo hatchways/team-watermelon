@@ -102,7 +102,11 @@ const Navbar = (props) => {
 							My Shopping Lists
 						</Button>
 						<FindNewFriendsModal />
+					</>):null
+				}
 						<SocketContainer/>
+				{authContext.isAuthenticated ? (
+					<>
 						<IconButton aria-controls="profile-menu" aria-haspopup="true" onClick={handleMenuClick}>
 							<Avatar src={authContext.profile_picture}>{authContext.name.substring(0, 1)}</Avatar>
 						</IconButton>

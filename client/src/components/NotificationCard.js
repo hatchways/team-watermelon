@@ -120,8 +120,9 @@ export default function NotiCard(props) {
                                 </Grid>
                             </Grid>
                             <Typography variant="body2" className={classes.description}>
-                                {cutContentLength(noti.content.description,100,"no description")}
+                                {noti.content.description?cutContentLength(noti.content.description,100,"no description"):null}
                             </Typography>
+                            {noti.content.lastprice&&noti.content.currentprice?
                             <Grid 
                                 container 
                                 className={(noti.notificationType==='new price'||noti.notificationType==='new_price')?classes.forProduct:classes.notProduct}
@@ -136,7 +137,7 @@ export default function NotiCard(props) {
                                     New Price: $ {convertNumberDecimal(noti.content.currentprice)}
                                     </Typography>
                                 </Grid>
-                            </Grid>
+                            </Grid>:null}
                         </CardContent>
                     </Grid>
                 </Grid>
