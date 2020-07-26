@@ -16,7 +16,7 @@ ReactJS    | Front-end (Client)
 NodeJS     | JavaScript Runtime Env
 
 ## How to Use
-- [ ] add the deployed url
+Visit https://bigdeal-app.herokuapp.com/
 
 ## Features
 * Login/sign up flow with e-mail address
