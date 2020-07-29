@@ -1,7 +1,7 @@
 # BigDeal
 ## Project Details
 ### Project Description
-An easy to use website where a user can input a link of a product they want to track and get notifications when it goes on sales.
+An easy to use website where a user can input a link of a product they want to track and get notifications when the price changes.
 ### Team Members
 * [Sina Jamshidi](https://github.com/sina-jamshidi) (Team Lead)
 * [Chian-Huei Wang](https://github.com/ChianHuei)
