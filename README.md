@@ -21,7 +21,7 @@ Visit https://bigdeal-app.herokuapp.com/
 
 <img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png" width="500">
 
-<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/shopping_lists.png" width="300"><img src="hhttps://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/products_list.png" width="300">
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/shopping_lists.png" width="300"><img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/products_list.png" width="300"><img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/search_users.png" width="300">
 <img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/create_new_list.png" width="300"><img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/friends.png" width="300">
 <img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/notifications_page.png" width="300"><img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/notifications.png" width="300">
 
