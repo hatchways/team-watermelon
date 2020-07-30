@@ -14,27 +14,28 @@ MongoDB    | Database (NoSQL)
 ExpressJS  | Back-end (Server)
 ReactJS    | Front-end (Client)
 NodeJS     | JavaScript Runtime Env
+socket.io  | Live notifications
 
 ## How to Use
 Visit https://bigdeal-app.herokuapp.com/
 
 
-<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png" width="300">
-<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/shopping_lists.png" width="300">
-<img src="hhttps://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/products_list.png" width="300">
-<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/create_new_list.png" width="300">
-<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/friends.png" width="300">
-<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/notifications_page.png" width="300">
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png" width="300"><img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/shopping_lists.png" width="300">
+<img src="hhttps://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/products_list.png" width="300"><img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/create_new_list.png" width="300">
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/friends.png" width="300"><img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/notifications_page.png" width="300">
 <img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/notifications.png" width="300">
 
 
 ## Features
 * Login/sign up flow with e-mail address
-* Create lists
+* Upload/update an image for user profile
+* Create/update/delete/view lists
+* Upload images as covers for lists
 * Add/ delete product links
-* Track product price
+* Track product price automatically
 * Browse friends
-* Follow friends
+* Follow/unfollow friends
 * Search users and view public lists
+* Live notifications for new prices
 
 ###### Copyright &copy; 2020 Team Watermelon
