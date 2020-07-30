@@ -18,7 +18,7 @@ NodeJS     | JavaScript Runtime Env
 ## How to Use
 Visit https://bigdeal-app.herokuapp.com/
 
-![landing page](https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png=100x20)
+![landing page](https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png =100x20)
 
 ## Features
 * Login/sign up flow with e-mail address
