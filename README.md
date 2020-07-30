@@ -18,8 +18,15 @@ NodeJS     | JavaScript Runtime Env
 ## How to Use
 Visit https://bigdeal-app.herokuapp.com/
 
-![landing page](https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png =100x20)
-<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png" width="100">
+
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png" width="300">
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/shopping_lists.png" width="300">
+<img src="hhttps://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/products_list.png" width="300">
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/create_new_list.png" width="300">
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/friends.png" width="300">
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/notifications_page.png" width="300">
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/notifications.png" width="300">
+
 
 ## Features
 * Login/sign up flow with e-mail address
