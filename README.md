@@ -19,6 +19,7 @@ NodeJS     | JavaScript Runtime Env
 Visit https://bigdeal-app.herokuapp.com/
 
 ![landing page](https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png =100x20)
+<img src="https://team-watermelon-irene-719.s3-us-west-1.amazonaws.com/landing_page.png" width="100">
 
 ## Features
 * Login/sign up flow with e-mail address
